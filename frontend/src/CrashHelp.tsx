@@ -74,11 +74,18 @@ export function useCurrentServerStatus(
   }, [connected, uuid]);
   const disconnected = !connected && !!uuid && connectedOnce === uuid;
   const flagged = !!(server?.isSuspended || server?.isTransferring || server?.status || server?.nodeMaintenanceEnabled);
-  let status = statusOf(server ?? {}, state);
-  const { t } = getExtTranslations();
-  if (!flagged && disconnected) status = { tone: 'off', label: t('status.disconnected', {}) };
-  else if (!flagged && crash) status = { tone: 'bad', label: t('status.crashed', {}) };
+  const status = withConnection(statusOf(server ?? {}, state), !flagged && disconnected, !flagged && !!crash);
   return { status, crash, disconnected };
+}
+
+// Bewusst eine eigene Funktion statt "let status = ...; if (...) status = ..." im Hook: der React Compiler hat die
+// bedingte Neuzuweisung samt Uebersetzungsaufruf als eigenen Block zwischengespeichert, der nicht vom Grundstatus
+// abhing, und so nach dem ersten Zeichnen dauerhaft "Gestoppt" gezeigt, obwohl der Server lief.
+function withConnection(status: StatusInfo, disconnected: boolean, crashed: boolean): StatusInfo {
+  const { t } = getExtTranslations();
+  if (disconnected) return { tone: 'off', label: t('status.disconnected', {}) };
+  if (crashed) return { tone: 'bad', label: t('status.crashed', {}) };
+  return status;
 }
 
 /**
