@@ -42,6 +42,7 @@ import { useServerStore, useServerStoreApi } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
 import SaveBar from './SaveBar.tsx';
 import { Section } from './TaxzServerSettings.tsx';
+import { useExtTranslations } from './translations.ts';
 import { variableControl } from './variableControl.ts';
 
 type Variable = z.infer<typeof serverVariableSchema>;
@@ -239,6 +240,7 @@ function VariableRow({
 
 function TaxzServerStartup() {
   const { t } = useTranslations();
+  const { t: tExt } = useExtTranslations();
   const { addToast } = useToast();
   const settings = useGlobalStore((state) => state.settings);
   const { server, updateServer, variables, setVariables, updateVariable } = useServerStore(
@@ -399,7 +401,7 @@ function TaxzServerStartup() {
       </ConfirmationModal>
 
       <div className='taxz-startup'>
-        <Section icon={faSliders} title={t('pages.server.startup.variables', {})} subtitle='Einstellungen des Eggs für diesen Server'>
+        <Section icon={faSliders} title={t('pages.server.startup.variables', {})} subtitle={tExt('startup.variablesSubtitle', {})}>
           {variablesLoading ? (
             <Spinner.Centered />
           ) : variablesError ? (
@@ -428,7 +430,7 @@ function TaxzServerStartup() {
         </Section>
 
         <div className='taxz-startup-side'>
-          <Section icon={faPlay} title={t('common.form.startupCommand', {})} subtitle='Änderungen werden sofort gespeichert'>
+          <Section icon={faPlay} title={t('common.form.startupCommand', {})} subtitle={tExt('startup.savedImmediately', {})}>
             {Object.keys(server.egg.startupCommands).length > 0 && (
               <Select
                 label={t('pages.server.startup.predefinedStartupCommands', {})}
@@ -471,7 +473,7 @@ function TaxzServerStartup() {
             />
           </Section>
 
-          <Section icon={faDocker as typeof faPlay} title={t('common.form.dockerImage', {})} subtitle='Änderungen werden sofort gespeichert'>
+          <Section icon={faDocker as typeof faPlay} title={t('common.form.dockerImage', {})} subtitle={tExt('startup.savedImmediately', {})}>
             <Select
               aria-label={t('common.form.dockerImage', {})}
               value={dockerImage}

@@ -84,7 +84,8 @@ export function setAdminDefaultsFromIndex(raw: unknown) {
   if (raw === undefined) return;
   const parsed = adminDefaultsSchema.safeParse(raw);
   if (parsed.success) adminDefaults = parsed.data;
-  else console.error('taxz theme: Admin-Vorgaben ungueltig, nutze eingebaute Vorgaben', parsed.error);
+  else console.error('taxz theme: invalid admin defaults, using built-in defaults'
+, parsed.error);
 }
 
 export function getAdminDefaults(): ThemePrefs {

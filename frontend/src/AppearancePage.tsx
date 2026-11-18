@@ -39,32 +39,31 @@ import {
 } from './prefs.ts';
 import { removeUserSetting } from '@/lib/userSettings.ts';
 import { ServerArtLayer } from './ServerArt.tsx';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
 
-const THEME_TEXT: Record<ThemeChoice, [string, string]> = {
-  standard: ['Standard', 'Calagopus wie bisher'],
-  taxz: ['taxz', 'Das neue Design'],
-};
+// Namen der Auswahlmoeglichkeiten, auch fuer die Admin-Vorgaben und das Willkommensfenster.
+export function themeText(theme: ThemeChoice): [string, string] {
+  const { t } = getExtTranslations();
+  return [t(`look.theme.${theme}.title`, {}), t(`look.theme.${theme}.subtitle`, {})];
+}
 
-export const BG_TEXT: Record<Background, [string, string]> = {
-  horizon: ['Horizont', 'Leuchtender Bogen unten'],
-  topo: ['Topografie', 'Höhenlinien, ruhig'],
-  aurora: ['Nordlicht', 'Langsame Farbwolken'],
-};
+export function backgroundText(background: Background): [string, string] {
+  const { t } = getExtTranslations();
+  return [t(`look.background.${background}.title`, {}), t(`look.background.${background}.subtitle`, {})];
+}
 
-export const ACCENT_TEXT: Record<Accent, string> = {
-  violet: 'Violett',
-  sky: 'Eisblau',
-  emerald: 'Smaragd',
-  glut: 'Glut',
-};
+export function accentText(accent: Accent): string {
+  return getExtTranslations().t(`look.accent.${accent}`, {});
+}
 
-const ART_TEXT: Record<ServerArt, [string, string]> = {
-  colors: ['Spielfarben', 'Farben und Symbol des Spiels'],
-  icon: ['Icon-Schein', 'Weicher Schein des Symbols'],
-  illu: ['Illustration', 'Kleine Landschaft je Spiel'],
-};
+export function artText(art: ServerArt): [string, string] {
+  const { t } = getExtTranslations();
+  return [t(`look.art.${art}.title`, {}), t(`look.art.${art}.subtitle`, {})];
+}
 
-const VIEW_TEXT: Record<ServerView, string> = { cards: 'Karten', list: 'Liste' };
+export function viewText(view: ServerView): string {
+  return getExtTranslations().t(`look.view.${view}`, {});
+}
 
 const PREVIEW_LOOK = gameLook({ name: 'Paper' });
 
@@ -148,13 +147,14 @@ export default function AppearancePage() {
   const taxzOff = prefs.theme !== 'taxz';
   const hasOwnChoice = Object.values(userPrefs).some((value) => value !== undefined);
   const admin = getAdminDefaults();
+  const { t } = useExtTranslations();
 
   return (
-    <AccountContentContainer title='Darstellung' subtitle='Gilt nur für dich und wird sofort übernommen'>
+    <AccountContentContainer title={t('appearance.title', {})} subtitle={t('appearance.subtitle', {})}>
       <div className='taxz-ap'>
-        <TitleCard title='Theme' icon={<FontAwesomeIcon icon={faSwatchbook} />}>
-          <p className='taxz-ap-lead'>Jeder wählt selbst, der Wechsel geht jederzeit zurück.</p>
-          <div className='taxz-tiles taxz-tiles-2' role='radiogroup' aria-label='Theme'>
+        <TitleCard title={t('appearance.theme.title', {})} icon={<FontAwesomeIcon icon={faSwatchbook} />}>
+          <p className='taxz-ap-lead'>{t('appearance.theme.lead', {})}</p>
+          <div className='taxz-tiles taxz-tiles-2' role='radiogroup' aria-label={t('appearance.theme.title', {})}>
             {THEMES.map((theme) => (
               <Tile
                 key={theme}
@@ -162,8 +162,8 @@ export default function AppearancePage() {
                 value={theme}
                 checked={prefs.theme === theme}
                 onSelect={(value) => update({ theme: value })}
-                title={THEME_TEXT[theme][0]}
-                subtitle={THEME_TEXT[theme][1]}
+                title={themeText(theme)[0]}
+                subtitle={themeText(theme)[1]}
               >
                 <MiniPreview background={prefs.background} accent={prefs.accent} standard={theme === 'standard'} />
               </Tile>
@@ -171,25 +171,25 @@ export default function AppearancePage() {
           </div>
         </TitleCard>
 
-        <TitleCard title='Hell oder dunkel' icon={<FontAwesomeIcon icon={faCircleHalfStroke} />}>
+        <TitleCard title={t('appearance.scheme.title', {})} icon={<FontAwesomeIcon icon={faCircleHalfStroke} />}>
           <SegmentedControl
-            aria-label='Hell oder dunkel'
+            aria-label={t('appearance.scheme.title', {})}
             value={colorScheme}
             onChange={(value) => setColorScheme(value as MantineColorScheme)}
             data={[
-              { value: 'auto', label: 'Wie das Gerät' },
-              { value: 'light', label: 'Hell' },
-              { value: 'dark', label: 'Dunkel' },
+              { value: 'auto', label: t('appearance.scheme.auto', {}) },
+              { value: 'light', label: t('appearance.scheme.light', {}) },
+              { value: 'dark', label: t('appearance.scheme.dark', {}) },
             ]}
           />
-          <p className='taxz-ap-note'>Gilt auf diesem Gerät, wie der Schalter unten in der Seitenleiste.</p>
+          <p className='taxz-ap-note'>{t('appearance.scheme.note', {})}</p>
         </TitleCard>
 
         <fieldset className='taxz-ap-taxz' disabled={taxzOff}>
-          {taxzOff && <p className='taxz-ap-hint'>Die folgenden Einstellungen gelten für das Theme „taxz“.</p>}
+          {taxzOff && <p className='taxz-ap-hint'>{t('appearance.taxzOnly', {})}</p>}
 
-          <TitleCard title='Hintergrund' icon={<FontAwesomeIcon icon={faImage} />}>
-            <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label='Hintergrund'>
+          <TitleCard title={t('appearance.background.title', {})} icon={<FontAwesomeIcon icon={faImage} />}>
+            <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label={t('appearance.background.title', {})}>
               {BACKGROUNDS.map((background) => (
                 <Tile
                   key={background}
@@ -197,8 +197,8 @@ export default function AppearancePage() {
                   value={background}
                   checked={prefs.background === background}
                   onSelect={(value) => update({ background: value })}
-                  title={BG_TEXT[background][0]}
-                  subtitle={BG_TEXT[background][1]}
+                  title={backgroundText(background)[0]}
+                  subtitle={backgroundText(background)[1]}
                   disabled={taxzOff}
                 >
                   <MiniPreview background={background} accent={prefs.accent} />
@@ -207,9 +207,9 @@ export default function AppearancePage() {
             </div>
           </TitleCard>
 
-          <TitleCard title='Akzentfarbe' icon={<FontAwesomeIcon icon={faPalette} />}>
-            <p className='taxz-ap-lead'>Für Knöpfe, Auswahl und Anzeigen. Statusfarben wie „Läuft“ bleiben immer gleich.</p>
-            <div className='taxz-swatches' role='radiogroup' aria-label='Akzentfarbe'>
+          <TitleCard title={t('appearance.accent.title', {})} icon={<FontAwesomeIcon icon={faPalette} />}>
+            <p className='taxz-ap-lead'>{t('appearance.accent.lead', {})}</p>
+            <div className='taxz-swatches' role='radiogroup' aria-label={t('appearance.accent.title', {})}>
               {ACCENT_ORDER.filter((accent) => ACCENTS.includes(accent)).map((accent) => (
                 <label
                   key={accent}
@@ -232,15 +232,15 @@ export default function AppearancePage() {
                       </svg>
                     )}
                   </span>
-                  {ACCENT_TEXT[accent]}
+                  {accentText(accent)}
                 </label>
               ))}
             </div>
           </TitleCard>
 
-          <TitleCard title='Serverbilder' icon={<FontAwesomeIcon icon={faImages} />}>
-            <p className='taxz-ap-lead'>Kopf der Serverkarten in der Serverliste. Gilt für jedes Spiel gleich.</p>
-            <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label='Serverbilder'>
+          <TitleCard title={t('appearance.art.title', {})} icon={<FontAwesomeIcon icon={faImages} />}>
+            <p className='taxz-ap-lead'>{t('appearance.art.lead', {})}</p>
+            <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label={t('appearance.art.title', {})}>
               {ARTS.map((art) => (
                 <Tile
                   key={art}
@@ -248,8 +248,8 @@ export default function AppearancePage() {
                   value={art}
                   checked={prefs.art === art}
                   onSelect={(value) => update({ art: value })}
-                  title={ART_TEXT[art][0]}
-                  subtitle={ART_TEXT[art][1]}
+                  title={artText(art)[0]}
+                  subtitle={artText(art)[1]}
                   disabled={taxzOff}
                 >
                   <span className='taxz-art-mini taxz-preview' data-taxz-accent={prefs.accent} aria-hidden='true'>
@@ -260,29 +260,29 @@ export default function AppearancePage() {
             </div>
           </TitleCard>
 
-          <TitleCard title='Serverliste' icon={<FontAwesomeIcon icon={faList} />}>
+          <TitleCard title={t('appearance.view.title', {})} icon={<FontAwesomeIcon icon={faList} />}>
             <SegmentedControl
-              aria-label='Ansicht der Serverliste'
+              aria-label={t('appearance.view.label', {})}
               value={prefs.serverView}
               disabled={taxzOff}
               onChange={(value) => update({ serverView: value as ServerView })}
-              data={(['cards', 'list'] as ServerView[]).map((view) => ({ value: view, label: VIEW_TEXT[view] }))}
+              data={(['cards', 'list'] as ServerView[]).map((view) => ({ value: view, label: viewText(view) }))}
             />
-            <p className='taxz-ap-note'>Lässt sich auch direkt auf der Serverliste umschalten.</p>
+            <p className='taxz-ap-note'>{t('appearance.view.note', {})}</p>
           </TitleCard>
 
-          <TitleCard title='Lesbarkeit' icon={<FontAwesomeIcon icon={faFont} />}>
+          <TitleCard title={t('appearance.readability.title', {})} icon={<FontAwesomeIcon icon={faFont} />}>
             <div className='taxz-ap-switches'>
               <Switch
-                label='Größere Schrift'
-                description='Alle Texte etwas größer, mindestens 14 px.'
+                label={t('appearance.readability.largeFont', {})}
+                description={t('appearance.readability.largeFontDescription', {})}
                 checked={prefs.largeFont}
                 disabled={taxzOff}
                 onChange={(event) => update({ largeFont: event.currentTarget.checked })}
               />
               <Switch
-                label='Starker Kontrast'
-                description='Deckende Karten statt Glas, kräftigere Rahmen und Texte. Ist „Mehr Kontrast“ im System an, gilt das automatisch.'
+                label={t('appearance.readability.strongContrast', {})}
+                description={t('appearance.readability.strongContrastDescription', {})}
                 checked={prefs.strongContrast}
                 disabled={taxzOff}
                 onChange={(event) => update({ strongContrast: event.currentTarget.checked })}
@@ -293,13 +293,17 @@ export default function AppearancePage() {
 
         <div className='taxz-ap-foot'>
           <p>
-            Der Admin legt fest, was Benutzer ohne eigene Wahl sehen (derzeit: {THEME_TEXT[admin.theme][0]},{' '}
-            {BG_TEXT[admin.background][0]}, {ACCENT_TEXT[admin.accent]}).
+            {t('appearance.adminDefault', {
+              theme: themeText(admin.theme)[0],
+              background: backgroundText(admin.background)[0],
+              accent: accentText(admin.accent),
+            })}
           </p>
           {hasOwnChoice && (
             <Button variant='subtle' onClick={() => removeUserSetting(PREFS_KEY)}>
-              Eigene Wahl löschen, Vorgabe nutzen
+              {t('appearance.reset', {})}
             </Button>
+
           )}
         </div>
       </div>

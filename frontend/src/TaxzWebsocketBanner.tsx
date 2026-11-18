@@ -10,12 +10,14 @@ import OriginalBanner from '@/pages/server/WebsocketStatusBanner.tsx';
 import { SocketErrorType } from '@/plugins/websocket/Websocket.ts';
 import { useServerStore } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 
 function TaxzBanner() {
   const socketError = useServerStore((state) => state.socketError);
   const setSocketError = useServerStore((state) => state.setSocketError);
   const transferring = useServerStore((state) => state.server.isTransferring);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const { t } = useExtTranslations();
 
   useEffect(() => {
     if (!socketError?.nextRetryMs) {
@@ -39,7 +41,9 @@ function TaxzBanner() {
     socketError.recoverable &&
     (socketError.type === SocketErrorType.CONNECTION_LOST || socketError.type === SocketErrorType.CONNECTION_FAILED);
   const text = lost
-    ? `Verbindung zum Server unterbrochen, verbinde neu …${countdown ? ` (nächster Versuch in ${countdown} s)` : ''}`
+    ? countdown
+      ? t('socket.lostRetry', { seconds: countdown })
+      : t('socket.lost', {})
     : socketError.message;
   if (!text) return null;
 
@@ -49,11 +53,11 @@ function TaxzBanner() {
       <span className='taxz-connbar-text'>{text}</span>
       {socketError.retry && (
         <button type='button' className='taxz-btn' onClick={socketError.retry}>
-          Jetzt verbinden
+          {t('socket.connectNow', {})}
         </button>
       )}
       {socketError.type === SocketErrorType.DAEMON_ERROR && (
-        <button type='button' className='taxz-ib' onClick={() => setSocketError(null)} aria-label='Meldung schließen'>
+        <button type='button' className='taxz-ib' onClick={() => setSocketError(null)} aria-label={t('socket.close', {})}>
           <FontAwesomeIcon icon={faXmark} />
         </button>
       )}

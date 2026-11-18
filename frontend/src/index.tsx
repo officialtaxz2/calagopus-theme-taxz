@@ -23,6 +23,8 @@ import { registerServerHead } from './ServerHead.tsx';
 import { registerStateHooks } from './states.tsx';
 import { registerSidebarHooks } from './TaxzSidebar.tsx';
 import { registerToastTiming } from './toastTiming.tsx';
+import { getExtTranslations } from './translations.ts';
+
 
 function apply(prefs: ThemePrefs) {
   applyPrefs(prefs);
@@ -44,7 +46,7 @@ class DeTaxzThemeExtension extends Extension {
 
     ctx.extensionRegistry.enterRoutes((routes) =>
       routes.addAccountRoute({
-        name: 'Darstellung',
+        name: () => getExtTranslations().t('appearance.title', {}),
         icon: faPalette,
         path: '/appearance',
         element: AppearancePage,

@@ -24,6 +24,7 @@ import useWebsocketEvent, { SocketEvent } from '@/plugins/websocket/useWebsocket
 import { useServerStore } from '@/stores/server.ts';
 import { type LineLevel, lineLevel } from './consoleLevel.ts';
 import { useIsTaxz } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 import { cleanLine } from './StartProgress.tsx';
 
 const MAX_LINES = 3000;
@@ -112,6 +113,7 @@ function FilteredView({
   const list = useRef<HTMLDivElement>(null);
   const atBottom = useRef(true);
   const needle = query.trim().toLowerCase();
+  const { t, tItem } = useExtTranslations();
   const shown = useMemo(
     () =>
       lines.filter(
@@ -127,17 +129,14 @@ function FilteredView({
     if (el && atBottom.current) el.scrollTop = el.scrollHeight;
   }, [shown]);
 
-  const label = level === 'warn' ? 'Warnungen' : level === 'error' ? 'Fehler' : 'Zeilen';
+  const count = tItem(level === 'warn' ? 'consoleWarning' : level === 'error' ? 'consoleError' : 'consoleLine', shown.length);
   return (
     <div className='taxz-cfilter'>
       <div className='taxz-cfilter-bar'>
-        <span>
-          {shown.length} {label}
-          {needle && <> mit „{query.trim()}“</>}
-        </span>
+        <span>{needle ? t('console.filter.matching', { count, query: query.trim() }) : count}</span>
         <button type='button' className='taxz-cfilter-clear' onClick={onClear}>
           <FontAwesomeIcon icon={faXmark} aria-hidden='true' />
-          Filter aufheben
+          {t('console.filter.clear', {})}
         </button>
       </div>
       <div
@@ -145,14 +144,14 @@ function FilteredView({
         className='taxz-cfilter-list'
         style={{ fontSize }}
         tabIndex={0}
-        aria-label='Gefilterte Konsolenausgabe'
+        aria-label={t('console.filter.output', {})}
         onScroll={(event) => {
           const el = event.currentTarget;
           atBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
         }}
       >
         {shown.length === 0 ? (
-          <p className='taxz-cfilter-none'>Keine passenden Zeilen in der bisherigen Ausgabe.</p>
+          <p className='taxz-cfilter-none'>{t('console.filter.none', {})}</p>
         ) : (
           shown.map((line) => (
             <div key={line.id} className={`taxz-cline is-${line.level}`}>
@@ -177,6 +176,7 @@ function ConsoleFilterInner() {
   const [query, setQuery] = useState('');
   const anchor = useRef<HTMLDivElement>(null);
   const [target, setTarget] = useState<HTMLElement | null>(null);
+  const { t } = useExtTranslations();
 
   const counts = useMemo(() => {
     let warn = 0;
@@ -197,14 +197,14 @@ function ConsoleFilterInner() {
 
   const active = level !== 'all' || query.trim() !== '';
   const options: [Level, string, number | null][] = [
-    ['all', 'Alle', null],
-    ['warn', 'Warnungen', counts.warn],
-    ['error', 'Fehler', counts.error],
+    ['all', t('console.filter.all', {}), null],
+    ['warn', t('console.filter.warnings', {}), counts.warn],
+    ['error', t('console.filter.errors', {}), counts.error],
   ];
 
   return (
     <div ref={anchor} className='taxz-chead-tools'>
-      <div className='taxz-seg2 is-sm' role='group' aria-label='Konsole filtern'>
+      <div className='taxz-seg2 is-sm' role='group' aria-label={t('console.filter.label', {})}>
         {options.map(([value, label, count]) => (
           <button
             key={value}
@@ -227,8 +227,8 @@ function ConsoleFilterInner() {
           onKeyDown={(event) => {
             if (event.key === 'Escape') setQuery('');
           }}
-          placeholder='Zeilen filtern …'
-          aria-label='Konsolenzeilen nach Text filtern'
+          placeholder={t('console.filter.placeholder', {})}
+          aria-label={t('console.filter.searchLabel', {})}
           autoCorrect='off'
           autoCapitalize='none'
           spellCheck={false}
@@ -269,16 +269,19 @@ export function QuickCommands() {
   const isTaxz = useIsTaxz();
   const snippets = useServerStore((state) => state.commandSnippets);
   const disabled = useServerStore((state) => !state.socketConnected || state.state === 'offline');
+  const { t, tReact } = useExtTranslations();
   if (!isTaxz) return null;
 
   return (
     <ServerCan action='control.console'>
-      <div className='taxz-qcmds' role='group' aria-label='Schnellbefehle'>
+      <div className='taxz-qcmds' role='group' aria-label={t('console.quick.label', {})}>
         {snippets.length === 0 ? (
           <span className='taxz-qcmds-hint'>
-            Schnellbefehle: eigene Befehlskürzel unter{' '}
-            <NavLink to='/account/command-snippets'>Konto › Befehlskürzel</NavLink> anlegen.
+            {tReact('console.quick.hint', {
+              link: <NavLink to='/account/command-snippets'>{t('console.quick.link', {})}</NavLink>,
+            })}
           </span>
+
         ) : (
           snippets.map((snippet) => (
             <button

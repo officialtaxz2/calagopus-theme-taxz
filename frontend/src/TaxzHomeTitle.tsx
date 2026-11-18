@@ -6,27 +6,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import OriginalHomeTitle from '@/pages/dashboard/home/DashboardHomeTitle.tsx';
 import { useIsTaxz, useThemePrefs } from './prefs.ts';
 import { useVisibleServerCounts } from './serverStatus.ts';
+import { useExtTranslations } from './translations.ts';
 
 function TaxzHomeTitle() {
   const [prefs, update] = useThemePrefs();
   const { total, active } = useVisibleServerCounts();
+  const { t, tItem } = useExtTranslations();
 
-  const sub =
-    total === 0
-      ? 'Hier erscheinen deine Server.'
-      : `${total} Server, davon ${active} aktiv.`;
+  const sub = total === 0 ? t('home.empty', {}) : t('home.count', { servers: tItem('server', total), active });
 
   return (
     <>
       <header className='taxz-phead'>
         <div>
-          <p className='taxz-kicker'>Übersicht</p>
-          <h1 className='taxz-h1'>Server</h1>
+          <p className='taxz-kicker'>{t('nav.group.overview', {})}</p>
+          <h1 className='taxz-h1'>{t('nav.servers', {})}</h1>
           <p className='taxz-sub' aria-live='polite'>
             {sub}
           </p>
         </div>
-        <div className='taxz-seg2' role='group' aria-label='Ansicht der Serverliste'>
+        <div className='taxz-seg2' role='group' aria-label={t('appearance.view.label', {})}>
           <button
             type='button'
             aria-pressed={prefs.serverView === 'cards'}
@@ -34,7 +33,7 @@ function TaxzHomeTitle() {
             onClick={() => update({ serverView: 'cards' })}
           >
             <FontAwesomeIcon icon={faGrip} />
-            Karten
+            {t('look.view.cards', {})}
           </button>
           <button
             type='button'
@@ -43,7 +42,7 @@ function TaxzHomeTitle() {
             onClick={() => update({ serverView: 'list' })}
           >
             <FontAwesomeIcon icon={faList} />
-            Liste
+            {t('look.view.list', {})}
           </button>
         </div>
       </header>

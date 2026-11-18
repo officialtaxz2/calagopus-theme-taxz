@@ -9,10 +9,12 @@ import { z } from 'zod';
 import { Modal } from '@/elements/modals/Modal.tsx';
 import { useUserSetting } from '@/lib/userSettings.ts';
 import { useAuth } from '@/providers/contexts/authContext.ts';
-import { ACCENT_ORDER, ACCENT_TEXT, BG_TEXT, MiniPreview, Tile } from './AppearancePage.tsx';
+import { ACCENT_ORDER, accentText, backgroundText, MiniPreview, Tile } from './AppearancePage.tsx';
 import { renderBackdrop } from './backdrop.ts';
 import InstallHint from './InstallHint.tsx';
 import { type Accent, applyPrefs, BACKGROUNDS, type Background, getEffectivePrefs, useThemePrefs } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
+
 
 export const WELCOME_KEY = 'de.taxz.theme::welcome_done';
 const doneSchema = z.boolean();
@@ -38,6 +40,7 @@ export default function WelcomeLook() {
   const [background, setBackground] = useState<Background>(prefs.background);
   const [accent, setAccent] = useState<Accent>(prefs.accent);
   const groupId = useId();
+  const { t } = useExtTranslations();
 
   useEffect(() => {
     if (show) preview(background, accent);
@@ -59,12 +62,12 @@ export default function WelcomeLook() {
     <Modal
       opened
       onClose={later}
-      title={`Willkommen, ${name}! Wie soll dein Panel aussehen?`}
+      title={t('welcome.title', { name })}
       size='lg'
       classNames={{ content: 'taxz-welcome' }}
     >
       <div className='taxz-ap taxz-welcome-body'>
-        <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label='Hintergrund'>
+        <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label={t('appearance.background.title', {})}>
           {BACKGROUNDS.map((value) => (
             <Tile
               key={value}
@@ -72,14 +75,14 @@ export default function WelcomeLook() {
               value={value}
               checked={background === value}
               onSelect={setBackground}
-              title={BG_TEXT[value][0]}
-              subtitle={BG_TEXT[value][1]}
+              title={backgroundText(value)[0]}
+              subtitle={backgroundText(value)[1]}
             >
               <MiniPreview background={value} accent={accent} />
             </Tile>
           ))}
         </div>
-        <div className='taxz-swatches' role='radiogroup' aria-label='Akzentfarbe'>
+        <div className='taxz-swatches' role='radiogroup' aria-label={t('appearance.accent.title', {})}>
           {ACCENT_ORDER.map((value) => (
             <label key={value} className={classNames('taxz-swatch', accent === value && 'is-on')} data-taxz-accent={value}>
               <input
@@ -97,18 +100,19 @@ export default function WelcomeLook() {
                   </svg>
                 )}
               </span>
-              {ACCENT_TEXT[value]}
+              {accentText(value)}
             </label>
           ))}
         </div>
         <div className='taxz-welcome-acts'>
-          <span className='taxz-welcome-hint'>Später änderbar unter „Darstellung“</span>
+          <span className='taxz-welcome-hint'>{t('welcome.hint', {})}</span>
           <button type='button' className='taxz-btn' onClick={later}>
-            Später
+            {t('welcome.later', {})}
           </button>
           <button type='button' className='taxz-btn taxz-btn-primary' onClick={apply}>
-            Übernehmen
+            {t('welcome.apply', {})}
           </button>
+
         </div>
       </div>
     </Modal>

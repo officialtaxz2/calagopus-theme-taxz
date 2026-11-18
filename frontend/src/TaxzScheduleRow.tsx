@@ -28,6 +28,7 @@ import { useTranslations } from '@/providers/TranslationProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
 import { describeTrigger, formatNext, nextRun } from './scheduleText.ts';
+import { useExtTranslations } from './translations.ts';
 
 interface ScheduleRowProps {
   schedule: z.infer<typeof serverScheduleSchema>;
@@ -42,6 +43,7 @@ const TaxzScheduleRow = forwardRef<HTMLTableRowElement, ScheduleRowProps>(functi
   ref,
 ) {
   const { t, language } = useTranslations();
+  const { t: tExt } = useExtTranslations();
   const { addToast } = useToast();
   const navigate = useNavigate();
   const server = useServerStore((state) => state.server);
@@ -195,12 +197,12 @@ const TaxzScheduleRow = forwardRef<HTMLTableRowElement, ScheduleRowProps>(functi
                 <b className='taxz-sched-name'>{schedule.name}</b>
                 <span className='taxz-sched-when'>
                   {schedule.triggers.length === 0
-                    ? 'Nur von Hand'
+                    ? tExt('schedule.manualOnly', {})
                     : schedule.triggers.map((trigger) => describeTrigger(trigger, language)).join(' · ')}
                 </span>
                 {next && (
                   <span className='taxz-sched-next'>
-                    {schedule.enabled ? `Nächster Lauf ${formatNext(next, timezone)}` : 'Pausiert'}
+                    {schedule.enabled ? tExt('schedule.nextRun', { when: formatNext(next, timezone) }) : tExt('schedule.paused', {})}
                   </span>
                 )}
               </div>

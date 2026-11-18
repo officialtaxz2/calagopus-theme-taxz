@@ -14,6 +14,7 @@ import { useThemePrefs } from './prefs.ts';
 import { ServerArtLayer, ServerEmblem } from './ServerArt.tsx';
 import { IMAGE_MAX_BYTES, IMAGE_TYPES, useServerImage, useServerImageActions } from './serverImages.ts';
 import { Section } from './TaxzServerSettings.tsx';
+import { useExtTranslations } from './translations.ts';
 
 export default function ServerImageSection() {
   const { addToast } = useToast();
@@ -25,21 +26,22 @@ export default function ServerImageSection() {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState<'upload' | 'remove' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useExtTranslations();
 
   const onFile = (file: File | undefined) => {
     if (!file) return;
     setError(null);
     if (!IMAGE_TYPES.includes(file.type)) {
-      setError('Bitte ein Bild im Format PNG, JPG oder WebP wählen.');
+      setError(t('serverImage.wrongType', {}));
       return;
     }
     if (file.size > IMAGE_MAX_BYTES) {
-      setError('Das Bild ist größer als 8 MB.');
+      setError(t('serverImage.tooLarge', {}));
       return;
     }
     setBusy('upload');
     upload(file)
-      .then(() => addToast('Serverbild gespeichert.', 'success'))
+      .then(() => addToast(t('serverImage.saved', {}), 'success'))
       .catch((err) => setError(httpErrorToHuman(err)))
       .finally(() => {
         setBusy(null);
@@ -51,15 +53,19 @@ export default function ServerImageSection() {
     setError(null);
     setBusy('remove');
     remove()
-      .then(() => addToast('Serverbild entfernt. Es gelten wieder die Spielfarben.', 'success'))
+      .then(() => addToast(t('serverImage.removed', {}), 'success'))
       .catch((err) => setError(httpErrorToHuman(err)))
       .finally(() => setBusy(null));
   };
 
   return (
-    <Section icon={faImage} title='Serverbild' subtitle='Für Serverliste und Server-Symbol, wird sofort gespeichert'>
+    <Section icon={faImage} title={t('serverImage.title', {})} subtitle={t('serverImage.subtitle', {})}>
       <div className='taxz-simg'>
-        <div className='taxz-simg-prev' aria-label={image ? 'Vorschau mit eigenem Bild' : 'Vorschau mit Spielfarben'} role='img'>
+        <div
+          className='taxz-simg-prev'
+          aria-label={image ? t('serverImage.previewOwn', {}) : t('serverImage.previewColors', {})}
+          role='img'
+        >
           <div className={classNames('taxz-simg-art', `taxz-art-${prefs.art}`)}>
             <ServerArtLayer look={look} art={prefs.art} seedText={server.uuid} image={image} />
           </div>
@@ -82,12 +88,12 @@ export default function ServerImageSection() {
             disabled={busy !== null}
           >
             <FontAwesomeIcon icon={faUpload} aria-hidden='true' />
-            {busy === 'upload' ? 'Lädt hoch …' : image ? 'Ändern' : 'Bild hochladen'}
+            {busy === 'upload' ? t('serverImage.uploading', {}) : image ? t('serverImage.change', {}) : t('serverImage.upload', {})}
           </button>
           {image && (
             <button type='button' className='taxz-btn taxz-btn-danger' onClick={onRemove} disabled={busy !== null}>
               <FontAwesomeIcon icon={faTrashCan} aria-hidden='true' />
-              {busy === 'remove' ? 'Entfernt …' : 'Entfernen'}
+              {busy === 'remove' ? t('serverImage.removing', {}) : t('serverImage.remove', {})}
             </button>
           )}
         </div>
@@ -97,10 +103,7 @@ export default function ServerImageSection() {
           {error}
         </p>
       )}
-      <p className='taxz-hint'>
-        PNG, JPG oder WebP, mindestens 64 × 64 Pixel. Nicht quadratische Bilder werden mittig zugeschnitten. Ohne Bild gelten
-        die Spielfarben.
-      </p>
+      <p className='taxz-hint'>{t('serverImage.hint', {})}</p>
     </Section>
   );
 }

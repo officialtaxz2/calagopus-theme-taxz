@@ -12,6 +12,7 @@ import { announcementTypeIconMapping } from '@/lib/enums.ts';
 import { useUserSetting } from '@/lib/userSettings.ts';
 import { useTranslations } from '@/providers/TranslationProvider.tsx';
 import { useIsTaxz } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 
 type Props = ComponentProps<typeof OriginalAnnouncementAlert>;
 type Announcement = Props['announcement'];
@@ -32,6 +33,7 @@ function stillOpenable(announcement: Announcement) {
 
 function TaxzBanner({ announcement }: Props) {
   const { language } = useTranslations();
+  const { t } = useExtTranslations();
   const [dismissed, setDismissed] = useUserSetting(DISMISSED_KEY, dismissedSchema, {});
   const marker = announcement.dismissibleEnd ?? 'null';
   const canClose = announcement.dismissible && stillOpenable(announcement);
@@ -51,7 +53,7 @@ function TaxzBanner({ announcement }: Props) {
         <button
           type='button'
           className='taxz-ib'
-          aria-label='Ankündigung schließen'
+          aria-label={t('announcement.close', {})}
           onClick={() => setDismissed((previous) => ({ ...previous, [announcement.uuid]: marker }))}
         >
           <FontAwesomeIcon icon={faXmark} />

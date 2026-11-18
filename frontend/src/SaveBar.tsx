@@ -3,6 +3,7 @@
 
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useExtTranslations } from './translations.ts';
 
 export default function SaveBar({
   count,
@@ -20,16 +21,17 @@ export default function SaveBar({
   /** Speichern als Absende-Knopf des umgebenden Formulars (dessen Pruefung und Rueckfragen bleiben dann erhalten). */
   submit?: boolean;
 }) {
+  const { t, tItem } = useExtTranslations();
   if (count === 0 && !saving) return null;
   return (
-    <div className='taxz-savebar' role='region' aria-label='Ungespeicherte Änderungen'>
+    <div className='taxz-savebar' role='region' aria-label={t('saveBar.label', {})}>
       <span className='taxz-savebar-text' aria-live='polite'>
         <span className='taxz-savebar-dot' aria-hidden='true' />
-        {count === 1 ? '1 ungespeicherte Änderung' : `${count} ungespeicherte Änderungen`}
+        {tItem('unsavedChange', count)}
       </span>
       <div className='taxz-savebar-acts'>
         <button type='button' className='taxz-btn' onClick={onDiscard} disabled={saving}>
-          Verwerfen
+          {t('common.discard', {})}
         </button>
         <button
           type={submit ? 'submit' : 'button'}
@@ -38,7 +40,8 @@ export default function SaveBar({
           disabled={saving || !canSave}
         >
           <FontAwesomeIcon icon={faCheck} aria-hidden='true' />
-          {saving ? 'Speichert …' : 'Speichern'}
+          {saving ? t('common.saving', {}) : t('common.save', {})}
+
         </button>
       </div>
     </div>

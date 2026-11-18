@@ -43,6 +43,7 @@ import { useServerStore } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
 import SaveBar from './SaveBar.tsx';
 import ServerImageSection from './ServerImageSection.tsx';
+import { useExtTranslations } from './translations.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyForm = UseFormReturnType<any>;
@@ -83,13 +84,14 @@ function commit(form: AnyForm) {
 
 function TechInfo() {
   const server = useServerStore((state) => state.server);
+  const { t } = useExtTranslations();
   const rows = [
-    { label: 'Node', value: `${server.nodeName} · ${server.nodeUuid}` },
-    { label: 'Standort', value: `${server.locationName} · ${server.locationUuid}` },
-    { label: 'Server-UUID', value: server.uuid },
+    { label: t('settings.tech.node', {}), value: `${server.nodeName} · ${server.nodeUuid}` },
+    { label: t('settings.tech.location', {}), value: `${server.locationName} · ${server.locationUuid}` },
+    { label: t('settings.tech.uuid', {}), value: server.uuid },
   ];
   return (
-    <Section icon={faMicrochip} title='Technische Angaben' subtitle='Nur für Fehlersuche und Support'>
+    <Section icon={faMicrochip} title={t('settings.tech.title', {})} subtitle={t('settings.tech.subtitle', {})}>
       <dl className='taxz-kv'>
         {rows.map((row) => (
           <div key={row.label}>
@@ -97,7 +99,7 @@ function TechInfo() {
             <dd>
               <span className='taxz-mono'>{row.value}</span>
               <CopyOnClick content={row.value} className='taxz-ib'>
-                <span className='taxz-sr'>{row.label} kopieren</span>
+                <span className='taxz-sr'>{t('settings.tech.copy', { label: row.label })}</span>
                 <FontAwesomeIcon icon={faCopy} aria-hidden='true' />
               </CopyOnClick>
             </dd>
@@ -111,8 +113,9 @@ function TechInfo() {
 function DangerZone() {
   const { t } = useTranslations();
   const [open, setOpen] = useState(false);
+  const { t: tExt } = useExtTranslations();
   return (
-    <Section icon={faArrowsRotate} title='Gefahrenbereich' danger>
+    <Section icon={faArrowsRotate} title={tExt('settings.danger', {})} danger>
       <SettingsReinstallModal opened={open} onClose={() => setOpen(false)} />
       <h3 className='taxz-danger-h'>{t('pages.server.settings.reinstall.title', {})}</h3>
       <div className='taxz-danger-text'>{t('pages.server.settings.reinstall.content', {}).md()}</div>
@@ -132,6 +135,7 @@ function TaxzServerSettings() {
   const server = useServerStore((state) => state.server);
   const updateServer = useServerStore((state) => state.updateServer);
   const allowTrash = useGlobalStore((state) => state.settings.server.allowChangingTrashSettings);
+  const { t: tExt } = useExtTranslations();
 
   const canRename = useServerCan('settings.rename');
   const canTimezone = useServerCan('settings.timezone');
@@ -253,13 +257,13 @@ function TaxzServerSettings() {
 
     setSaving(false);
     if (errors.length) errors.forEach((message) => addToast(message, 'error'));
-    else addToast('Einstellungen gespeichert.', 'success');
+    else addToast(tExt('settings.saved', {}), 'success');
   };
 
   return (
     <ServerContentContainer
-      title='Einstellungen'
-      subtitle={`${server.name} · Änderungen werden gemeinsam gespeichert`}
+      title={tExt('settings.title', {})}
+      subtitle={tExt('settings.subtitle', { name: server.name })}
       registry={window.extensionContext.extensionRegistry.pages.server.settings.container}
     >
       <form
@@ -271,7 +275,7 @@ function TaxzServerSettings() {
       >
         <div className='taxz-settings-main'>
           {(canRename || canTimezone) && (
-            <Section icon={faPen} title='Allgemein'>
+            <Section icon={faPen} title={tExt('settings.general', {})}>
               {canRename && (
                 <>
                   <TextInput withAsterisk label={t('common.form.serverName', {})} {...rename.getInputProps('name')} />
@@ -287,19 +291,19 @@ function TaxzServerSettings() {
                     clearable
                     {...timezone.getInputProps('timezone')}
                   />
-                  {now && <p className='taxz-hint'>Uhrzeit dort: {now}</p>}
+                  {now && <p className='taxz-hint'>{tExt('settings.timeThere', { time: now })}</p>}
                 </div>
               )}
             </Section>
           )}
 
           {(canAutostart || canAutokill) && (
-            <Section icon={faPowerOff} title='Verhalten'>
+            <Section icon={faPowerOff} title={tExt('settings.behavior', {})}>
               {canAutostart && (
                 <Select
                   withAsterisk
                   label={t('pages.server.settings.autostart.title', {})}
-                  description='Nach einem Neustart des Systems'
+                  description={tExt('settings.autostartDescription', {})}
                   data={[
                     { label: t('common.enum.serverAutoStartBehavior.always', {}), value: 'always' },
                     { label: t('common.enum.serverAutoStartBehavior.unlessStopped', {}), value: 'unless_stopped' },
@@ -312,7 +316,7 @@ function TaxzServerSettings() {
                 <>
                   <Switch
                     label={t('pages.server.settings.autokill.title', {})}
-                    description='Hängenden Server nach dem Stoppen hart beenden'
+                    description={tExt('settings.autokillDescription', {})}
                     {...autokill.getInputProps('enabled', { type: 'checkbox' })}
                   />
                   <NumberInput

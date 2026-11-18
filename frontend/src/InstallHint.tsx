@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { safeLocalStorageGet, safeLocalStorageSet } from '@/lib/safeStorage.ts';
 import { isTaxzActive } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 
 const HINT_KEY = 'de.taxz.theme::install_hint_done';
 
@@ -67,6 +68,7 @@ const isIos = () => /iPad|iPhone|iPod/.test(navigator.userAgent);
 export default function InstallHint({ enabled }: { enabled: boolean }) {
   const [done, setDone] = useState(() => safeLocalStorageGet(HINT_KEY) === '1');
   const [, rerender] = useState(0);
+  const { t } = useExtTranslations();
 
   useEffect(() => {
     const listener = () => rerender((n) => n + 1);
@@ -85,17 +87,13 @@ export default function InstallHint({ enabled }: { enabled: boolean }) {
   };
 
   return (
-    <aside className='taxz-install' aria-label='Als App installieren'>
+    <aside className='taxz-install' aria-label={t('install.label', {})}>
       <span className='taxz-install-ic' aria-hidden='true'>
         <FontAwesomeIcon icon={faMobileScreenButton} />
       </span>
       <div className='taxz-install-body'>
-        <b>Zum Startbildschirm hinzufügen</b>
-        <span>
-          {deferred
-            ? 'Das Panel öffnet sich dann wie eine App, ohne Browserleiste.'
-            : 'Tippe unten auf „Teilen“ und dann auf „Zum Home-Bildschirm“.'}
-        </span>
+        <b>{t('install.title', {})}</b>
+        <span>{deferred ? t('install.text', {}) : t('install.ios', {})}</span>
       </div>
       {deferred && (
         <button
@@ -106,10 +104,10 @@ export default function InstallHint({ enabled }: { enabled: boolean }) {
             deferred?.userChoice.finally(close);
           }}
         >
-          Hinzufügen
+          {t('install.add', {})}
         </button>
       )}
-      <button type='button' className='taxz-ib' aria-label='Hinweis schließen' onClick={close}>
+      <button type='button' className='taxz-ib' aria-label={t('install.close', {})} onClick={close}>
         <FontAwesomeIcon icon={faXmark} />
       </button>
     </aside>

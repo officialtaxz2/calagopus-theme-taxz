@@ -20,7 +20,8 @@ import { useServerCan } from '@/plugins/usePermissions.ts';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
-import { bytes } from './serverStatus.ts';
+import { bytes, locale } from './serverStatus.ts';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
 
 type Backup = z.infer<typeof serverBackupSchema>;
 
@@ -29,21 +30,27 @@ const MIN_DAYS = 14;
 const MAX_DAYS = 90;
 
 function stateOf(backup: Backup): { tone: 'ok' | 'warn' | 'bad'; label: string } {
-  if (backup.deletionStatus === 'deleting') return { tone: 'warn', label: 'Wird gelöscht' };
-  if (!backup.completed) return { tone: 'warn', label: 'Läuft' };
-  if (!backup.isSuccessful) return { tone: 'bad', label: 'Fehlgeschlagen' };
-  return { tone: 'ok', label: 'Fertig' };
+  const { t } = getExtTranslations();
+  if (backup.deletionStatus === 'deleting') return { tone: 'warn', label: t('backups.state.deleting', {}) };
+  if (!backup.completed) return { tone: 'warn', label: t('backups.state.running', {}) };
+  if (!backup.isSuccessful) return { tone: 'bad', label: t('backups.state.failed', {}) };
+  return { tone: 'ok', label: t('backups.state.done', {}) };
 }
 
-const dateTime = new Intl.DateTimeFormat('de-DE', {
-  weekday: 'short',
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-});
-const shortDate = new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: '2-digit' });
+const dateTime = {
+  format: (date: Date | number) =>
+    new Intl.DateTimeFormat(locale(), {
+      weekday: 'short',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(date),
+};
+const shortDate = {
+  format: (date: Date | number) => new Intl.DateTimeFormat(locale(), { day: '2-digit', month: '2-digit' }).format(date),
+};
 
 export default function BackupTimeline() {
   const isTaxz = useIsTaxz();
@@ -61,6 +68,7 @@ function Timeline() {
   const canRestore = useServerCan('backups.restore');
   const [selected, setSelected] = useState<string | null>(null);
   const [restoring, setRestoring] = useState(false);
+  const { t } = useExtTranslations();
 
   const { start, end, dots, levels } = useMemo(() => {
     const now = Date.now();
@@ -85,11 +93,11 @@ function Timeline() {
   const days = Math.round((end - start) / DAY);
 
   const doDownload = (backup: Backup) => {
-    const pending = addPendingToast('Download wird vorbereitet …');
+    const pending = addPendingToast(t('backups.download.preparing', {}));
     downloadBackup(server.uuid, backup.uuid, 'tar_gz')
       .then(({ url }) => {
-        pending.settle('Download gestartet.', 'success');
-        downloadUrl(url, () => addToast('Download fehlgeschlagen.', 'error'));
+        pending.settle(t('backups.download.started', {}), 'success');
+        downloadUrl(url, () => addToast(t('backups.download.failed', {}), 'error'));
       })
       .catch((error) => pending.settle(httpErrorToHuman(error), 'error'));
   };
@@ -97,14 +105,14 @@ function Timeline() {
   if (backups.length === 0) return null;
 
   return (
-    <section className='taxz-btl' aria-label='Backups als Zeitleiste'>
+    <section className='taxz-btl' aria-label={t('backups.timelineLabel', {})}>
       <div className='taxz-btl-head'>
-        <h2 className='taxz-btl-title'>Zeitleiste</h2>
-        <span className='taxz-btl-range'>Letzte {days} Tage</span>
+        <h2 className='taxz-btl-title'>{t('backups.timeline', {})}</h2>
+        <span className='taxz-btl-range'>{t('backups.lastDays', { days })}</span>
       </div>
       <div className='taxz-btl-track' style={{ '--lvls': levels } as React.CSSProperties}>
         <span className='taxz-btl-line' aria-hidden='true' />
-        {dots.length === 0 && <span className='taxz-btl-empty'>Keine Backups in diesem Zeitraum.</span>}
+        {dots.length === 0 && <span className='taxz-btl-empty'>{t('backups.empty', {})}</span>}
         {dots.map(({ backup, x, level }) => {
           const state = stateOf(backup);
           return (
@@ -124,21 +132,21 @@ function Timeline() {
       <div className='taxz-btl-scale' aria-hidden='true'>
         <span>{shortDate.format(start)}</span>
         <span>{shortDate.format(start + (end - start) / 2)}</span>
-        <span>heute</span>
+        <span>{t('backups.today', {})}</span>
       </div>
 
       {current && (
-        <div className='taxz-btl-card' role='region' aria-label={`Backup ${current.name}`}>
+        <div className='taxz-btl-card' role='region' aria-label={t('backups.cardLabel', { name: current.name })}>
           <div className='taxz-btl-info'>
             <b>{current.name}</b>
             <dl className='taxz-btl-kv'>
-              <dt>Erstellt</dt>
+              <dt>{t('backups.created', {})}</dt>
               <dd>{dateTime.format(current.created)}</dd>
-              <dt>Größe</dt>
+              <dt>{t('backups.size', {})}</dt>
               <dd className='taxz-mono'>{current.completed ? bytes(current.bytes) : '–'}</dd>
-              <dt>Art</dt>
-              <dd>{current.kind === 'server' ? 'Server-Backup' : 'Datenbank-Backup'}</dd>
-              <dt>Status</dt>
+              <dt>{t('backups.kind', {})}</dt>
+              <dd>{current.kind === 'server' ? t('backups.kindServer', {}) : t('backups.kindDatabase', {})}</dd>
+              <dt>{t('backups.status', {})}</dt>
               <dd>{stateOf(current).label}</dd>
             </dl>
           </div>
@@ -147,13 +155,13 @@ function Timeline() {
               {canDownload && (
                 <button type='button' className='taxz-btn' onClick={() => doDownload(current)}>
                   <FontAwesomeIcon icon={faFileArrowDown} aria-hidden='true' />
-                  Herunterladen
+                  {t('backups.downloadButton', {})}
                 </button>
               )}
               {canRestore && (
                 <button type='button' className='taxz-btn taxz-btn-danger' onClick={() => setRestoring(true)}>
                   <FontAwesomeIcon icon={faRotateLeft} aria-hidden='true' />
-                  Wiederherstellen
+                  {t('backups.restore', {})}
                 </button>
               )}
             </div>

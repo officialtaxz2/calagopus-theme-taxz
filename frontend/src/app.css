@@ -3,7 +3,7 @@
  * (gesetzt nur, wenn der Benutzer "taxz" gewaehlt hat). Ohne das Attribut greift nichts davon,
  * "Standard" bleibt also exakt das Original. Ausnahmen: die Schriften (nur geladen, wenn benutzt),
  * die Seite "Darstellung" (.taxz-ap) und ihre Vorschauen (.taxz-preview), die in beiden Themes funktionieren muessen.
- * Werte: Designvorgabe /mnt/project-files/mcserver/panel-design/designvorgabe-taxz-theme.md, Abschnitte 3 bis 8.
+ * Verweise wie "Designvorgabe 6.1" in Kommentaren meinen die Abschnitte der Designvorgabe, nach der das Theme gebaut wurde.
  */
 
 @font-face {

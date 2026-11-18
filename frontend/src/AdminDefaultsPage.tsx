@@ -9,7 +9,9 @@ import TitleCard from '@/elements/data-display/TitleCard.tsx';
 import Select from '@/elements/input/Select.tsx';
 import Switch from '@/elements/input/Switch.tsx';
 import { useToast } from '@/providers/ToastProvider.tsx';
-import { type Accent, type Background, BUILTIN_DEFAULTS, type ThemeChoice } from './prefs.ts';
+import { accentText, artText, backgroundText, themeText, viewText } from './AppearancePage.tsx';
+import { ACCENTS, type Accent, ARTS, BACKGROUNDS, type Background, BUILTIN_DEFAULTS, SERVER_VIEWS, type ThemeChoice } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 
 const API = '/api/admin/extensions/de.taxz.theme/defaults';
 
@@ -38,6 +40,7 @@ export default function AdminDefaultsPage() {
   const [values, setValues] = useState<ApiDefaults>(INITIAL);
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { t } = useExtTranslations();
 
   useEffect(() => {
     axiosInstance
@@ -56,88 +59,68 @@ export default function AdminDefaultsPage() {
     setSaving(true);
     axiosInstance
       .put(API, { defaults: values })
-      .then(() =>
-        addToast('Vorgaben gespeichert. Neu geladene Seiten zeigen sie, spätestens nach einer Minute.', 'success'),
-      )
+      .then(() => addToast(t('admin.defaults.saved', {}), 'success'))
       .catch((error) => addToast(httpErrorToHuman(error), 'error'))
       .finally(() => setSaving(false));
   };
 
   return (
-    <TitleCard title='Vorgaben für Benutzer ohne eigene Wahl'>
+    <TitleCard title={t('admin.defaults.title', {})}>
       <Stack>
-        <p className='text-sm text-(--mantine-color-dimmed)'>
-          Jeder Benutzer kann unter Konto → Darstellung selbst wählen. Diese Werte gelten, solange er das nicht getan
-          hat, und auf der Anmeldeseite.
-        </p>
+        <p className='text-sm text-(--mantine-color-dimmed)'>{t('admin.defaults.lead', {})}</p>
         <Select
-          label='Theme'
+          label={t('appearance.theme.title', {})}
           value={values.theme}
           disabled={!loaded}
           onChange={(value) => value && set('theme', value as ThemeChoice)}
           data={[
-            { value: 'taxz', label: 'taxz' },
-            { value: 'standard', label: 'Standard (Calagopus wie bisher)' },
+            { value: 'taxz', label: themeText('taxz')[0] },
+            { value: 'standard', label: t('admin.defaults.standardOption', {}) },
           ]}
         />
         <Select
-          label='Hintergrund'
+          label={t('appearance.background.title', {})}
           value={values.background}
           disabled={!loaded}
           onChange={(value) => value && set('background', value as Background)}
-          data={[
-            { value: 'horizon', label: 'Horizont' },
-            { value: 'topo', label: 'Topografie' },
-            { value: 'aurora', label: 'Nordlicht' },
-          ]}
+          data={BACKGROUNDS.map((value) => ({ value, label: backgroundText(value)[0] }))}
         />
         <Select
-          label='Akzentfarbe'
+          label={t('appearance.accent.title', {})}
           value={values.accent}
           disabled={!loaded}
           onChange={(value) => value && set('accent', value as Accent)}
-          data={[
-            { value: 'violet', label: 'Violett' },
-            { value: 'sky', label: 'Eisblau' },
-            { value: 'emerald', label: 'Smaragd' },
-            { value: 'glut', label: 'Glut' },
-          ]}
+          data={ACCENTS.map((value) => ({ value, label: accentText(value) }))}
         />
         <Select
-          label='Serverbilder'
+          label={t('appearance.art.title', {})}
           value={values.art}
           disabled={!loaded}
           onChange={(value) => value && set('art', value as ApiDefaults['art'])}
-          data={[
-            { value: 'colors', label: 'Spielfarben' },
-            { value: 'icon', label: 'Icon-Schein' },
-            { value: 'illu', label: 'Illustration' },
-          ]}
+          data={ARTS.map((value) => ({ value, label: artText(value)[0] }))}
         />
         <Select
-          label='Serverliste'
+          label={t('appearance.view.title', {})}
           value={values.server_view}
           disabled={!loaded}
           onChange={(value) => value && set('server_view', value as ApiDefaults['server_view'])}
-          data={[
-            { value: 'cards', label: 'Karten' },
-            { value: 'list', label: 'Liste' },
-          ]}
+          data={SERVER_VIEWS.map((value) => ({ value, label: viewText(value) }))}
         />
         <Switch
-          label='Größere Schrift'
+          label={t('appearance.readability.largeFont', {})}
           checked={values.large_font}
           disabled={!loaded}
           onChange={(event) => set('large_font', event.currentTarget.checked)}
         />
         <Switch
-          label='Starker Kontrast'
+          label={t('appearance.readability.strongContrast', {})}
           checked={values.strong_contrast}
           disabled={!loaded}
           onChange={(event) => set('strong_contrast', event.currentTarget.checked)}
         />
         <Button onClick={save} loading={saving} disabled={!loaded} className='w-fit!'>
-          Speichern
+          {t('common.save', {})}
+
         </Button>
       </Stack>
     </TitleCard>

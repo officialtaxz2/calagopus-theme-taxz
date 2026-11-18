@@ -97,7 +97,7 @@ impl SettingsDeserializeExt for ExtensionSettingsDataDeserializer {
         let defaults = match deserializer.read_serde_setting::<Option<ThemeDefaults>>("defaults") {
             Ok(defaults) => defaults.unwrap_or_default(),
             Err(err) => {
-                tracing::warn!("taxz theme: gespeicherte Vorgaben ungueltig, nehme Standardwerte: {err}");
+                tracing::warn!("taxz theme: stored defaults are invalid, using built-in defaults: {err}");
                 ThemeDefaults::default()
             }
         };
@@ -107,7 +107,7 @@ impl SettingsDeserializeExt for ExtensionSettingsDataDeserializer {
         {
             Ok(images) => images.unwrap_or_default(),
             Err(err) => {
-                tracing::warn!("taxz theme: gespeicherte Serverbilder ungueltig: {err}");
+                tracing::warn!("taxz theme: stored server images are invalid: {err}");
                 BTreeMap::new()
             }
         };

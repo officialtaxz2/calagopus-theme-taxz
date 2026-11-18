@@ -105,7 +105,7 @@ mod put {
             };
             if let Some(previous) = previous.filter(|previous| previous != &path) {
                 if let Err(error) = state.storage.remove(Some(&previous)).await {
-                    tracing::warn!("taxz theme: altes Serverbild nicht geloescht: {error:#}");
+                    tracing::warn!("taxz theme: could not delete old server image: {error:#}");
                 }
             }
 
@@ -168,7 +168,7 @@ mod delete {
                     .ok();
             };
             if let Err(error) = state.storage.remove(Some(&previous)).await {
-                tracing::warn!("taxz theme: Serverbild nicht geloescht: {error:#}");
+                tracing::warn!("taxz theme: could not delete server image: {error:#}");
             }
 
             activity_logger

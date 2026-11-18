@@ -10,6 +10,7 @@ import EmptyState from '@/elements/feedback/EmptyState.tsx';
 import ErrorState from '@/elements/feedback/ErrorState.tsx';
 import Spinner from '@/elements/feedback/Spinner.tsx';
 import { useIsTaxz, useThemePrefs } from './prefs.ts';
+import { useExtTranslations } from './translations.ts';
 
 type EmptyProps = ComponentProps<typeof EmptyState>;
 type ErrorProps = ComponentProps<typeof ErrorState>;
@@ -31,22 +32,23 @@ function TaxzEmpty({ element, props }: { element: ReactElement; props: EmptyProp
 
 function TaxzError({ element, props }: { element: ReactElement; props: ErrorProps }) {
   const isTaxz = useIsTaxz();
+  const { t } = useExtTranslations();
   if (!isTaxz) return element;
   return (
     <div className='taxz-state is-error' role='alert'>
       <span className='taxz-state-ic' aria-hidden='true'>
         <FontAwesomeIcon icon={faTriangleExclamation} />
       </span>
-      <h3 className='taxz-state-title'>Das hat nicht geklappt</h3>
+      <h3 className='taxz-state-title'>{t('states.error.title', {})}</h3>
       <div className='taxz-state-text'>
         <p>{props.error}</p>
-        {props.onRetry && <p>Prüfe die Verbindung und versuche es noch einmal.</p>}
+        {props.onRetry && <p>{t('states.error.hint', {})}</p>}
       </div>
       {props.onRetry && (
         <div className='taxz-state-acts'>
           <button type='button' className='taxz-btn' onClick={props.onRetry} disabled={props.retrying}>
             <FontAwesomeIcon icon={faRotateRight} aria-hidden='true' />
-            {props.retrying ? 'Versucht erneut …' : 'Erneut versuchen'}
+            {props.retrying ? t('common.retrying', {}) : t('common.retry', {})}
           </button>
         </div>
       )}
@@ -78,11 +80,13 @@ function TaxzCenteredSpinner({ element }: { element: ReactElement }) {
   const isTaxz = useIsTaxz();
   const [prefs] = useThemePrefs();
   const { pathname } = useLocation();
+  const { t } = useExtTranslations();
   // Nur die Serverliste hat ein festes Kartenbild; andere Stellen behalten den Lade-Kreis in Akzentfarbe.
   if (!isTaxz || pathname !== '/') return element;
   return (
     <div className={prefs.serverView === 'list' ? 'taxz-skel-grid is-list' : 'taxz-skel-grid'} role='status'>
-      <span className='taxz-sr'>Server werden geladen …</span>
+      <span className='taxz-sr'>{t('states.loadingServers', {})}</span>
+
       <ServerCardSkeleton />
       <ServerCardSkeleton />
       <ServerCardSkeleton />

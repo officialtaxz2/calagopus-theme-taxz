@@ -44,7 +44,9 @@ import { ServerArtLayer, ServerEmblem } from './ServerArt.tsx';
 import { useServerImage } from './serverImages.ts';
 import Sparkline from './Sparkline.tsx';
 import { bytesShort, isActive, num, reportVisibleServer, statusOf, type Tone } from './serverStatus.ts';
+import { useExtTranslations } from './translations.ts';
 import { useTween } from './useTween.ts';
+
 
 type Props = ComponentProps<typeof OriginalServerItem>;
 
@@ -76,11 +78,14 @@ function CardStarting({ uptimeMs }: { uptimeMs: number }) {
     return () => window.clearInterval(timer);
   }, []);
   const seconds = Math.max(0, Math.floor((now - since) / 1000));
+  const { t } = useExtTranslations();
   return (
     <p className='taxz-sc-note taxz-sc-starting'>
       {/* Der Sekundenzaehler wird nicht vorgelesen; der Status "Startet" steht schon in der Karte. */}
       <span aria-hidden='true'>
-        Startet seit {seconds < 60 ? `${seconds} s` : `${Math.floor(seconds / 60)} Min ${seconds % 60} s`}
+        {seconds < 60
+          ? t('card.startingSeconds', { seconds })
+          : t('card.startingMinutes', { minutes: Math.floor(seconds / 60), seconds: seconds % 60 })}
       </span>
     </p>
   );
@@ -108,11 +113,12 @@ function TaxzServerItem(props: Props) {
   const statsUnavailable = useServerStatsUnavailable(server);
   const { handleBulkPowerAction, bulkActionLoading } = useBulkPowerActions();
   const [openModal, setOpenModal] = useState<'add-group' | 'kill' | 'stop' | null>(null);
+  const { t, language } = useExtTranslations();
 
   const state = stats?.state ?? null;
   const canReadConsole = server.permissions.includes('*') || server.permissions.includes('control.read-console') || (user?.role?.serverPermissions ?? []).includes('control.read-console');
   const crash = useOpenCrash(server.uuid, state, canReadConsole && !server.status && !server.isSuspended && !server.isTransferring);
-  const status = crash ? { tone: 'bad' as const, label: 'Abgestürzt' } : statusOf(server, state);
+  const status = crash ? { tone: 'bad' as const, label: t('status.crashed', {}) } : statusOf(server, state);
   const look = useMemo(() => gameLook(server.egg), [server.egg]);
   const image = useServerImage(server.uuid);
   const href = to ?? `/server/${server.uuidShort}`;
@@ -146,7 +152,7 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faPlay,
-        label: 'Starten',
+        label: t('power.start', {}),
         canAccess: canPower('control.start'),
         disabled: powerBlocked || bulkActionLoading !== null || state !== 'offline',
         onClick: () => doPowerAction('start'),
@@ -154,7 +160,7 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faRotateRight,
-        label: 'Neu starten',
+        label: t('power.restart', {}),
         canAccess: canPower('control.restart'),
         disabled: powerBlocked || bulkActionLoading !== null || !state,
         onClick: () => doPowerAction('restart'),
@@ -162,7 +168,7 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faStop,
-        label: 'Stoppen',
+        label: t('power.stop', {}),
         color: 'red' as const,
         canAccess: canPower('control.stop'),
         disabled: powerBlocked || bulkActionLoading !== null || !state || state === 'offline',
@@ -171,7 +177,7 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faSkull,
-        label: 'Sofort beenden',
+        label: t('power.kill', {}),
         color: 'red' as const,
         hidden: state !== 'stopping',
         canAccess: canPower('control.stop'),
@@ -187,7 +193,7 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faPlus,
-        label: availableGroups.length === 0 ? 'Zu Gruppe hinzufügen (keine frei)' : 'Zu Gruppe hinzufügen',
+        label: availableGroups.length === 0 ? t('card.addToGroupNone', {}) : t('card.addToGroup', {}),
         hidden: !showGroupAddButton,
         disabled: availableGroups.length === 0,
         onClick: () => setOpenModal('add-group'),
@@ -195,13 +201,13 @@ function TaxzServerItem(props: Props) {
       {
         type: 'action' as const,
         icon: faMinus,
-        label: 'Aus Gruppe entfernen',
+        label: t('card.removeFromGroup', {}),
         color: 'red' as const,
         hidden: !onGroupRemove,
         onClick: () => onGroupRemove?.(),
       },
     ],
-    [canPower, powerBlocked, bulkActionLoading, state, doPowerAction, showGroupAddButton, onGroupRemove, availableGroups.length],
+    [canPower, powerBlocked, bulkActionLoading, state, doPowerAction, showGroupAddButton, onGroupRemove, availableGroups.length, language],
   );
 
   const cpuLimit = server.limits.cpu || 0;
@@ -236,7 +242,7 @@ function TaxzServerItem(props: Props) {
     },
     {
       key: 'disk',
-      label: 'Speicher',
+      label: t('metric.disk', {}),
       value: stats ? bytesShort(diskNow) : '–',
       max: stats && diskMax ? bytesShort(diskMax) : '',
       pct: stats && diskMax ? (stats.diskBytes / diskMax) * 100 : null,
@@ -249,11 +255,11 @@ function TaxzServerItem(props: Props) {
     if (powerBlocked) return null;
     if (state === 'offline' && canPower('control.start')) {
       return (
-        <Tooltip label={`${server.name} starten`}>
+        <Tooltip label={t('power.startName', { name: server.name })}>
           <button
             type='button'
             className='taxz-btn taxz-btn-icon taxz-btn-start'
-            aria-label={`${server.name} starten`}
+            aria-label={t('power.startName', { name: server.name })}
             disabled={bulkActionLoading !== null}
             onClick={() => doPowerAction('start')}
           >
@@ -264,11 +270,11 @@ function TaxzServerItem(props: Props) {
     }
     if ((state === 'running' || state === 'starting') && canPower('control.stop')) {
       return (
-        <Tooltip label={`${server.name} stoppen`}>
+        <Tooltip label={t('power.stopName', { name: server.name })}>
           <button
             type='button'
             className='taxz-btn taxz-btn-icon taxz-btn-danger'
-            aria-label={`${server.name} stoppen`}
+            aria-label={t('power.stopName', { name: server.name })}
             disabled={bulkActionLoading !== null}
             onClick={() => setOpenModal('stop')}
           >
@@ -279,11 +285,11 @@ function TaxzServerItem(props: Props) {
     }
     if (state === 'stopping' && canPower('control.stop')) {
       return (
-        <Tooltip label={`${server.name} sofort beenden`}>
+        <Tooltip label={t('power.killName', { name: server.name })}>
           <button
             type='button'
             className='taxz-btn taxz-btn-icon taxz-btn-danger'
-            aria-label={`${server.name} sofort beenden`}
+            aria-label={t('power.killName', { name: server.name })}
             onClick={() => setOpenModal('kill')}
           >
             <FontAwesomeIcon icon={faSkull} />
@@ -299,12 +305,12 @@ function TaxzServerItem(props: Props) {
   };
 
   const selectBox = showSelection && onSelectionChange && (
-    <Tooltip label={isSelected ? 'Auswahl aufheben' : 'Auswählen'} unwrapped>
+    <Tooltip label={isSelected ? t('card.deselect', {}) : t('card.select', {})} unwrapped>
       <button
         type='button'
         className={classNames('taxz-sel', isSelected && 'is-on')}
         aria-pressed={isSelected}
-        aria-label={isSelected ? `${server.name} abwählen` : `${server.name} auswählen`}
+        aria-label={isSelected ? t('card.deselectName', { name: server.name }) : t('card.selectName', { name: server.name })}
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -319,11 +325,11 @@ function TaxzServerItem(props: Props) {
   const menuButton = (openMenu: (x: number, y: number) => void, items: ContextMenuItem[]) => (
     <>
       {showContextMenu && items.some((item) => !item.hidden && item.canAccess !== false) && (
-        <Tooltip label='Weitere Aktionen'>
+        <Tooltip label={t('card.moreActions', {})}>
           <button
             type='button'
             className='taxz-btn taxz-btn-icon'
-            aria-label={`Weitere Aktionen für ${server.name}`}
+            aria-label={t('card.moreActionsName', { name: server.name })}
             aria-haspopup='menu'
             onClick={(event) => {
               event.preventDefault();
@@ -340,8 +346,8 @@ function TaxzServerItem(props: Props) {
   );
 
   const foreign = showForeignServerBadge && !server.isOwner && (
-    <Tooltip label='Server eines anderen Benutzers'>
-      <FontAwesomeIcon icon={faUsers} className='taxz-foreign' aria-label='Server eines anderen Benutzers' />
+    <Tooltip label={t('card.foreign', {})}>
+      <FontAwesomeIcon icon={faUsers} className='taxz-foreign' aria-label={t('card.foreign', {})} />
     </Tooltip>
   );
 
@@ -351,12 +357,12 @@ function TaxzServerItem(props: Props) {
         <RedactedText value={address} />
       </span>
       <CopyOnClick content={address} className='taxz-ib'>
-        <span className='taxz-sr'>Adresse kopieren</span>
+        <span className='taxz-sr'>{t('card.copyAddress', {})}</span>
         <FontAwesomeIcon icon={faCopy} aria-hidden='true' />
       </CopyOnClick>
     </span>
   ) : (
-    <span className='taxz-addr taxz-muted'>Keine Adresse</span>
+    <span className='taxz-addr taxz-muted'>{t('card.noAddress', {})}</span>
   );
 
   return (
@@ -365,26 +371,26 @@ function TaxzServerItem(props: Props) {
       <ConfirmationModal
         opened={openModal === 'stop'}
         onClose={() => setOpenModal(null)}
-        title={`${server.name} stoppen?`}
-        confirm='Stoppen'
+        title={t('power.stopConfirmTitle', { name: server.name })}
+        confirm={t('power.stop', {})}
         onConfirmed={() => {
           setOpenModal(null);
           return doPowerAction('stop');
         }}
       >
-        Der Server fährt herunter, alle Verbindungen zum Spiel werden getrennt.
+        {t('power.stopConfirmText', {})}
       </ConfirmationModal>
       <ConfirmationModal
         opened={openModal === 'kill'}
         onClose={() => setOpenModal(null)}
-        title={`${server.name} sofort beenden?`}
-        confirm='Sofort beenden'
+        title={t('power.killConfirmTitle', { name: server.name })}
+        confirm={t('power.kill', {})}
         onConfirmed={() => {
           setOpenModal(null);
           return doPowerAction('kill');
         }}
       >
-        Der Server wird ohne Speichern abgebrochen. Nicht gespeicherte Spielstände gehen verloren.
+        {t('power.killConfirmText', {})}
       </ConfirmationModal>
 
       <ContextMenu enabled={showContextMenu} items={menuItems}>
@@ -460,11 +466,11 @@ function TaxzServerItem(props: Props) {
                 {state === 'starting' && <CardStarting uptimeMs={stats?.uptime ?? 0} />}
                 {crash && (
                   <p className='taxz-sc-note taxz-sc-crash' role='status'>
-                    Abgestürzt {ago(crash.timestamp)} · {crashCause(crash, undefined).short}
+                    {t('card.crashed', { when: ago(crash.timestamp), cause: crashCause(crash, undefined).short })}
                   </p>
                 )}
                 {noStats && statsUnavailable ? (
-                  <p className='taxz-sc-note'>Werte gerade nicht abrufbar (Node nicht erreichbar).</p>
+                  <p className='taxz-sc-note'>{t('card.statsUnavailable', {})}</p>
                 ) : (
                   <div className='taxz-stats3'>
                     {metrics.map((metric) => (
@@ -483,7 +489,8 @@ function TaxzServerItem(props: Props) {
                 <div className='taxz-sc-acts'>
                   <NavLink to={href} className='taxz-btn taxz-btn-tonal taxz-sc-open' onClick={linkClick} tabIndex={-1}>
                     <FontAwesomeIcon icon={faTerminal} />
-                    <span className='taxz-sc-open-txt'>Öffnen</span>
+                    <span className='taxz-sc-open-txt'>{t('card.open', {})}</span>
+
                   </NavLink>
                   {powerButton}
                   {menuButton(openMenu, items)}

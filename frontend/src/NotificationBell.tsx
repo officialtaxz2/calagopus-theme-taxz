@@ -3,7 +3,7 @@
 // (/api/client/extensions/de.taxz.theme/notifications), der Abstuerze, Backups und fehlgeschlagene Zeitplaene aller
 // eigenen Server der letzten sieben Tage sammelt, jeweils nur mit dem passenden Recht. Admins mit Recht "stats.read"
 // sehen zusaetzlich ein verfuegbares Panel-Update (Update-Pruefung des Panels). Dieser Eintrag ist nur ein Hinweis ohne
-// Link: Neue Panel-Versionen kommen ueber das Repo (woechentlicher Update-Check als PR), nicht ueber den Updater im Panel.
+// Link, wie aktualisiert wird, entscheidet jede Installation selbst.
 // "Gelesen" ist ein Zeitpunkt (plus die zuletzt gesehene Panel-Version) in den Benutzereinstellungen, also auf allen Geraeten gleich.
 
 import {
@@ -31,6 +31,8 @@ import { useUserSetting } from '@/lib/userSettings.ts';
 import { isOutdated } from '@/lib/version.ts';
 import { useAuth } from '@/providers/contexts/authContext.ts';
 import { ago } from './CrashHelp.tsx';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
+
 
 const eventSchema = z.object({
   id: z.string(),
@@ -66,13 +68,15 @@ interface Item {
 }
 
 function crashText(event: Event) {
-  if (event.oom_killed) return 'Speicher voll';
+  const { t } = getExtTranslations();
+  if (event.oom_killed) return t('crash.cause.oom', {});
   const signal = event.exit_code !== null ? exitCodeSignal(event.exit_code) : null;
-  if (signal) return `Vom System beendet (${signal})`;
-  return event.exit_code !== null ? `Exit-Code ${event.exit_code}` : 'Ursache unbekannt';
+  if (signal) return t('bell.signal', { signal });
+  return event.exit_code !== null ? t('bell.exitCode', { code: event.exit_code }) : t('crash.cause.unknown', {});
 }
 
 function toItem(event: Event, readAt: number): Omit<Item, 'meta'> & { detail: string | null } {
+  const { t } = getExtTranslations();
   const base = `/server/${event.server.uuid_short}`;
   const unread = event.at.getTime() > readAt;
   switch (event.kind) {
@@ -81,7 +85,7 @@ function toItem(event: Event, readAt: number): Omit<Item, 'meta'> & { detail: st
         id: event.id,
         tone: 'bad',
         icon: faSkull,
-        title: `${event.server.name} ist abgestürzt`,
+        title: t('crash.title', { name: event.server.name }),
         detail: crashText(event),
         to: `${base}/console/crashes?crash=${event.crash_id}`,
         at: event.at,
@@ -92,7 +96,7 @@ function toItem(event: Event, readAt: number): Omit<Item, 'meta'> & { detail: st
         id: event.id,
         tone: 'ok',
         icon: faBoxArchive,
-        title: `Backup „${event.name}“ fertig`,
+        title: t('bell.backupOk', { name: event.name ?? '' }),
         detail: null,
         to: `${base}/backups`,
         at: event.at,
@@ -103,7 +107,7 @@ function toItem(event: Event, readAt: number): Omit<Item, 'meta'> & { detail: st
         id: event.id,
         tone: 'bad',
         icon: faTriangleExclamation,
-        title: `Backup „${event.name}“ fehlgeschlagen`,
+        title: t('bell.backupFailed', { name: event.name ?? '' }),
         detail: null,
         to: `${base}/backups`,
         at: event.at,
@@ -114,7 +118,7 @@ function toItem(event: Event, readAt: number): Omit<Item, 'meta'> & { detail: st
         id: event.id,
         tone: 'warn',
         icon: faCalendarXmark,
-        title: `Zeitplan „${event.name}“ fehlgeschlagen`,
+        title: t('bell.scheduleFailed', { name: event.name ?? '' }),
         detail: null,
         to: `${base}/schedules`,
         at: event.at,
@@ -149,6 +153,7 @@ function useNotifications() {
       ? updates.data
       : null;
 
+  const { t, language } = useExtTranslations();
   const items = useMemo<Item[]>(() => {
     const list: Item[] = (events.data?.events ?? []).map((event) => {
       const { detail, ...item } = toItem(event, readAt);
@@ -160,15 +165,15 @@ function useNotifications() {
         id: `update:${update.latestPanelVersion}`,
         tone: 'info',
         icon: faArrowUp,
-        title: `Panel-Update verfügbar: ${update.latestPanelVersion}`,
-        meta: `Installiert: ${update.panelVersion} · kommt mit dem Update-PR, nicht im Panel installieren`,
+        title: t('bell.update', { version: update.latestPanelVersion }),
+        meta: t('bell.installed', { version: update.panelVersion }),
         to: null,
         at: null,
         unread: read.update !== update.latestPanelVersion,
       });
     }
     return list;
-  }, [events.data, readAt, update, read.update]);
+  }, [events.data, readAt, update, read.update, language]);
 
   const unread = items.filter((item) => item.unread).length;
   const markAllRead = () => {
@@ -196,7 +201,8 @@ export default function NotificationBell({ placement }: { placement: 'sidebar' |
 function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
   const [opened, setOpened] = useState(false);
   const { items, unread, markAllRead, loading, error, retry, unavailable } = useNotifications();
-  const label = unread > 0 ? `Benachrichtigungen, ${unread} ungelesen` : 'Benachrichtigungen';
+  const { t } = useExtTranslations();
+  const label = unread > 0 ? t('bell.labelUnread', { count: unread }) : t('bell.title', {});
 
   return (
     <Popover
@@ -225,9 +231,9 @@ function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
           {unread > 0 && <span className='taxz-bell-dot' aria-hidden='true' />}
         </button>
       </Popover.Target>
-      <Popover.Dropdown role='dialog' aria-label='Benachrichtigungen'>
+      <Popover.Dropdown role='dialog' aria-label={t('bell.title', {})}>
         <div className='taxz-bell-head'>
-          <h2>Benachrichtigungen</h2>
+          <h2>{t('bell.title', {})}</h2>
           {/* aria-disabled statt disabled: der Fokus bleibt nach dem Klick im Dialog (Escape schliesst weiter) */}
           <button
             type='button'
@@ -236,20 +242,20 @@ function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
             aria-disabled={unread === 0}
           >
             <FontAwesomeIcon icon={faCheck} aria-hidden='true' />
-            Alle gelesen
+            {t('bell.markRead', {})}
           </button>
         </div>
         {error ? (
           <div className='taxz-bell-empty'>
-            Benachrichtigungen konnten nicht geladen werden.{' '}
+            {t('bell.loadFailed', {})}{' '}
             <button type='button' className='taxz-bell-retry' onClick={retry}>
-              Erneut versuchen
+              {t('common.retry', {})}
             </button>
           </div>
         ) : loading ? (
-          <div className='taxz-bell-empty'>Wird geladen …</div>
+          <div className='taxz-bell-empty'>{t('common.loading', {})}</div>
         ) : items.length === 0 ? (
-          <div className='taxz-bell-empty'>Keine Ereignisse in den letzten 7 Tagen.</div>
+          <div className='taxz-bell-empty'>{t('bell.empty', {})}</div>
         ) : (
           <ul className='taxz-bell-list'>
             {items.map((item) => {
@@ -265,7 +271,7 @@ function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
                   </span>
                   {item.unread && (
                     <span className='taxz-bell-new'>
-                      <span className='sr-only'>ungelesen</span>
+                      <span className='sr-only'>{t('bell.unread', {})}</span>
                     </span>
                   )}
                 </>
@@ -286,7 +292,8 @@ function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
         )}
         {unavailable > 0 && (
           <p className='taxz-bell-note'>
-            Absturzverlauf von {unavailable === 1 ? 'einem Server' : `${unavailable} Servern`} gerade nicht abrufbar.
+            {unavailable === 1 ? t('bell.unavailableOne', {}) : t('bell.unavailableMany', { count: unavailable })}
+
           </p>
         )}
       </Popover.Dropdown>

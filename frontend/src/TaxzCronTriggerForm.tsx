@@ -27,10 +27,12 @@ import { useServerStore } from '@/stores/server.ts';
 import OriginalCronTriggerExtraForm from '@/pages/server/schedules/triggers/CronTriggerExtraForm.tsx';
 import type { TriggerFormProps } from '@/pages/server/schedules/triggers/TriggerForm.tsx';
 import { useIsTaxz } from './prefs.ts';
-import { describeCronGerman } from './scheduleText.ts';
+import { describeCronPlain } from './scheduleText.ts';
+import { useExtTranslations } from './translations.ts';
 
 function TaxzCronTriggerExtraForm({ form, index }: TriggerFormProps) {
   const { t, language } = useTranslations();
+  const { t: tExt } = useExtTranslations();
   const server = useServerStore((state) => state.server);
   const [advancedManual, setAdvancedManual] = useState(false);
 
@@ -91,7 +93,7 @@ function TaxzCronTriggerExtraForm({ form, index }: TriggerFormProps) {
   };
 
   const cronValid = isValidCronExpression(schedule);
-  const description = cronValid ? describeCronGerman(schedule, trigger.weekInterval, language) : null;
+  const description = cronValid ? describeCronPlain(schedule, trigger.weekInterval, language) : null;
 
   const timeValue =
     simple && 'hour' in simple
@@ -118,10 +120,10 @@ function TaxzCronTriggerExtraForm({ form, index }: TriggerFormProps) {
         <Group align='end' gap='sm'>
           <div className='taxz-cronfreq'>
             <span className='taxz-cronfreq-label' id={`taxz-freq-${index}`}>
-              Wiederholung
+              {tExt('schedule.form.repeat', {})}
             </span>
             <div className='taxz-seg2' role='group' aria-labelledby={`taxz-freq-${index}`}>
-              {FREQUENCIES.map(([value, label]) => (
+              {FREQUENCIES.map((value) => (
                 <button
                   key={value}
                   type='button'
@@ -129,7 +131,7 @@ function TaxzCronTriggerExtraForm({ form, index }: TriggerFormProps) {
                   className={simple!.frequency === value ? 'is-on' : undefined}
                   onClick={() => handleFrequencyChange(value)}
                 >
-                  {label}
+                  {tExt(`schedule.form.frequency.${value}`, {})}
                 </button>
               ))}
             </div>
@@ -246,13 +248,7 @@ function TaxzCronTriggerExtraForm({ form, index }: TriggerFormProps) {
   );
 }
 
-const FREQUENCIES: [SimpleSchedule['frequency'], string][] = [
-  ['daily', 'Täglich'],
-  ['weekly', 'Wöchentlich'],
-  ['everyHours', 'Stündlich'],
-  ['monthly', 'Monatlich'],
-  ['everyMinutes', 'Minütlich'],
-];
+const FREQUENCIES: SimpleSchedule['frequency'][] = ['daily', 'weekly', 'everyHours', 'monthly', 'everyMinutes'];
 
 export default function CronTriggerExtraForm(props: TriggerFormProps) {
   const isTaxz = useIsTaxz();

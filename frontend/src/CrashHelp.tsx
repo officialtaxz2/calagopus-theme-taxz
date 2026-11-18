@@ -27,8 +27,10 @@ import { useAuth } from '@/providers/AuthProvider.tsx';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
 import { lineLevel } from './consoleLevel.ts';
-import { type PowerState, type StatusInfo, statusOf } from './serverStatus.ts';
+import { locale, type PowerState, type StatusInfo, statusOf } from './serverStatus.ts';
 import { cleanLine } from './StartProgress.tsx';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
+
 
 type Crash = z.infer<typeof serverCrashSchema>;
 
@@ -74,8 +76,9 @@ export function useCurrentServerStatus(
   const disconnected = !connected && !!uuid && connectedOnce === uuid;
   const flagged = !!(server?.isSuspended || server?.isTransferring || server?.status || server?.nodeMaintenanceEnabled);
   let status = statusOf(server ?? {}, state);
-  if (!flagged && disconnected) status = { tone: 'off', label: 'Getrennt' };
-  else if (!flagged && crash) status = { tone: 'bad', label: 'Abgestürzt' };
+  const { t } = getExtTranslations();
+  if (!flagged && disconnected) status = { tone: 'off', label: t('status.disconnected', {}) };
+  else if (!flagged && crash) status = { tone: 'bad', label: t('status.crashed', {}) };
   return { status, crash, disconnected };
 }
 
@@ -141,30 +144,34 @@ export function useOpenCrash(uuid: string, state: string | null | undefined, ena
 const PORT_IN_USE = /address already in use|eaddrinuse/i;
 
 export function crashCause(crash: Crash, log: string | undefined): { short: string; text: string } {
-  if (crash.oomKilled)
-    return { short: 'Speicher voll', text: 'Speicher voll: Das System hat den Server beendet, weil der RAM nicht reichte.' };
-  if (log && PORT_IN_USE.test(log))
-    return { short: 'Port belegt', text: 'Port belegt: Ein anderes Programm nutzt die Adresse des Servers schon.' };
+  const { t } = getExtTranslations();
+  if (crash.oomKilled) return { short: t('crash.cause.oom', {}), text: t('crash.cause.oomText', {}) };
+  if (log && PORT_IN_USE.test(log)) return { short: t('crash.cause.port', {}), text: t('crash.cause.portText', {}) };
   const signal = exitCodeSignal(crash.exitCode);
-  if (signal) return { short: 'Vom System beendet', text: `Vom System beendet (${signal}, Exit-Code ${crash.exitCode}).` };
+  if (signal)
+    return { short: t('crash.cause.signal', {}), text: t('crash.cause.signalText', { signal, code: crash.exitCode }) };
   if (crash.exitCode !== 0)
-    return { short: 'Ursache unbekannt', text: `Ursache unbekannt. Der Server endete mit Exit-Code ${crash.exitCode}.` };
-  return { short: 'Ursache unbekannt', text: 'Ursache unbekannt. Der Server hat sich unerwartet beendet.' };
+    return { short: t('crash.cause.unknown', {}), text: t('crash.cause.unknownCode', { code: crash.exitCode }) };
+  return { short: t('crash.cause.unknown', {}), text: t('crash.cause.unknownText', {}) };
 }
 
 const ERROR_LINE = /exception/i;
 
 export function ago(date: Date) {
+  const { t } = getExtTranslations();
   const minutes = Math.max(0, Math.round((Date.now() - date.getTime()) / 60_000));
-  if (minutes < 1) return 'gerade eben';
-  if (minutes < 60) return `vor ${minutes} Min`;
+  if (minutes < 1) return t('time.justNow', {});
+  if (minutes < 60) return t('time.minutesAgo', { minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `vor ${hours} Std`;
+  if (hours < 24) return t('time.hoursAgo', { hours });
   const days = Math.floor(hours / 24);
-  return days === 1 ? 'vor 1 Tag' : `vor ${days} Tagen`;
+  return days === 1 ? t('time.dayAgo', {}) : t('time.daysAgo', { days });
 }
 
-const when = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const when = (date: Date) =>
+  new Intl.DateTimeFormat(locale(), { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).format(
+    date,
+  );
 
 /** Absturz-Karte auf der Serverseite. */
 export function CrashCard({
@@ -179,6 +186,7 @@ export function CrashCard({
   const { user } = useAuth();
   const { addToast } = useToast();
   const [starting, setStarting] = useState(false);
+  const { t } = useExtTranslations();
   const { data: log } = useQuery({
     queryKey: queryKeys.server(server.uuid).crashes.log(crash.id),
     queryFn: () => getCrashLog(server.uuid, crash.id),
@@ -205,7 +213,7 @@ export function CrashCard({
     setStarting(true);
     sendPowerAction(server.uuid, 'start')
       .then(() => {
-        addToast(`${server.name} wird gestartet.`, 'success');
+        addToast(t('crash.starting', { name: server.name }), 'success');
         dismissCrash(server.uuid, crash.id);
       })
       .catch((error) => addToast(httpErrorToHuman(error), 'error'))
@@ -219,15 +227,15 @@ export function CrashCard({
           <FontAwesomeIcon icon={faSkull} />
         </span>
         <div className='taxz-crash-title'>
-          <h2 id={`taxz-crash-${crash.id}`}>{server.name} ist abgestürzt</h2>
+          <h2 id={`taxz-crash-${crash.id}`}>{t('crash.title', { name: server.name })}</h2>
           <span>
-            {when.format(crash.timestamp)} ({ago(crash.timestamp)})
+            {when(crash.timestamp)} ({ago(crash.timestamp)})
           </span>
         </div>
         <button
           type='button'
           className='taxz-ib'
-          aria-label='Absturzmeldung ausblenden'
+          aria-label={t('crash.dismiss', {})}
           onClick={() => dismissCrash(server.uuid, crash.id)}
         >
           <FontAwesomeIcon icon={faXmark} />
@@ -235,7 +243,7 @@ export function CrashCard({
       </div>
       <p className='taxz-crash-cause'>{cause.text}</p>
       {lines.length > 0 && (
-        <div className='taxz-crash-log' aria-label='Letzte Konsolenzeilen vor dem Absturz'>
+        <div className='taxz-crash-log' aria-label={t('crash.lastLines', {})}>
           {lines.map((line, index) => (
             <div key={index} className={index === errorIndex ? 'is-error' : undefined}>
               {line}
@@ -247,18 +255,19 @@ export function CrashCard({
         {canStart && (
           <button type='button' className='taxz-btn taxz-btn-primary' onClick={restart} disabled={starting}>
             <FontAwesomeIcon icon={faPlay} aria-hidden='true' />
-            {starting ? 'Startet …' : 'Neu starten'}
+            {starting ? t('crash.startingButton', {}) : t('crash.restart', {})}
           </button>
         )}
         {isAdmin(user, 'servers.update') && (
           <NavLink className='taxz-btn' to={`/admin/servers/${server.uuid}/settings`}>
             <FontAwesomeIcon icon={faMemory} aria-hidden='true' />
-            Speicher anpassen
+            {t('crash.adjustMemory', {})}
           </NavLink>
         )}
         <NavLink className='taxz-btn' to={`/server/${server.uuidShort}/console/crashes?crash=${crash.id}`}>
           <FontAwesomeIcon icon={faFileLines} aria-hidden='true' />
-          Ganzes Log
+          {t('crash.fullLog', {})}
+
         </NavLink>
       </div>
     </section>

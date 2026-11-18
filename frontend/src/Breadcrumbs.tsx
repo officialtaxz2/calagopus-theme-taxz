@@ -11,8 +11,10 @@ import Container from '@/elements/layout/Container.tsx';
 import { useCurrentWindow } from '@/providers/CurrentWindowProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
 import { useIsTaxz } from './prefs.ts';
+import type { NavGroup } from './TaxzSidebar.tsx';
+import { useExtTranslations } from './translations.ts';
 
-export type CrumbPage = { label: string; to: string; group: string } | null;
+export type CrumbPage = { label: string; to: string; group: NavGroup } | null;
 
 let current: CrumbPage = null;
 const listeners = new Set<() => void>();
@@ -39,8 +41,9 @@ function useCrumbPage(): CrumbPage {
 type Crumb = { label: string; to?: string };
 
 function Trail({ items }: { items: Crumb[] }) {
+  const { t } = useExtTranslations();
   return (
-    <nav className='taxz-crumbs' aria-label='Brotkrumen'>
+    <nav className='taxz-crumbs' aria-label={t('crumbs.label', {})}>
       <ol>
         {items.map((item, index) => {
           const last = index === items.length - 1;
@@ -68,7 +71,8 @@ function Trail({ items }: { items: Crumb[] }) {
 
 function ServerTrail({ base, page }: { base: string; page: CrumbPage }) {
   const name = useServerStore((state) => state.server?.name);
-  const items: Crumb[] = [{ label: 'Server', to: '/' }];
+  const { t } = useExtTranslations();
+  const items: Crumb[] = [{ label: t('crumbs.servers', {}), to: '/' }];
   if (name) items.push({ label: name, to: base });
   if (page && page.to !== '/') items.push({ label: page.label });
   return <Trail items={items} />;
@@ -81,6 +85,7 @@ function Crumbs() {
   const { id } = useCurrentWindow();
   const { pathname } = useLocation();
   const page = useCrumbPage();
+  const { t } = useExtTranslations();
   if (!isTaxz || id) return null;
 
   const path = strip(pathname);
@@ -88,19 +93,19 @@ function Crumbs() {
   if (server) return <ServerTrail base={server[0]} page={page} />;
 
   if (path === '/admin' || path.startsWith('/admin/')) {
-    const items: Crumb[] = [{ label: 'Admin', to: '/admin' }];
-    items.push({ label: page && page.to !== '/admin' ? page.label : 'Übersicht' });
+    const items: Crumb[] = [{ label: t('crumbs.admin', {}), to: '/admin' }];
+    items.push({ label: page && page.to !== '/admin' ? page.label : t('crumbs.overview', {}) });
     return <Trail items={items} />;
   }
 
   if (path === '/account' || path.startsWith('/account/')) {
-    if (page?.group === 'Konto' && page.to !== '/account') {
-      return <Trail items={[{ label: 'Konto', to: '/account' }, { label: page.label }]} />;
+    if (page?.group === 'account' && page.to !== '/account') {
+      return <Trail items={[{ label: t('nav.account', {}), to: '/account' }, { label: page.label }]} />;
     }
-    return <Trail items={[{ label: page?.label ?? 'Konto' }]} />;
+    return <Trail items={[{ label: page?.label ?? t('nav.account', {}) }]} />;
   }
 
-  return <Trail items={[{ label: page?.label ?? 'Server' }]} />;
+  return <Trail items={[{ label: page?.label ?? t('crumbs.servers', {}) }]} />;
 }
 
 export function registerBreadcrumbs() {

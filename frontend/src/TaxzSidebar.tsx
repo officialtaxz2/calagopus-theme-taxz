@@ -63,6 +63,7 @@ import { useCurrentServerStatus } from './CrashHelp.tsx';
 import { useServerHeadVisible } from './ServerHead.tsx';
 import { useServerImage } from './serverImages.ts';
 import { isActive, uptime } from './serverStatus.ts';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
 import WelcomeLook from './WelcomeLook.tsx';
 
 type SidebarProps = { children: ReactNode; header?: ReactNode; footer?: ReactNode };
@@ -121,7 +122,12 @@ function withResources(nodes: ReactNode, base: string, state: { done: boolean })
     });
     return [
       consoleLink,
-      <Sidebar.Link key='taxz-resources' to={`${base}${RESOURCES_PATH}`} icon={faChartLine} name='Ressourcen' />,
+      <Sidebar.Link
+        key='taxz-resources'
+        to={`${base}${RESOURCES_PATH}`}
+        icon={faChartLine}
+        name={getExtTranslations().t('nav.resources', {})}
+      />,
     ];
   });
 }
@@ -134,10 +140,17 @@ function addResources(props: SidebarProps, context: Context): SidebarProps {
   return state.done ? { ...props, children } : props;
 }
 
-function dashboardGroup(to: string): string {
+// Gruppen der Navigation; der Schluessel ist zugleich der Uebersetzungsschluessel nav.group.<schluessel>, '' ist ohne Titel.
+export type NavGroup = '' | 'overview' | 'account' | 'admin' | 'more' | 'control' | 'setup' | 'share';
+
+export function groupLabel(group: NavGroup): string {
+  return group ? getExtTranslations().t(`nav.group.${group}`, {}) : '';
+}
+
+function dashboardGroup(to: string): NavGroup {
   const path = strip(to);
-  if (path === '/' || path === '/account/activity') return 'Übersicht';
-  if (path === '/admin') return 'Verwaltung';
+  if (path === '/' || path === '/account/activity') return 'overview';
+  if (path === '/admin') return 'admin';
   if (
     [
       '/account',
@@ -151,32 +164,38 @@ function dashboardGroup(to: string): string {
       '/account/shortcuts',
     ].includes(path)
   )
-    return 'Konto';
-  return 'Weitere';
+    return 'account';
+  return 'more';
 }
 
 // Konto-Gruppe (6.1): Reihenfolge, und welche Punkte unter "Schluessel und Sitzungen" zusammengefasst werden.
 const KEY_PATHS = ['/account/security-keys', '/account/api-keys', '/account/ssh-keys', '/account/oauth-links', '/account/sessions'];
 const ACCOUNT_ORDER = ['/account', '/account/appearance', 'keys', '/account/command-snippets', '/account/shortcuts'];
 
-function serverGroup(to: string, base: string): string {
+function serverGroup(to: string, base: string): NavGroup {
   const path = strip(to);
-  if (!path.startsWith(base)) return path === '/admin' || path.startsWith('/admin/') ? 'Verwaltung' : '';
+  if (!path.startsWith(base)) return path === '/admin' || path.startsWith('/admin/') ? 'admin' : '';
   const rest = path.slice(base.length) || '/';
-  if (['/', RESOURCES_PATH, '/files', '/backups', '/schedules'].includes(rest)) return 'Steuern';
-  if (['/network', '/databases', '/startup', '/mounts', '/settings'].includes(rest)) return 'Einrichten';
-  if (['/subusers', '/activity'].includes(rest)) return 'Teilen';
-  return 'Weitere';
+  if (['/', RESOURCES_PATH, '/files', '/backups', '/schedules'].includes(rest)) return 'control';
+  if (['/network', '/databases', '/startup', '/mounts', '/settings'].includes(rest)) return 'setup';
+  if (['/subusers', '/activity'].includes(rest)) return 'share';
+  return 'more';
 }
 
-// Punkte, die das Panel auf Deutsch noch englisch beschriftet (Designvorgabe 1.6: Deutsch, wo das Theme rendert).
-const GERMAN_NAMES: Record<'dashboard' | 'server', Record<string, string>> = {
-  dashboard: { '/': 'Server', '/account': 'Konto' },
-  server: { '/': 'Alle Server' },
-};
+// Eigene Namen fuer Punkte, deren Panel-Name im Theme nicht passt (Designvorgabe 1.6), z. B. "Alle Server" im Server.
+function ownName(kind: 'dashboard' | 'server', to: string): string | undefined {
+  const { t } = getExtTranslations();
+  const path = strip(to);
+  if (kind === 'dashboard') {
+    if (path === '/') return t('nav.servers', {});
+    if (path === '/account') return t('nav.account', {});
+    return undefined;
+  }
+  return path === '/' ? t('nav.allServers', {}) : undefined;
+}
 
-function germanize(node: ReactElement, to: string, key: string, kind: 'dashboard' | 'server'): ReactElement {
-  const name = GERMAN_NAMES[kind][strip(to)];
+function withOwnName(node: ReactElement, to: string, key: string, kind: 'dashboard' | 'server'): ReactElement {
+  const name = ownName(kind, to);
   return node.type === Sidebar.Link && name ? cloneElement(node as ReactElement<{ name?: string }>, { key, name }) : cloneElement(node, { key });
 }
 
@@ -201,7 +220,7 @@ function activePage(props: SidebarProps, context: Context, pathname: string): Cr
     const to = strip(entry.to);
     const matches = path === to || (to !== '/' && path.startsWith(`${to}/`));
     if (!matches || (best && best.to.length >= to.length)) continue;
-    const label = GERMAN_NAMES[kind][to] ?? linkName(entry.node);
+    const label = ownName(kind, to) ?? linkName(entry.node);
     if (!label) continue;
     const group =
       context.kind === 'server' ? serverGroup(to, context.base) : context.kind === 'admin' ? '' : dashboardGroup(to);
@@ -210,9 +229,9 @@ function activePage(props: SidebarProps, context: Context, pathname: string): Cr
   return best;
 }
 
-const ORDER: Record<Context['kind'], string[]> = {
-  dashboard: ['Übersicht', 'Konto', 'Verwaltung', 'Weitere'],
-  server: ['', 'Steuern', 'Einrichten', 'Teilen', 'Verwaltung', 'Weitere'],
+const ORDER: Record<Context['kind'], NavGroup[]> = {
+  dashboard: ['overview', 'account', 'admin', 'more'],
+  server: ['', 'control', 'setup', 'share', 'admin', 'more'],
   admin: [],
 };
 
@@ -268,6 +287,7 @@ function ServerCard({ switcher }: { switcher: ReactElement | null }) {
   const image = useServerImage(server?.uuid ?? '');
   const headVisible = useServerHeadVisible();
   const { status, crash, disconnected } = useCurrentServerStatus(server, state);
+  const { t } = useExtTranslations();
   if (!server?.uuid) return null;
 
   const line =
@@ -280,7 +300,7 @@ function ServerCard({ switcher }: { switcher: ReactElement | null }) {
         <div className='taxz-swcard-main'>
           {switcher ? (
             <label className='taxz-swcard-pick'>
-              <span className='taxz-sr'>Server wechseln</span>
+              <span className='taxz-sr'>{t('nav.switchServer', {})}</span>
               {switcher}
             </label>
           ) : (
@@ -317,7 +337,7 @@ function accountItems(list: Placed[]): ReactNode[] {
     entries.push({
       rank: rank('keys'),
       node: (
-        <Fold key='keys' label='Schlüssel und Sitzungen' icon={faKey} paths={keys.map((item) => strip(item.to))}>
+        <Fold key='keys' label={getExtTranslations().t('nav.keys', {})} icon={faKey} paths={keys.map((item) => strip(item.to))}>
           {keys.map((item) => item.node)}
         </Fold>
       ),
@@ -345,7 +365,7 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
     else if (entry.kind !== 'divider') footer.push(cloneElement(entry.node as ReactElement, { key: `f-${index}` }));
   }
 
-  const groups = new Map<string, Placed[]>();
+  const groups = new Map<NavGroup, Placed[]>();
   const keep: ReactNode[] = [];
 
   const place = (entry: Entry, index: number, fromHeader: boolean) => {
@@ -353,7 +373,7 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
       const group = context.kind === 'server' ? serverGroup(entry.to, context.base) : dashboardGroup(entry.to);
       const list = groups.get(group) ?? [];
       const key = `${group}-${entry.to}-${index}`;
-      list.push({ to: entry.to, node: germanize(entry.node, entry.to, key, context.kind) });
+      list.push({ to: entry.to, node: withOwnName(entry.node, entry.to, key, context.kind) });
       groups.set(group, list);
     } else if (entry.kind === 'other' && fromHeader) {
       // Die Status-Karte des Panels ersetzt im Server die eigene Server-Karte.
@@ -367,16 +387,17 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
 
   const order = ORDER[context.kind];
   const known = [...order, ...[...groups.keys()].filter((key) => !order.includes(key))];
-  const items = (key: string): ReactNode[] => {
+  const items = (key: NavGroup): ReactNode[] => {
     const list = groups.get(key) ?? [];
-    return context.kind === 'dashboard' && key === 'Konto' ? accountItems(list) : list.map((item) => item.node);
+    return context.kind === 'dashboard' && key === 'account' ? accountItems(list) : list.map((item) => item.node);
   };
+  const { t } = getExtTranslations();
 
   // Auf der Serverliste selbst waere der Umschalter doppelt (die Liste hat ihre eigene Suche).
   const jump =
     context.kind === 'dashboard' && switcher && !SERVER_LIST_PATHS.includes(strip(pathname)) ? (
       <label key='jump' className='taxz-jump'>
-        <span className='taxz-jump-label'>Zu Server wechseln</span>
+        <span className='taxz-jump-label'>{t('nav.jumpToServer', {})}</span>
         {switcher}
       </label>
     ) : null;
@@ -391,12 +412,12 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
     ),
     footer: footer.length > 0 ? <>{footer}</> : undefined,
     children: (
-      <nav className='taxz-nav' aria-label='Navigation'>
+      <nav className='taxz-nav' aria-label={t('nav.label', {})}>
         {known
           .filter((key) => groups.has(key))
           .map((key) => (
             <Fragment key={key || 'top'}>
-              <Group title={key}>{items(key)}</Group>
+              <Group title={groupLabel(key)}>{items(key)}</Group>
               {key === '' && context.kind === 'server' && <ServerCard switcher={switcher} />}
             </Fragment>
           ))}
@@ -408,25 +429,27 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
 type Tab = { to: string; label: string; icon: IconDefinition; end?: boolean };
 
 function tabsFor(context: Context): Tab[] {
+  const { t } = getExtTranslations();
   if (context.kind === 'server') {
     return [
-      { to: context.base, label: 'Konsole', icon: faTerminal, end: true },
-      { to: `${context.base}/files`, label: 'Dateien', icon: faFolder },
-      // Weiches Trennzeichen: Mit grosser Schrift bricht das Wort am Handy sauber in zwei Zeilen statt abgeschnitten zu werden.
-      { to: `${context.base}/settings`, label: 'Einstel\u00ADlungen', icon: faGear },
+      { to: context.base, label: t('nav.tab.console', {}), icon: faTerminal, end: true },
+      { to: `${context.base}/files`, label: t('nav.tab.files', {}), icon: faFolder },
+      // Weiches Trennzeichen in der Uebersetzung: Mit grosser Schrift bricht das Wort am Handy sauber in zwei Zeilen statt
+      // abgeschnitten zu werden.
+      { to: `${context.base}/settings`, label: t('nav.tab.settings', {}), icon: faGear },
     ];
   }
   if (context.kind === 'admin') {
     return [
-      { to: '/admin', label: 'Übersicht', icon: faGauge, end: true },
-      { to: '/admin/servers', label: 'Server', icon: faServer },
-      { to: '/admin/users', label: 'Benutzer', icon: faUsers },
+      { to: '/admin', label: t('nav.tab.overview', {}), icon: faGauge, end: true },
+      { to: '/admin/servers', label: t('nav.tab.servers', {}), icon: faServer },
+      { to: '/admin/users', label: t('nav.tab.users', {}), icon: faUsers },
     ];
   }
   return [
-    { to: '/', label: 'Server', icon: faServer, end: true },
-    { to: '/account/activity', label: 'Aktivität', icon: faChartLine },
-    { to: '/account', label: 'Konto', icon: faUser, end: true },
+    { to: '/', label: t('nav.tab.servers', {}), icon: faServer, end: true },
+    { to: '/account/activity', label: t('nav.tab.activity', {}), icon: faChartLine },
+    { to: '/account', label: t('nav.tab.account', {}), icon: faUser, end: true },
   ];
 }
 
@@ -437,6 +460,7 @@ function MobileBars({ props }: { props: SidebarProps }) {
   const pageHeader = useRelativePageStore((state) => state.pageHeader);
   const openQuickActions = useQuickActionsStore((state) => state.setOpen);
   const appName = useGlobalStore((state) => state.settings.app.name);
+  const { t } = useExtTranslations();
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -451,12 +475,12 @@ function MobileBars({ props }: { props: SidebarProps }) {
     <>
       <header className='taxz-ph-top'>
         {context.kind === 'server' && strip(pathname) === `${context.base}${RESOURCES_PATH}` ? (
-          <Link to={context.base} className='taxz-ph-btn' aria-label='Zurück zur Konsole' title='Konsole'>
+          <Link to={context.base} className='taxz-ph-btn' aria-label={t('nav.backToConsole', {})} title={t('nav.tab.console', {})}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </Link>
         ) : (
           context.kind !== 'dashboard' && (
-            <Link to='/' className='taxz-ph-btn' aria-label='Zurück zu allen Servern' title='Alle Server'>
+            <Link to='/' className='taxz-ph-btn' aria-label={t('nav.backToServers', {})} title={t('nav.allServers', {})}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </Link>
           )
@@ -476,14 +500,14 @@ function MobileBars({ props }: { props: SidebarProps }) {
           type='button'
           className='taxz-ph-btn'
           onClick={() => openQuickActions(true)}
-          aria-label='Schnellaktionen und Suche öffnen'
-          title='Suchen'
+          aria-label={t('nav.openSearch', {})}
+          title={t('nav.search', {})}
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       </header>
 
-      <nav className='taxz-ph-tabs' aria-label='Schnellnavigation'>
+      <nav className='taxz-ph-tabs' aria-label={t('nav.quickNav', {})}>
         {tabs.map((tab) => (
           <NavLink
             key={tab.to}
@@ -503,7 +527,7 @@ function MobileBars({ props }: { props: SidebarProps }) {
           aria-haspopup='dialog'
         >
           <FontAwesomeIcon icon={faBars} />
-          <span>Mehr</span>
+          <span>{t('nav.more', {})}</span>
         </button>
       </nav>
 
@@ -512,7 +536,7 @@ function MobileBars({ props }: { props: SidebarProps }) {
         onClose={() => setOpen(false)}
         position='bottom'
         size='85%'
-        title='Mehr'
+        title={t('nav.more', {})}
         classNames={{ content: 'taxz-ph-sheet' }}
       >
         <div className='taxz-ph-sheet-body'>
@@ -573,13 +597,14 @@ function ModeToggle() {
   const { setColorScheme } = useMantineColorScheme();
   const computed = useComputedColorScheme('dark');
   const next = computed === 'dark' ? 'light' : 'dark';
+  const { t } = useExtTranslations();
   return (
     <button
       type='button'
       className='taxz-mode-toggle'
       onClick={() => setColorScheme(next)}
-      aria-label={next === 'light' ? 'Hell einschalten' : 'Dunkel einschalten'}
-      title={next === 'light' ? 'Hell' : 'Dunkel'}
+      aria-label={next === 'light' ? t('nav.toLight', {}) : t('nav.toDark', {})}
+      title={next === 'light' ? t('appearance.scheme.light', {}) : t('appearance.scheme.dark', {})}
     >
       <FontAwesomeIcon icon={computed === 'dark' ? faSun : faMoon} />
     </button>
@@ -591,7 +616,7 @@ function roleLabel(user: ReturnType<typeof useAuth>['user']): string {
   if (!user) return '';
   const role = user.role?.name?.trim();
   if (role) return role;
-  return user.admin ? 'Administrator' : 'Benutzer';
+  return user.admin ? getExtTranslations().t('nav.roleAdmin', {}) : getExtTranslations().t('nav.roleUser', {});
 }
 
 // Als CSS-Zeichenkette fuer "content: var(--taxz-role)"; Steuerzeichen raus, Anfuehrungszeichen und Backslash maskiert.

@@ -81,7 +81,7 @@ const GAMES: GameEntry[] = [
   },
   {
     key: 'factory',
-    label: 'Fabrik',
+    label: 'Factory',
     match: /factorio|satisfactory|space ?engineers|astroneer/i,
     colors: ['#c27b2a', '#2a1a0c', '#ffd28a'],
     icon: ICON.gear,

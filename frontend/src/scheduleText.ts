@@ -1,112 +1,102 @@
-// Zeitplaene in Klartext (Designvorgabe 9.13, Idee 17): jeder Ausloeser als deutscher Satz ("Jeden Tag um 04:30"),
+// Zeitplaene in Klartext (Designvorgabe 9.13, Idee 17): jeder Ausloeser als Satz ("Jeden Tag um 04:30", "Every day at 04:30"),
 // dazu der naechste Lauf. Einfache Cron-Formen beschreibt das Theme selbst, alles andere uebernimmt die Beschreibung des
 // Panels (cronstrue). Andere Ausloeser des Panels (Ein/Aus, Status, Backup, Absturz, ...) werden ebenfalls als Satz beschrieben.
 
 import type { z } from 'zod';
 import { CRON_WEEKDAYS, describeCron, getCronOccurrence, parseSimpleSchedule } from '@/lib/cron.ts';
 import type { serverScheduleTriggerSchema } from '@/lib/schemas/server/schedules.ts';
+import { getExtTranslations } from './translations.ts';
 
 type Trigger = z.infer<typeof serverScheduleTriggerSchema>;
 
-const WEEKDAY_NAMES: Record<(typeof CRON_WEEKDAYS)[number], string> = {
-  SUN: 'Sonntag',
-  MON: 'Montag',
-  TUE: 'Dienstag',
-  WED: 'Mittwoch',
-  THU: 'Donnerstag',
-  FRI: 'Freitag',
-  SAT: 'Samstag',
+const WEEKDAYS: Record<(typeof CRON_WEEKDAYS)[number], 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat'> = {
+  SUN: 'sun',
+  MON: 'mon',
+  TUE: 'tue',
+  WED: 'wed',
+  THU: 'thu',
+  FRI: 'fri',
+  SAT: 'sat',
 };
 
-const POWER_ACTION: Record<string, string> = {
-  start: 'gestartet',
-  stop: 'gestoppt',
-  restart: 'neu gestartet',
-  kill: 'hart beendet',
-};
+const POWER_ACTIONS = ['start', 'stop', 'restart', 'kill'] as const;
+const POWER_STATES = ['running', 'offline', 'starting', 'stopping'] as const;
+const BACKUP_STATUSES = ['starting', 'finished', 'failed'] as const;
+const METRICS = ['cpu', 'memory', 'disk'] as const;
+const COMPARATORS = ['smaller_than', 'smaller_than_or_equals', 'equal', 'greater_than', 'greater_than_or_equals'] as const;
 
-const POWER_STATE: Record<string, string> = {
-  running: '„Läuft“',
-  offline: '„Gestoppt“',
-  starting: '„Startet“',
-  stopping: '„Stoppt“',
-};
-
-const BACKUP_STATUS: Record<string, string> = {
-  starting: 'startet',
-  finished: 'fertig ist',
-  failed: 'fehlschlägt',
-};
-
-const METRIC: Record<string, string> = { cpu: 'die CPU-Last', memory: 'der RAM', disk: 'der Speicher' };
-
-const COMPARATOR: Record<string, string> = {
-  smaller_than: 'unter',
-  smaller_than_or_equals: 'höchstens bei',
-  equal: 'genau bei',
-  greater_than: 'über',
-  greater_than_or_equals: 'mindestens bei',
-};
+const has = <T extends string>(list: readonly T[], value: string): value is T => (list as readonly string[]).includes(value);
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const time = (hour: number, minute: number) => `${pad(hour)}:${pad(minute)}`;
 
-function weeks(interval: number) {
-  return interval > 1 ? `alle ${interval} Wochen ` : 'jeden ';
-}
-
-export function describeCronGerman(schedule: string, weekInterval: number, language: string): string {
+/** Einfache Cron-Formen als Satz in der Sprache des Benutzers, alles andere beschreibt das Panel (cronstrue). */
+export function describeCronPlain(schedule: string, weekInterval: number, language: string): string {
+  const { t } = getExtTranslations();
   const simple = parseSimpleSchedule(schedule);
   if (simple) {
     switch (simple.frequency) {
       case 'everyMinutes':
-        return simple.interval === 1 ? 'Jede Minute' : `Alle ${simple.interval} Minuten`;
+        return simple.interval === 1 ? t('schedule.cron.everyMinute', {}) : t('schedule.cron.everyMinutes', { n: simple.interval });
       case 'everyHours':
-        return simple.interval === 1 ? 'Jede Stunde zur vollen Stunde' : `Alle ${simple.interval} Stunden`;
+        return simple.interval === 1 ? t('schedule.cron.everyHour', {}) : t('schedule.cron.everyHours', { n: simple.interval });
       case 'daily':
-        return `Jeden Tag um ${time(simple.hour, simple.minute)}`;
+        return t('schedule.cron.daily', { time: time(simple.hour, simple.minute) });
       case 'weekly': {
-        const text = `${weeks(weekInterval)}${WEEKDAY_NAMES[simple.weekday]} um ${time(simple.hour, simple.minute)}`;
-        return text.charAt(0).toUpperCase() + text.slice(1);
+        const weekday = t(`schedule.weekday.${WEEKDAYS[simple.weekday]}`, {});
+        const at = time(simple.hour, simple.minute);
+        return weekInterval > 1
+          ? t('schedule.cron.everyWeeks', { n: weekInterval, weekday, time: at })
+          : t('schedule.cron.weekly', { weekday, time: at });
       }
       case 'monthly':
-        return `Jeden Monat am ${simple.day}. um ${time(simple.hour, simple.minute)}`;
+        return t('schedule.cron.monthly', { day: simple.day, time: time(simple.hour, simple.minute) });
     }
   }
   try {
     return describeCron(schedule, weekInterval, language);
   } catch {
-    return `Zeitplan ${schedule}`;
+    return t('schedule.cron.raw', { schedule });
   }
 }
 
 export function describeTrigger(trigger: Trigger, language: string): string {
+  const { t } = getExtTranslations();
   switch (trigger.type) {
     case 'cron':
-      return describeCronGerman(trigger.schedule, trigger.weekInterval, language);
+      return describeCronPlain(trigger.schedule, trigger.weekInterval, language);
     case 'power_action':
-      return `Wenn der Server ${POWER_ACTION[trigger.action] ?? trigger.action} wird`;
+      return has(POWER_ACTIONS, trigger.action)
+        ? t(`schedule.trigger.power.${trigger.action}`, {})
+        : t('schedule.trigger.powerOther', { action: trigger.action });
     case 'server_state':
-      return `Wenn der Server ${POWER_STATE[trigger.state] ?? trigger.state} meldet`;
+      return has(POWER_STATES, trigger.state)
+        ? t(`schedule.trigger.state.${trigger.state}`, {})
+        : t('schedule.trigger.stateOther', { state: trigger.state });
     case 'backup_status':
-      return `Wenn ein Backup ${BACKUP_STATUS[trigger.status] ?? trigger.status}`;
+      return has(BACKUP_STATUSES, trigger.status)
+        ? t(`schedule.trigger.backup.${trigger.status}`, {})
+        : t('schedule.trigger.backupOther', { status: trigger.status });
     case 'database_backup_status':
-      return `Wenn ein Datenbank-Backup ${BACKUP_STATUS[trigger.status] ?? trigger.status}`;
+      return has(BACKUP_STATUSES, trigger.status)
+        ? t(`schedule.trigger.databaseBackup.${trigger.status}`, {})
+        : t('schedule.trigger.databaseBackupOther', { status: trigger.status });
     case 'schedule_completion':
-      return trigger.successful
-        ? 'Wenn ein anderer Zeitplan erfolgreich durchgelaufen ist'
-        : 'Wenn ein anderer Zeitplan fehlgeschlagen ist';
+      return trigger.successful ? t('schedule.trigger.scheduleOk', {}) : t('schedule.trigger.scheduleFailed', {});
     case 'resource_usage': {
+      const metric = has(METRICS, trigger.metric) ? t(`schedule.metric.${trigger.metric}`, {}) : trigger.metric;
+      const comparator = has(COMPARATORS, trigger.comparator) ? t(`schedule.comparator.${trigger.comparator}`, {}) : '';
       const value = trigger.percentage ? `${trigger.value} %` : `${trigger.value}`;
-      const span = trigger.forSeconds > 0 ? ` für ${trigger.forSeconds} s` : '';
-      return `Wenn ${METRIC[trigger.metric] ?? trigger.metric}${span} ${COMPARATOR[trigger.comparator] ?? ''} ${value} liegt`;
+      return trigger.forSeconds > 0
+        ? t('schedule.trigger.resourceFor', { metric, comparator, value, seconds: trigger.forSeconds })
+        : t('schedule.trigger.resource', { metric, comparator, value });
     }
     case 'console_line':
-      return `Wenn in der Konsole „${trigger.contains}“ erscheint`;
+      return t('schedule.trigger.console', { text: trigger.contains });
     case 'crash':
-      return 'Wenn der Server abstürzt';
+      return t('schedule.trigger.crash', {});
     default:
-      return 'Eigener Auslöser';
+      return t('schedule.trigger.other', {});
   }
 }
 
@@ -125,18 +115,20 @@ export function nextRun(triggers: Trigger[], timezone: string, from = new Date()
   return next;
 }
 
-/** "heute 04:30", "morgen 04:30" oder "Mo., 24.11., 03:00" in der Zeitzone des Servers. */
+/** "heute 04:30", "morgen 04:30" oder "Mo., 24.11., 03:00" in der Zeitzone des Servers und der Sprache des Benutzers. */
 export function formatNext(date: Date, timezone: string, now = new Date()): string {
-  const day = new Intl.DateTimeFormat('de-DE', { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' });
-  const clock = new Intl.DateTimeFormat('de-DE', { timeZone: timezone, hour: '2-digit', minute: '2-digit' }).format(date);
+  const { t, language } = getExtTranslations();
+  const lang = language || 'en';
+  const day = new Intl.DateTimeFormat(lang, { timeZone: timezone, year: 'numeric', month: '2-digit', day: '2-digit' });
+  const clock = new Intl.DateTimeFormat(lang, { timeZone: timezone, hour: '2-digit', minute: '2-digit' }).format(date);
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  if (day.format(date) === day.format(now)) return `heute ${clock}`;
-  if (day.format(date) === day.format(tomorrow)) return `morgen ${clock}`;
-  const label = new Intl.DateTimeFormat('de-DE', {
+  if (day.format(date) === day.format(now)) return t('schedule.next.today', { time: clock });
+  if (day.format(date) === day.format(tomorrow)) return t('schedule.next.tomorrow', { time: clock });
+  const label = new Intl.DateTimeFormat(lang, {
     timeZone: timezone,
     weekday: 'short',
     day: '2-digit',
     month: '2-digit',
   }).format(date);
-  return `${label}, ${clock}`;
+  return t('schedule.next.date', { date: label, time: clock });
 }

@@ -1,6 +1,8 @@
 // Gemeinsame Status-Logik fuer Serverkarten, Listenzeilen, Server-Kopf und Unterzeile der Serverliste.
 
 import { useSyncExternalStore } from 'react';
+import { getExtTranslations } from './translations.ts';
+
 
 export type PowerState = 'offline' | 'starting' | 'stopping' | 'running';
 export type Tone = 'ok' | 'warn' | 'off' | 'bad' | 'info';
@@ -18,24 +20,25 @@ interface ServerFlags {
 }
 
 export function statusOf(server: ServerFlags, state: PowerState | null | undefined): StatusInfo {
-  if (server.isSuspended) return { tone: 'bad', label: 'Gesperrt' };
-  if (server.isTransferring) return { tone: 'info', label: 'Wird umgezogen' };
-  if (server.status === 'installing') return { tone: 'info', label: 'Wird installiert' };
-  if (server.status === 'install_failed') return { tone: 'bad', label: 'Installation fehlgeschlagen' };
-  if (server.status === 'restoring_backup') return { tone: 'info', label: 'Backup wird eingespielt' };
-  if (server.status === 'backup_restore_failed') return { tone: 'bad', label: 'Backup fehlgeschlagen' };
-  if (server.nodeMaintenanceEnabled) return { tone: 'warn', label: 'Wartung' };
+  const { t } = getExtTranslations();
+  if (server.isSuspended) return { tone: 'bad', label: t('status.suspended', {}) };
+  if (server.isTransferring) return { tone: 'info', label: t('status.transferring', {}) };
+  if (server.status === 'installing') return { tone: 'info', label: t('status.installing', {}) };
+  if (server.status === 'install_failed') return { tone: 'bad', label: t('status.installFailed', {}) };
+  if (server.status === 'restoring_backup') return { tone: 'info', label: t('status.restoringBackup', {}) };
+  if (server.status === 'backup_restore_failed') return { tone: 'bad', label: t('status.backupRestoreFailed', {}) };
+  if (server.nodeMaintenanceEnabled) return { tone: 'warn', label: t('status.maintenance', {}) };
   switch (state) {
     case 'running':
-      return { tone: 'ok', label: 'Läuft' };
+      return { tone: 'ok', label: t('status.running', {}) };
     case 'starting':
-      return { tone: 'warn', label: 'Startet' };
+      return { tone: 'warn', label: t('status.starting', {}) };
     case 'stopping':
-      return { tone: 'warn', label: 'Stoppt' };
+      return { tone: 'warn', label: t('status.stopping', {}) };
     case 'offline':
-      return { tone: 'off', label: 'Gestoppt' };
+      return { tone: 'off', label: t('status.offline', {}) };
     default:
-      return { tone: 'off', label: 'Unbekannt' };
+      return { tone: 'off', label: t('status.unknown', {}) };
   }
 }
 
@@ -76,16 +79,20 @@ export function useVisibleServerCounts() {
   );
 }
 
-const de = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 });
-export const num = (value: number, digits = 1) =>
-  new Intl.NumberFormat('de-DE', { maximumFractionDigits: digits, minimumFractionDigits: 0 }).format(value);
+/** Sprache des Benutzers fuer Zahlen und Datumsangaben ("de" -> 3,1; "en" -> 3.1). */
+export function locale(): string {
+  return getExtTranslations().language || 'en';
+}
 
-/** Bytes als "3,1 GiB" (deutsches Komma, 1024er Schritte wie im Panel). */
+export const num = (value: number, digits = 1) =>
+  new Intl.NumberFormat(locale(), { maximumFractionDigits: digits, minimumFractionDigits: 0 }).format(value);
+
+/** Bytes als "3,1 GiB" (Komma je nach Sprache, 1024er Schritte wie im Panel). */
 export function bytes(value: number): string {
   if (!value || value < 1) return '0 B';
   const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
   const i = Math.min(units.length - 1, Math.floor(Math.log(value) / Math.log(1024)));
-  return `${de.format(value / 1024 ** i)} ${units[i]}`;
+  return `${num(value / 1024 ** i)} ${units[i]}`;
 }
 
 /** Kurzform fuer enge Kennzahlen: "1,1 M", "12,6 G" (wie im Prototyp "3,1 / 8 G"). */
@@ -93,16 +100,18 @@ export function bytesShort(value: number): string {
   if (!value || value < 1) return '0';
   const units = ['B', 'K', 'M', 'G', 'T'];
   const i = Math.min(units.length - 1, Math.floor(Math.log(value) / Math.log(1024)));
-  return `${de.format(value / 1024 ** i)} ${units[i]}`;
+  return `${num(value / 1024 ** i)} ${units[i]}`;
 }
 
 export function uptime(ms: number): string {
+  const { t } = getExtTranslations();
   const s = Math.floor(ms / 1000);
   const d = Math.floor(s / 86400);
   const h = Math.floor((s % 86400) / 3600);
   const m = Math.floor((s % 3600) / 60);
-  if (d > 0) return `${d} T ${h} Std`;
-  if (h > 0) return `${h} Std ${m} Min`;
-  if (m > 0) return `${m} Min`;
-  return `${s} s`;
+  if (d > 0) return t('uptime.days', { days: d, hours: h });
+  if (h > 0) return t('uptime.hours', { hours: h, minutes: m });
+  if (m > 0) return t('uptime.minutes', { minutes: m });
+  return t('uptime.seconds', { seconds: s });
 }
+

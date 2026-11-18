@@ -7,6 +7,7 @@ import { SocketEvent } from '@/plugins/websocket/useWebsocketEvent.ts';
 import useWebsocketEvent from '@/plugins/websocket/useWebsocketEvent.ts';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
+import { getExtTranslations, useExtTranslations } from './translations.ts';
 
 // eslint-disable-next-line no-control-regex
 const ANSI = /\u001b\[[0-9;?]*[ -/]*[@-~]/g;
@@ -15,9 +16,12 @@ export function cleanLine(line: string) {
   return line.replace(ANSI, '').replace(/\r/g, '').trim();
 }
 
-function seconds(ms: number) {
+function elapsed(ms: number) {
+  const { t } = getExtTranslations();
   const s = Math.max(0, Math.floor(ms / 1000));
-  return s < 60 ? `${s} s` : `${Math.floor(s / 60)} Min ${s % 60} s`;
+  return s < 60
+    ? t('card.startingSeconds', { seconds: s })
+    : t('card.startingMinutes', { minutes: Math.floor(s / 60), seconds: s % 60 });
 }
 
 export default function StartProgress() {
@@ -29,6 +33,7 @@ export default function StartProgress() {
   const [now, setNow] = useState(() => Date.now());
   const [lastLine, setLastLine] = useState('');
   const previous = useRef<string | null>(null);
+  const { t } = useExtTranslations();
 
   useEffect(() => {
     const before = previous.current;
@@ -38,7 +43,7 @@ export default function StartProgress() {
       setLastLine('');
     }
     if (state !== 'starting') setSince(null);
-    if (state === 'running' && before === 'starting') addToast(`${name} läuft.`, 'success');
+    if (state === 'running' && before === 'starting') addToast(t('start.running', { name }), 'success');
   }, [state, name, addToast]);
 
   useEffect(() => {
@@ -58,10 +63,10 @@ export default function StartProgress() {
     <div className='taxz-startline'>
       {/* Nur Beginn ("startet") und Ende (Meldung "läuft") werden vorgelesen, nicht der Sekundenzähler und jede Konsolenzeile. */}
       <span className='taxz-sr' role='status'>
-        {name} startet
+        {t('start.starting', { name })}
       </span>
       <span className='taxz-startline-time' aria-hidden='true'>
-        Startet seit {seconds(containerUptime || now - since)}
+        {elapsed(containerUptime || now - since)}
       </span>
       {lastLine && (
         <span className='taxz-startline-last taxz-mono' aria-hidden='true'>

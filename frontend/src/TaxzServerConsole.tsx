@@ -21,6 +21,7 @@ import { useIsTaxz } from './prefs.ts';
 import Sparkline from './Sparkline.tsx';
 import { bytes, num } from './serverStatus.ts';
 import { useTween } from './useTween.ts';
+import { useExtTranslations } from './translations.ts';
 
 function Tile({
   icon,
@@ -46,6 +47,7 @@ function Tile({
   detail?: string;
 }) {
   const fill = pct === null || pct === undefined ? null : Math.max(0, Math.min(100, pct));
+  const { t } = useExtTranslations();
   return (
     <div className='taxz-kpi'>
       <div className='taxz-kpi-top'>
@@ -54,8 +56,8 @@ function Tile({
         </span>
         <span className='taxz-kpi-label'>{label}</span>
         {/* Ganze Kachel klickbar (Link ueber die Flaeche gespannt); Name fuer Screenreader ohne die laufend wechselnden Zahlen */}
-        <Link to={to} className='taxz-stretch taxz-kpi-go' title='Verlauf unter Ressourcen ansehen'>
-          <span className='taxz-sr'>{label}: Verlauf unter Ressourcen ansehen</span>
+        <Link to={to} className='taxz-stretch taxz-kpi-go' title={t('consolePage.history', {})}>
+          <span className='taxz-sr'>{t('consolePage.historyLabel', { label })}</span>
           <FontAwesomeIcon icon={faChevronRight} aria-hidden='true' />
         </Link>
       </div>
@@ -114,10 +116,11 @@ function LoadTiles() {
   const sparkTimes = useMemo(() => series.map((sample) => sample.t), [series]);
   const waiting = !stats;
   const resources = `/server/${server.uuidShort}/console/history`;
+  const { t } = useExtTranslations();
 
   return (
-    <section className='taxz-kpis' aria-label='Auslastung'>
-      <h2 className='taxz-sr'>Auslastung</h2>
+    <section className='taxz-kpis' aria-label={t('consolePage.load', {})}>
+      <h2 className='taxz-sr'>{t('consolePage.load', {})}</h2>
       <Tile
         icon={faMicrochip}
         to={resources}
@@ -143,7 +146,7 @@ function LoadTiles() {
       <Tile
         icon={faHardDrive}
         to={resources}
-        label='Speicher'
+        label={t('metric.disk', {})}
         value={waiting ? '–' : bytes(disk)}
         max={diskLimit ? bytes(diskLimit) : undefined}
         pct={waiting ? null : diskLimit ? (disk / diskLimit) * 100 : null}
@@ -151,7 +154,7 @@ function LoadTiles() {
       <Tile
         icon={faArrowRightArrowLeft}
         to={resources}
-        label='Netzwerk'
+        label={t('metric.network', {})}
         value={waiting || off ? '–' : `${bytes(rx + tx)}/s`}
         detail={waiting || off ? undefined : `↓ ${bytes(rx)}/s · ↑ ${bytes(tx)}/s`}
         spark={netSeries}
@@ -168,11 +171,12 @@ function LoadTiles() {
 function TaxzServerConsole() {
   const server = useServerStore((state) => state.server);
   const keyboardInset = useVisualViewportBottomInset();
-  useNavbarPageHeader({ title: server.name, subtitle: 'Konsole' });
+  const { t } = useExtTranslations();
+  useNavbarPageHeader({ title: server.name, subtitle: t('nav.tab.console', {}) });
 
   return (
     <ServerContentContainer
-      title='Konsole'
+      title={t('nav.tab.console', {})}
       hideTitleComponent
       registry={window.extensionContext.extensionRegistry.pages.server.console.container}
     >

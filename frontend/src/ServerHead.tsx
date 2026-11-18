@@ -26,6 +26,7 @@ import { uptime } from './serverStatus.ts';
 import { StatusPill } from './TaxzServerItem.tsx';
 import StartProgress from './StartProgress.tsx';
 import TabStatus from './TabStatus.tsx';
+import { useExtTranslations } from './translations.ts';
 
 type ContainerProps = ComponentProps<typeof ServerContentContainer>;
 
@@ -53,6 +54,7 @@ export function ServerHead() {
   const look = useMemo(() => gameLook(server.egg), [server.egg]);
   const image = useServerImage(server.uuid);
   const { pathname } = useLocation();
+  const { t } = useExtTranslations();
   const canStart = useServerCan('control.start');
   const { status, crash, disconnected } = useCurrentServerStatus(server, state);
   const onConsole = /^\/server\/[^/]+\/?$/.test(pathname);
@@ -67,7 +69,7 @@ export function ServerHead() {
 
   return (
     <>
-    <section className='taxz-shead' aria-label={`Server ${server.name}`}>
+    <section className='taxz-shead' aria-label={t('serverHead.label', { name: server.name })}>
       <ServerEmblem look={look} size='lg' image={image} />
       <div className='taxz-shead-main'>
         <h1 className='taxz-shead-name'>{server.name}</h1>
@@ -79,7 +81,7 @@ export function ServerHead() {
                 <RedactedText value={address} />
               </span>
               <CopyOnClick content={address} className='taxz-ib'>
-                <span className='taxz-sr'>Adresse kopieren</span>
+                <span className='taxz-sr'>{t('serverHead.copyAddress', {})}</span>
                 <FontAwesomeIcon icon={faCopy} aria-hidden='true' />
               </CopyOnClick>
             </span>
