@@ -3,6 +3,8 @@ name: Release
 on:
   push:
     tags: ['v*.*.*']
+  # Alternativ von Hand (Actions > Release > Run workflow, Branch main): legt den Tag vX.Y.Z selbst an.
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,10 +21,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Tag matches version
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           version="$(sed -n 's/^version = "\(.*\)"/\1/p' backend/Cargo.toml | head -n 1)"
-          test "v$version" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME does not match backend/Cargo.toml version $version"; exit 1; }
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+            test "$GITHUB_REF_NAME" = main || { echo "Run the release workflow on main, not $GITHUB_REF_NAME"; exit 1; }
+            if gh release view "v$version" >/dev/null 2>&1; then echo "Release v$version already exists"; exit 1; fi
+          else
+            test "v$version" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME does not match backend/Cargo.toml version $version"; exit 1; }
+          fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "TAG=v$version" >> "$GITHUB_ENV"
       - name: Release notes from CHANGELOG.md
         run: |
           awk -v v="$VERSION" '$0 ~ "^## " { if (found) exit; if (index($0, "## " v) == 1) { found = 1; next } } found' CHANGELOG.md > notes.md
@@ -35,4 +45,5 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/de_taxz_theme.c7s.zip dist/de_taxz_theme.c7s.zip.sha256 --title "$GITHUB_REF_NAME" --notes-file notes.md
+        # --target legt den Tag beim Start von Hand auf genau diesem Commit an; bei einem Tag-Push gibt es ihn schon.
+        run: gh release create "$TAG" dist/de_taxz_theme.c7s.zip dist/de_taxz_theme.c7s.zip.sha256 --target "$GITHUB_SHA" --title "$TAG" --notes-file notes.md
