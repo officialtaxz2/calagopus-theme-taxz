@@ -1,6 +1,6 @@
 //! taxz-Theme: zusaetzliches, pro Benutzer waehlbares Aussehen. Das Backend speichert nur die Admin-Vorgaben
 //! und gibt sie ueber index.html an das Frontend (auch vor der Anmeldung, fuer die Anmeldeseite). Dazu die Ereignisse
-//! fuer die Glocke (notifications.rs) und das eigene Bild pro Server (server_image.rs).
+//! fuer die Glocke (notifications.rs), das eigene Bild pro Server (server_image.rs) und die Update-Pruefung (updates.rs).
 
 use shared::{
     State,
@@ -12,6 +12,7 @@ mod notifications;
 mod routes;
 mod server_image;
 mod settings;
+mod updates;
 
 #[derive(Default)]
 pub struct ExtensionStruct;
@@ -56,6 +57,14 @@ impl Extension for ExtensionStruct {
             Ok(serde_json::to_value(ext.defaults)?)
         });
         builder
+    }
+
+    async fn check_for_updates(
+        &self,
+        state: State,
+        current_version: &semver::Version,
+    ) -> Result<Option<shared::extensions::ExtensionUpdateInfo>, anyhow::Error> {
+        updates::check(&state, current_version).await
     }
 
     async fn settings_deserializer(
