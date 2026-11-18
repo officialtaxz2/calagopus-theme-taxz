@@ -1,0 +1,5318 @@
+/*
+ * taxz-Theme fuer Calagopus. Alles, was das Aussehen des Panels aendert, haengt an :root[data-taxz]
+ * (gesetzt nur, wenn der Benutzer "taxz" gewaehlt hat). Ohne das Attribut greift nichts davon,
+ * "Standard" bleibt also exakt das Original. Ausnahmen: die Schriften (nur geladen, wenn benutzt),
+ * die Seite "Darstellung" (.taxz-ap) und ihre Vorschauen (.taxz-preview), die in beiden Themes funktionieren muessen.
+ * Werte: Designvorgabe /mnt/project-files/mcserver/panel-design/designvorgabe-taxz-theme.md, Abschnitte 3 bis 8.
+ */
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('./fonts/manrope-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('./fonts/manrope-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
+    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('./fonts/jetbrains-mono-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
+    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------- 3.1 Flaechen und Text ---------- */
+
+:root[data-taxz][data-mantine-color-scheme='dark'],
+[data-mantine-color-scheme='dark'] .taxz-preview {
+  --side: rgba(20, 16, 27, 0.62);
+  --card: rgba(22, 18, 29, 0.64);
+  --card-solid: #1a1622;
+  --card2: rgba(255, 255, 255, 0.06);
+  --hover: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.11);
+  --line-soft: rgba(255, 255, 255, 0.07);
+  --track: rgba(255, 255, 255, 0.12);
+  --fg: #f6f1f3;
+  --muted: #c0b5c2;
+  --faint: #a397a6;
+  --ok: #5ddf98;
+  --warn: #ffc95c;
+  --bad: #ff8a82;
+  --off: #b3abb9;
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.07) inset, 0 18px 40px -22px rgba(0, 0, 0, 0.6);
+  --con-bg: rgba(9, 7, 13, 0.82);
+  --taxz-hz-shade: rgba(4, 3, 8, 0.55);
+  --taxz-topo-hi: 0.3;
+  --taxz-topo-lo: 0.05;
+  --taxz-grain-op: 0.1;
+  --taxz-grain-blend: overlay;
+  --taxz-blob-op: 0.55;
+  --taxz-emb-bg: #241d2c;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'],
+[data-mantine-color-scheme='light'] .taxz-preview {
+  --side: rgba(255, 255, 255, 0.66);
+  --card: rgba(255, 255, 255, 0.76);
+  --card-solid: #ffffff;
+  --card2: rgba(120, 60, 30, 0.06);
+  --hover: rgba(120, 60, 30, 0.07);
+  --line: rgba(120, 60, 30, 0.14);
+  --line-soft: rgba(120, 60, 30, 0.09);
+  --track: rgba(120, 60, 30, 0.12);
+  --fg: #251a1d;
+  --muted: #5f5055;
+  --faint: #6c5d62;
+  --ok: #075c33;
+  --warn: #744500;
+  --bad: #9a241f;
+  --off: #594f5d;
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 18px 40px -24px rgba(120, 60, 30, 0.35);
+  --con-bg: rgba(24, 18, 24, 0.9);
+  --taxz-hz-shade: rgba(255, 255, 255, 0.55);
+  --taxz-topo-hi: 0.4;
+  --taxz-topo-lo: 0.08;
+  --taxz-grain-op: 0.14;
+  --taxz-grain-blend: multiply;
+  --taxz-blob-op: 0.38;
+  --taxz-emb-bg: rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- 3.3 Form, Schein, Schrift (modusunabhaengig) ---------- */
+
+:root[data-taxz],
+.taxz-preview,
+.taxz-ap {
+  --r1: 9px;
+  --r2: 15px;
+  --r3: 22px;
+  --gk: 0.4;
+  --dk: 1;
+  --dks: 0.85;
+  --pad: calc(18px * var(--dk));
+  --gap: calc(16px * var(--dk));
+  --blur: blur(18px) saturate(1.25);
+  --acc-grad: linear-gradient(135deg, var(--accent2), var(--accent));
+  --taxz-sans: 'Manrope', 'Segoe UI', Arial, sans-serif;
+  --taxz-mono: 'JetBrains Mono', Consolas, monospace;
+  --con-fg: #ece7ef;
+  --con-dim: #9d96a5;
+}
+
+/* ---------- 3.2 Akzentfarben (erzeugt aus Tabelle 3.2) ---------- */
+
+:root[data-taxz][data-mantine-color-scheme='dark'][data-taxz-accent='violet'],
+[data-mantine-color-scheme='dark'] .taxz-preview[data-taxz-accent='violet'] {
+  --accent: #9466f7;
+  --accent2: #c4b5fd;
+  --on-acc: #0b0518;
+  --acc-text: #b9a5ff;
+  --acc-soft: rgba(139,92,246,.16);
+  --glow-c: 139 92 246;
+  --glow2: 56 189 248;
+  --bg: #0f0d18;
+  --con-cmd: #c4b5fd;
+  --taxz-acc-0: #f4f0fe;
+  --taxz-acc-1: #e7ddfd;
+  --taxz-acc-2: #d6c5fc;
+  --taxz-acc-3: #c4abfb;
+  --taxz-acc-4: #b291f9;
+  --taxz-acc-5: #a37bf8;
+  --taxz-acc-6: #9466f7;
+  --taxz-acc-7: #7f58d4;
+  --taxz-acc-8: #6b49b2;
+  --taxz-acc-9: #563b8f;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'][data-taxz-accent='violet'],
+[data-mantine-color-scheme='light'] .taxz-preview[data-taxz-accent='violet'] {
+  --accent: #9466f7;
+  --accent2: #c4b5fd;
+  --on-acc: #0b0518;
+  --acc-text: #6d28d9;
+  --acc-soft: rgba(124,58,237,.10);
+  --glow-c: 139 92 246;
+  --glow2: 56 189 248;
+  --bg: #f6f3fb;
+  --con-cmd: #c4b5fd;
+  --taxz-acc-0: #f4f0fe;
+  --taxz-acc-1: #e7ddfd;
+  --taxz-acc-2: #d6c5fc;
+  --taxz-acc-3: #c4abfb;
+  --taxz-acc-4: #b291f9;
+  --taxz-acc-5: #a37bf8;
+  --taxz-acc-6: #9466f7;
+  --taxz-acc-7: #7f58d4;
+  --taxz-acc-8: #6b49b2;
+  --taxz-acc-9: #563b8f;
+}
+
+:root[data-taxz][data-mantine-color-scheme='dark'][data-taxz-accent='sky'],
+[data-mantine-color-scheme='dark'] .taxz-preview[data-taxz-accent='sky'] {
+  --accent: #0ea5e9;
+  --accent2: #7dd3fc;
+  --on-acc: #03131c;
+  --acc-text: #6cc9f7;
+  --acc-soft: rgba(14,165,233,.15);
+  --glow-c: 14 165 233;
+  --glow2: 139 92 246;
+  --bg: #0c1118;
+  --con-cmd: #7dd3fc;
+  --taxz-acc-0: #e7f6fd;
+  --taxz-acc-1: #caebfa;
+  --taxz-acc-2: #a3ddf7;
+  --taxz-acc-3: #7acef3;
+  --taxz-acc-4: #51beef;
+  --taxz-acc-5: #30b2ec;
+  --taxz-acc-6: #0ea5e9;
+  --taxz-acc-7: #0c8ec8;
+  --taxz-acc-8: #0a77a8;
+  --taxz-acc-9: #086087;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'][data-taxz-accent='sky'],
+[data-mantine-color-scheme='light'] .taxz-preview[data-taxz-accent='sky'] {
+  --accent: #0ea5e9;
+  --accent2: #7dd3fc;
+  --on-acc: #03131c;
+  --acc-text: #0369a1;
+  --acc-soft: rgba(3,105,161,.10);
+  --glow-c: 14 165 233;
+  --glow2: 139 92 246;
+  --bg: #f1f5f9;
+  --con-cmd: #7dd3fc;
+  --taxz-acc-0: #e7f6fd;
+  --taxz-acc-1: #caebfa;
+  --taxz-acc-2: #a3ddf7;
+  --taxz-acc-3: #7acef3;
+  --taxz-acc-4: #51beef;
+  --taxz-acc-5: #30b2ec;
+  --taxz-acc-6: #0ea5e9;
+  --taxz-acc-7: #0c8ec8;
+  --taxz-acc-8: #0a77a8;
+  --taxz-acc-9: #086087;
+}
+
+:root[data-taxz][data-mantine-color-scheme='dark'][data-taxz-accent='emerald'],
+[data-mantine-color-scheme='dark'] .taxz-preview[data-taxz-accent='emerald'] {
+  --accent: #10b981;
+  --accent2: #6ee7b7;
+  --on-acc: #04130d;
+  --acc-text: #5ee0a8;
+  --acc-soft: rgba(16,185,129,.15);
+  --glow-c: 16 185 129;
+  --glow2: 59 130 246;
+  --bg: #0c1312;
+  --con-cmd: #6ee7b7;
+  --taxz-acc-0: #e7f8f2;
+  --taxz-acc-1: #caf0e3;
+  --taxz-acc-2: #a4e4cf;
+  --taxz-acc-3: #7cd8ba;
+  --taxz-acc-4: #53cda4;
+  --taxz-acc-5: #31c393;
+  --taxz-acc-6: #10b981;
+  --taxz-acc-7: #0e9f6f;
+  --taxz-acc-8: #0c855d;
+  --taxz-acc-9: #096b4b;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'][data-taxz-accent='emerald'],
+[data-mantine-color-scheme='light'] .taxz-preview[data-taxz-accent='emerald'] {
+  --accent: #10b981;
+  --accent2: #6ee7b7;
+  --on-acc: #04130d;
+  --acc-text: #047857;
+  --acc-soft: rgba(4,120,87,.10);
+  --glow-c: 16 185 129;
+  --glow2: 59 130 246;
+  --bg: #f1f6f4;
+  --con-cmd: #6ee7b7;
+  --taxz-acc-0: #e7f8f2;
+  --taxz-acc-1: #caf0e3;
+  --taxz-acc-2: #a4e4cf;
+  --taxz-acc-3: #7cd8ba;
+  --taxz-acc-4: #53cda4;
+  --taxz-acc-5: #31c393;
+  --taxz-acc-6: #10b981;
+  --taxz-acc-7: #0e9f6f;
+  --taxz-acc-8: #0c855d;
+  --taxz-acc-9: #096b4b;
+}
+
+:root[data-taxz][data-mantine-color-scheme='dark'][data-taxz-accent='glut'],
+[data-mantine-color-scheme='dark'] .taxz-preview[data-taxz-accent='glut'] {
+  --accent: #ff7a1a;
+  --accent2: #ffb347;
+  --on-acc: #1a0d03;
+  --acc-text: #ffad6b;
+  --acc-soft: rgba(255,140,60,.16);
+  --glow-c: 255 122 26;
+  --glow2: 150 62 140;
+  --bg: #120e18;
+  --con-cmd: #ffa45c;
+  --taxz-acc-0: #fff2e8;
+  --taxz-acc-1: #ffe2cd;
+  --taxz-acc-2: #ffcca8;
+  --taxz-acc-3: #ffb681;
+  --taxz-acc-4: #ff9f5a;
+  --taxz-acc-5: #ff8d3a;
+  --taxz-acc-6: #ff7a1a;
+  --taxz-acc-7: #db6916;
+  --taxz-acc-8: #b85813;
+  --taxz-acc-9: #94470f;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'][data-taxz-accent='glut'],
+[data-mantine-color-scheme='light'] .taxz-preview[data-taxz-accent='glut'] {
+  --accent: #e35d00;
+  --accent2: #ff9a3c;
+  --on-acc: #1a0d03;
+  --acc-text: #a8430a;
+  --acc-soft: rgba(227,93,0,.10);
+  --glow-c: 255 122 26;
+  --glow2: 236 130 170;
+  --bg: #fbeee4;
+  --con-cmd: #ffa45c;
+  --taxz-acc-0: #fcefe6;
+  --taxz-acc-1: #f9dbc7;
+  --taxz-acc-2: #f4c19e;
+  --taxz-acc-3: #f0a673;
+  --taxz-acc-4: #eb8a47;
+  --taxz-acc-5: #e77424;
+  --taxz-acc-6: #e35d00;
+  --taxz-acc-7: #c35000;
+  --taxz-acc-8: #a34300;
+  --taxz-acc-9: #843600;
+}
+
+/* ---------- Mantine und Tailwind auf die taxz-Tokens umlenken ---------- */
+
+:root[data-taxz] {
+  --mantine-font-family: var(--taxz-sans);
+  --mantine-font-family-headings: var(--taxz-sans);
+  --mantine-font-family-monospace: var(--taxz-mono);
+  --font-sans: var(--taxz-sans);
+  --font-mono: var(--taxz-mono);
+  --mantine-radius-xs: 6px;
+  --mantine-radius-sm: var(--r1);
+  --mantine-radius-md: var(--r2);
+  --mantine-radius-lg: var(--r3);
+  --mantine-radius-xl: 28px;
+  --mantine-radius-default: var(--r2);
+
+  /* Mantine-Farbe "blue" ist die Hauptfarbe des Panels: auf den Akzent legen */
+  --mantine-color-blue-0: var(--taxz-acc-0);
+  --mantine-color-blue-1: var(--taxz-acc-1);
+  --mantine-color-blue-2: var(--taxz-acc-2);
+  --mantine-color-blue-3: var(--taxz-acc-3);
+  --mantine-color-blue-4: var(--taxz-acc-4);
+  --mantine-color-blue-5: var(--taxz-acc-5);
+  --mantine-color-blue-6: var(--taxz-acc-6);
+  --mantine-color-blue-7: var(--taxz-acc-7);
+  --mantine-color-blue-8: var(--taxz-acc-8);
+  --mantine-color-blue-9: var(--taxz-acc-9);
+  --mantine-color-blue-filled: var(--accent);
+  --mantine-color-blue-filled-hover: var(--taxz-acc-7);
+  --mantine-color-blue-light: var(--acc-soft);
+  --mantine-color-blue-light-hover: color-mix(in srgb, var(--accent) 24%, transparent);
+  --mantine-color-blue-light-color: var(--acc-text);
+  --mantine-color-blue-outline: var(--acc-text);
+  --mantine-color-blue-outline-hover: var(--acc-soft);
+  --mantine-color-blue-text: var(--acc-text);
+  --mantine-primary-color-filled: var(--accent);
+  --mantine-primary-color-filled-hover: var(--taxz-acc-7);
+  --mantine-primary-color-light: var(--acc-soft);
+  --mantine-primary-color-light-hover: color-mix(in srgb, var(--accent) 24%, transparent);
+  --mantine-primary-color-light-color: var(--acc-text);
+  --mantine-color-anchor: var(--acc-text);
+
+  --mantine-color-text: var(--fg);
+  --mantine-color-dimmed: var(--muted);
+  --mantine-color-placeholder: var(--faint);
+  --mantine-color-body: var(--card);
+  --mantine-color-default: var(--card2);
+  --mantine-color-default-hover: var(--hover);
+  --mantine-color-default-color: var(--fg);
+  --mantine-color-default-border: var(--line);
+  --mantine-color-error: var(--bad);
+
+  --color-server-status-running: var(--ok);
+  --color-server-status-offline: var(--bad);
+  --color-server-status-starting: var(--warn);
+  --color-server-status-stopping: var(--warn);
+
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dunkel: Mantines Grau-Palette als Glas-Stufen */
+:root[data-taxz][data-mantine-color-scheme='dark'] {
+  --mantine-color-dark-0: var(--fg);
+  --mantine-color-dark-1: #ddd3de;
+  --mantine-color-dark-2: var(--muted);
+  --mantine-color-dark-3: var(--faint);
+  --mantine-color-dark-4: rgba(255, 255, 255, 0.14);
+  --mantine-color-dark-5: rgba(255, 255, 255, 0.1);
+  --mantine-color-dark-6: var(--card2);
+  --mantine-color-dark-7: var(--card);
+  --mantine-color-dark-8: rgba(14, 11, 20, 0.72);
+  --mantine-color-dark-9: rgba(9, 7, 13, 0.85);
+  --mantine-color-dark-filled: rgba(255, 255, 255, 0.1);
+  --mantine-color-dark-light: var(--card2);
+  --mantine-color-dark-light-hover: var(--hover);
+  color-scheme: dark;
+}
+
+/* Hell: Weiss und Grau als warme Glas-Stufen */
+:root[data-taxz][data-mantine-color-scheme='light'] {
+  --mantine-color-white: var(--card-solid);
+  --mantine-color-gray-0: var(--card2);
+  --mantine-color-gray-1: var(--hover);
+  --mantine-color-gray-2: rgba(120, 60, 30, 0.1);
+  --mantine-color-gray-3: var(--line);
+  --mantine-color-gray-4: rgba(120, 60, 30, 0.2);
+  --mantine-color-gray-6: var(--muted);
+  --mantine-color-gray-7: #4a3c41;
+  --mantine-color-gray-filled: #6c5d62;
+  --mantine-color-gray-light: var(--card2);
+  --mantine-color-gray-light-hover: var(--hover);
+  --mantine-color-default: rgba(255, 255, 255, 0.6);
+  color-scheme: light;
+}
+
+/* ---------- Grund und Hintergrund (4.) ---------- */
+
+:root[data-taxz] {
+  background: var(--bg);
+  color: var(--fg);
+  scrollbar-color: var(--line) transparent;
+}
+
+/* body bleibt durchsichtig, sonst deckt er den fest stehenden Hintergrund (#taxz-backdrop, z-index -1) ab */
+:root[data-taxz] body {
+  background: transparent;
+  color: var(--fg);
+}
+
+:root[data-taxz] body {
+  font-family: var(--taxz-sans);
+  font-weight: 500;
+}
+
+#taxz-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: calc(0.45 + 0.55 * var(--gk, 0.4));
+}
+
+:root:not([data-taxz]) #taxz-backdrop {
+  display: none;
+}
+
+#taxz-backdrop svg,
+.taxz-mini-bg svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.taxz-grain {
+  opacity: var(--taxz-grain-op);
+  mix-blend-mode: var(--taxz-grain-blend);
+}
+
+.taxz-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: var(--taxz-blob-op);
+  animation: taxz-drift 26s ease-in-out infinite alternate;
+}
+
+.taxz-b1 {
+  width: 55%;
+  height: 45%;
+  left: 48%;
+  top: -14%;
+  background: rgb(var(--glow-c) / 0.8);
+}
+
+.taxz-b2 {
+  width: 50%;
+  height: 50%;
+  left: -12%;
+  top: 55%;
+  background: rgb(var(--glow2) / 0.8);
+  animation-duration: 32s;
+  animation-delay: -8s;
+}
+
+.taxz-b3 {
+  width: 35%;
+  height: 30%;
+  left: 30%;
+  top: 30%;
+  background: rgb(var(--glow-c) / 0.35);
+  animation-duration: 38s;
+  animation-delay: -14s;
+}
+
+@keyframes taxz-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(6%, 4%) scale(1.12);
+  }
+}
+
+/* ---------- Glasflaechen ---------- */
+
+:root[data-taxz] :is(.mantine-Card-root, .mantine-Paper-root, .mantine-Modal-content, .mantine-Drawer-content) {
+  background-color: var(--card);
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .mantine-Card-root {
+  border-radius: var(--r3);
+}
+
+/* Karten in Karten: keine zweite Glasschicht, nur leichte Flaeche */
+:root[data-taxz] :is(.mantine-Card-root, .mantine-Paper-root) :is(.mantine-Card-root, .mantine-Paper-root) {
+  background-color: var(--card2);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: var(--r2);
+}
+
+:root[data-taxz] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+  background-color: var(--card);
+  border-color: var(--line);
+  border-radius: var(--r2);
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz][data-mantine-color-scheme='dark'] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+  background-color: rgba(26, 21, 34, 0.92);
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+  background-color: rgba(255, 255, 255, 0.94);
+}
+
+:root[data-taxz] .mantine-Modal-content {
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+}
+
+:root[data-taxz] .mantine-Modal-header {
+  background: transparent;
+}
+
+:root[data-taxz] .mantine-Modal-overlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* Ohne backdrop-filter: deckende Karten */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root[data-taxz] :is(.mantine-Card-root, .mantine-Paper-root, .mantine-Modal-content, .mantine-Drawer-content, #sidebar-desktop) {
+    background-color: var(--card-solid);
+  }
+}
+
+/* ---------- Schrift (3.4) ---------- */
+
+:root[data-taxz] :is(h1, h2, h3, h4, h5, h6, .mantine-Title-root) {
+  font-family: var(--taxz-sans);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+:root[data-taxz] .mantine-Title-root[data-order='1'] {
+  font-size: max(var(--taxz-fmin, 0px), calc(28px * var(--taxz-fs, 1)));
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+:root[data-taxz] :is(code, kbd, pre, .mantine-Code-root, .mantine-Kbd-root) {
+  font-family: var(--taxz-mono);
+}
+
+:root[data-taxz] .mantine-Kbd-root {
+  background: var(--card2);
+  border-color: var(--line);
+  border-bottom-width: 1px;
+  color: var(--muted);
+  border-radius: 5px;
+}
+
+/* Groessere Schrift (Idee 23): alles 12,5 % groesser */
+:root[data-taxz] {
+  --taxz-fs: 1;
+  --taxz-fmin: 0px;
+}
+
+/* Panel-Groessen haengen an rem, also reicht die Grundschrift; eigene Groessen ueber --taxz-fs, kleinste Schrift 14 px (3.4) */
+:root[data-taxz][data-taxz-large] {
+  font-size: 112.5%;
+  --taxz-fs: 1.125;
+  --taxz-fmin: 14px;
+  --mantine-font-size-xs: 14px;
+  --text-xs: 14px;
+}
+
+/* ---------- Bausteine (8.) ---------- */
+
+:root[data-taxz] .mantine-Button-root {
+  font-weight: 700;
+  border-radius: var(--button-radius, var(--r2));
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s,
+    border-color 0.15s;
+}
+
+/* Hauptknopf: Akzentverlauf mit Schein */
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled'][style*='--mantine-color-blue-filled'],
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']) {
+  background: var(--acc-grad);
+  color: var(--on-acc);
+  border-color: transparent;
+  box-shadow: 0 6px 20px -8px rgb(var(--glow-c) / calc(0.55 * var(--gk)));
+}
+
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled'][style*='--mantine-color-blue-filled']:hover,
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']):hover {
+  filter: brightness(1.06);
+}
+
+/* Gefahr: roter Text mit Rand statt voller roter Flaeche */
+:root[data-taxz] .mantine-Button-root[data-variant='filled'][style*='--mantine-color-red-filled'] {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+  border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
+}
+
+:root[data-taxz] .mantine-Button-root[data-variant='filled'][style*='--mantine-color-red-filled']:hover {
+  background: color-mix(in srgb, var(--bad) 22%, transparent);
+}
+
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='default'] {
+  background-color: var(--card2);
+  border-color: var(--line);
+  color: var(--fg);
+}
+
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='default']:hover {
+  background-color: var(--hover);
+}
+
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-disabled],
+:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root):disabled {
+  opacity: 0.45;
+}
+
+/* Gesperrter Hauptknopf: Calagopus setzt dann Text "dimmed" und einen Rand inline, auf dem Verlauf waere das unlesbar */
+:root[data-taxz] .mantine-Button-root[data-variant='filled']:is(:disabled, [data-disabled])[style*='--mantine-color-blue-filled'] {
+  color: var(--on-acc) !important;
+  border-color: transparent !important;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+/* Fokus (8.): 2 px Ring in Akzentfarbe mit 2 px Abstand auf allem Bedienbaren */
+:root[data-taxz] :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Eingabefelder */
+:root[data-taxz] :is(.mantine-Input-input, .mantine-InputBase-input, .mantine-TextInput-input, .mantine-PasswordInput-input) {
+  --input-bg: var(--card2);
+  --input-bd: var(--line);
+  border-radius: var(--r2);
+}
+
+:root[data-taxz] :is(.mantine-Input-input, .mantine-InputBase-input):focus,
+:root[data-taxz] .mantine-Input-input:focus-within {
+  border-color: var(--accent);
+}
+
+:root[data-taxz] .mantine-SegmentedControl-root {
+  background: var(--card2);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+}
+
+:root[data-taxz] .mantine-SegmentedControl-indicator {
+  background: var(--hover);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  border-radius: calc(var(--r2) - 3px);
+}
+
+:root[data-taxz] .mantine-Switch-track {
+  --switch-bg: var(--track);
+  border-color: var(--line);
+}
+
+:root[data-taxz] .mantine-Switch-input:checked + .mantine-Switch-track {
+  background: var(--acc-grad);
+  border-color: transparent;
+}
+
+:root[data-taxz] .mantine-Progress-root {
+  --progress-radius: 99px;
+  background: var(--track);
+}
+
+:root[data-taxz] .mantine-Progress-section[style*='--mantine-color-blue'],
+:root[data-taxz] .mantine-Progress-section:not([style*='--mantine-color-']) {
+  background: var(--acc-grad);
+}
+
+:root[data-taxz] .mantine-Table-table {
+  --table-border-color: var(--line-soft);
+  --table-hover-color: var(--hover);
+  --table-striped-color: var(--card2);
+}
+
+:root[data-taxz] .mantine-Table-thead {
+  background: var(--card2);
+}
+
+:root[data-taxz] .mantine-Table-th {
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  font-weight: 700;
+}
+
+:root[data-taxz] .mantine-Divider-root {
+  --divider-color: var(--line);
+}
+
+:root[data-taxz] .mantine-Tooltip-tooltip {
+  background: rgba(20, 16, 27, 0.94);
+  color: #f6f1f3;
+  border-radius: var(--r1);
+  font-weight: 600;
+}
+
+:root[data-taxz] .mantine-Badge-root {
+  border-radius: 99px;
+  font-weight: 700;
+}
+
+/* Kartenkopf (TitleCard): ruhige Flaeche statt grauer Leiste */
+:root[data-taxz] #title-card-header {
+  background: transparent !important;
+  border-bottom-color: var(--line-soft) !important;
+  padding: 14px var(--pad);
+}
+
+:root[data-taxz] #title-card-header .mantine-Title-root {
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+  font-weight: 800;
+}
+
+:root[data-taxz] #title-card-icon {
+  background: var(--acc-soft) !important;
+  color: var(--acc-text);
+  border-radius: var(--r1) !important;
+}
+
+/* Kopf der Inhaltsseiten */
+:root[data-taxz] :is(#dashboard-root, #server-root, #admin-root) .mantine-Title-root[data-order='1'] {
+  font-weight: 800;
+}
+
+/* ---------- Seitenleiste (6.1) ---------- */
+
+:root[data-taxz] #sidebar-desktop {
+  width: 252px !important;
+  margin: 12px 0 12px 12px;
+  top: 12px;
+  height: calc(100vh - 24px);
+  background: var(--side);
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  box-shadow: var(--shadow);
+  padding: 14px 12px;
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] #sidebar-content {
+  gap: 10px;
+}
+
+:root[data-taxz] .taxz-side-head {
+  display: grid;
+  gap: 10px;
+}
+
+:root[data-taxz] .taxz-side-head > * {
+  margin: 0 !important;
+}
+
+:root[data-taxz] .taxz-side-head > div:empty {
+  display: none;
+}
+
+:root[data-taxz] .taxz-nav {
+  display: grid;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.taxz-ngrp {
+  display: grid;
+  gap: 2px;
+}
+
+.taxz-ngrp h4 {
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--muted);
+  padding: 6px 10px 4px;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+/* Navigationspunkte: Knoepfe der Seitenleiste als ruhige Eintraege */
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet) #sidebar-content a > .mantine-Button-root,
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet) .taxz-ngrp a > .mantine-Button-root,
+:root[data-taxz] .taxz-ph-sheet-body a > .mantine-Button-root {
+  --button-bg: transparent;
+  --button-hover: var(--hover);
+  --button-color: var(--muted);
+  --button-bd: 0;
+  height: auto;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: var(--r2);
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet-body) a > .mantine-Button-root:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet-body) a > .mantine-Button-root.active {
+  background: var(--acc-soft);
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1px rgb(var(--glow-c) / 0.25);
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet-body) a > .mantine-Button-root.active svg {
+  color: var(--acc-text);
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet-body) a > .mantine-Button-root svg {
+  width: 16px;
+  margin-right: 10px !important;
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet-body) .mantine-Button-label {
+  justify-content: flex-start;
+}
+
+/* Trenner der Admin-Gruppen als Gruppenueberschrift */
+:root[data-taxz] #sidebar-desktop .mantine-Divider-root[data-with-label] {
+  margin: 8px 0 2px !important;
+  --divider-color: transparent;
+}
+
+:root[data-taxz] #sidebar-desktop .mantine-Divider-label {
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--muted);
+  padding-left: 10px;
+}
+
+:root[data-taxz] #sidebar-desktop .mantine-Divider-label::before {
+  display: none;
+}
+
+:root[data-taxz] #sidebar-desktop .mantine-Divider-root:not([data-with-label]) {
+  --divider-color: var(--line-soft);
+}
+
+/* Schnellaktionen: die Tastenkombination passt neben dem Text nicht in die 252 px breite Leiste */
+:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+  display: none;
+}
+
+/* Benutzer unten */
+:root[data-taxz] #sidebar-account-card {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 10px 6px 2px;
+}
+
+:root[data-taxz] #sidebar-account-card .mantine-Avatar-root {
+  --avatar-size: 32px !important;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+}
+
+:root[data-taxz] #sidebar-account-card .mantine-Avatar-placeholder {
+  background: var(--acc-grad);
+  color: var(--on-acc);
+  font-weight: 800;
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] #sidebar-account-card span {
+  font-weight: 700;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+}
+
+.taxz-foot {
+  position: relative;
+}
+
+.taxz-mode-toggle {
+  position: absolute;
+  right: 42px;
+  bottom: 4px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r1);
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.taxz-mode-toggle:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+/* Server-Umschalter und Status in der Seitenleiste */
+:root[data-taxz] #sidebar-desktop .mantine-Card-root:not(#sidebar-account-card) {
+  background: var(--card2);
+  box-shadow: none;
+  border-radius: var(--r2);
+}
+
+/* ---------- Grundgeruest breit und mittel (6.1, 6.2) ---------- */
+
+:root[data-taxz] :is(#dashboard-root, #server-root, #admin-root) {
+  padding-inline: 2px;
+}
+
+@media (min-width: 641px) {
+  /* Seitenleiste bleibt auch auf mittleren Breiten (das Standard-Panel klappt erst ab 1024 px Inhaltsbreite auf).
+     Calagopus versteckt sie mit der Tailwind-Klasse "hidden!" in @layer utilities. Ein !important ausserhalb von Layern
+     verliert gegen ein !important in einem Layer, im frueheren Layer "theme" gewinnt es dagegen. */
+  @layer theme {
+    :root[data-taxz] #sidebar-desktop {
+      display: block !important;
+      position: sticky !important;
+    }
+  }
+
+  :root[data-taxz] #sidebar-desktop {
+    flex: none;
+  }
+
+  :root[data-taxz] div:has(> #sidebar-desktop) {
+    display: flex;
+  }
+
+  :root[data-taxz] div:has(> #sidebar-desktop) > .mantine-Card-root:first-child,
+  :root[data-taxz] div:has(> #sidebar-desktop) > div[class~='-mt-12'] {
+    display: none !important;
+  }
+
+  .taxz-ph-top,
+  .taxz-ph-tabs {
+    display: none !important;
+  }
+}
+
+/* ---------- Handy (6.3) ---------- */
+
+.taxz-ph-top,
+.taxz-ph-tabs {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] div:has(> #sidebar-desktop) > .mantine-Card-root:first-child,
+  :root[data-taxz] div:has(> #sidebar-desktop) > div[class~='-mt-12'] {
+    display: none !important;
+  }
+
+  :root[data-taxz] .taxz-ph-top {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 14px 8px;
+    background: var(--side);
+    border-bottom: 1px solid var(--line);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+  }
+
+  .taxz-ph-title {
+    min-width: 0;
+    flex: 1;
+    display: grid;
+  }
+
+  .taxz-ph-btn {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--r2);
+    background: none;
+    color: var(--muted);
+    font-size: max(var(--taxz-fmin, 0px), calc(17px * var(--taxz-fs, 1)));
+    cursor: pointer;
+  }
+
+  .taxz-ph-btn:hover,
+  .taxz-ph-btn:active {
+    background: var(--hover);
+    color: var(--fg);
+  }
+
+  .taxz-ph-title b {
+    font-size: max(var(--taxz-fmin, 0px), calc(16px * var(--taxz-fs, 1)));
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .taxz-ph-title small {
+    font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :root[data-taxz] .taxz-ph-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 70;
+    padding: 6px;
+    gap: 4px;
+    background: var(--side);
+    border: 1px solid var(--line);
+    border-radius: var(--r3);
+    box-shadow: var(--shadow);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+  }
+
+  :root[data-taxz] :is(#dashboard-root, #server-root, #admin-root) {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.taxz-tab {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 3px;
+  min-height: 48px;
+  padding: 4px 2px;
+  border-radius: var(--r2);
+  color: var(--muted);
+  font: 700 max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.taxz-tab svg {
+  font-size: max(var(--taxz-fmin, 0px), calc(17px * var(--taxz-fs, 1)));
+}
+
+.taxz-tab span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taxz-tab.is-on {
+  color: var(--fg);
+  background: var(--acc-soft);
+}
+
+.taxz-tab.is-on svg {
+  color: var(--acc-text);
+}
+
+:root[data-taxz] .taxz-ph-sheet {
+  border-radius: var(--r3) var(--r3) 0 0;
+}
+
+.taxz-ph-sheet-body {
+  display: grid;
+  gap: 12px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.taxz-ph-sheet-body .taxz-side-head > a {
+  display: none;
+}
+
+/* Leiste mit Name und Start/Stopp ueber der Konsole: klebt beim Scrollen oben, daher Glas statt deckender Flaeche */
+:root[data-taxz] #console-infobar {
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  border-radius: var(--r3);
+  box-shadow: none;
+}
+
+/* ---------- Konsole (3.5): immer dunkel ---------- */
+
+:root[data-taxz] .xterm,
+:root[data-taxz] .xterm .xterm-viewport,
+:root[data-taxz] .xterm .xterm-screen {
+  background-color: transparent !important;
+}
+
+:root[data-taxz] .xterm .xterm-scrollable-element {
+  background-color: transparent !important;
+}
+
+:root[data-taxz] div:has(> .xterm) {
+  background-color: var(--con-bg);
+}
+
+/* Im hellen Modus gibt Calagopus der Konsole ein helles xterm-Farbschema (dunkle Schrift). Auf der dunklen Konsolenflaeche
+   gelten daher hier die Farben des dunklen Schemas (xterm-Standardpalette), damit Schrift und Farben lesbar bleiben. */
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows {
+  color: var(--con-fg) !important;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-dim {
+  color: var(--con-dim) !important;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-selection div {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .slider {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-0 {
+  color: #2e3436;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-1 {
+  color: #cc0000;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-2 {
+  color: #4e9a06;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-3 {
+  color: #c4a000;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-4 {
+  color: #3465a4;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-5 {
+  color: #75507b;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-6 {
+  color: #06989a;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-7 {
+  color: #d3d7cf;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-8 {
+  color: #555753;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-9 {
+  color: #ef2929;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-10 {
+  color: #8ae234;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-11 {
+  color: #fce94f;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-12 {
+  color: #729fcf;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-13 {
+  color: #ad7fa8;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-14 {
+  color: #34e2e2;
+}
+
+:root[data-taxz][data-mantine-color-scheme='light'] .xterm .xterm-rows .xterm-fg-15 {
+  color: #eeeeec;
+}
+
+:root[data-taxz] .xterm {
+  font-family: var(--taxz-mono) !important;
+}
+
+/* ---------- Starker Kontrast (Idee 23) ---------- */
+
+:root[data-taxz][data-taxz-contrast] {
+  --muted: var(--fg);
+  --faint: var(--fg);
+  --line: color-mix(in srgb, var(--fg) 35%, transparent);
+  --line-soft: color-mix(in srgb, var(--fg) 22%, transparent);
+  --card: var(--card-solid);
+  --side: var(--card-solid);
+  --blur: none;
+}
+
+:root[data-taxz][data-taxz-contrast] #taxz-backdrop {
+  opacity: 0.3;
+}
+
+@media (prefers-contrast: more) {
+  :root[data-taxz] {
+    --muted: var(--fg);
+    --faint: var(--fg);
+    --line: color-mix(in srgb, var(--fg) 35%, transparent);
+    --line-soft: color-mix(in srgb, var(--fg) 22%, transparent);
+    --card: var(--card-solid);
+    --side: var(--card-solid);
+    --blur: none;
+  }
+
+  :root[data-taxz] #taxz-backdrop {
+    opacity: 0.3;
+  }
+}
+
+/* ---------- Bewegung reduzieren ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .taxz-blob {
+    animation: none;
+  }
+
+  :root[data-taxz] * {
+    transition-duration: 0s !important;
+  }
+}
+
+/* ===================================================================
+ * Seite "Darstellung" (.taxz-ap): funktioniert in beiden Themes
+ * =================================================================== */
+
+.taxz-ap {
+  display: grid;
+  gap: 16px;
+  max-width: 940px;
+}
+
+.taxz-ap-lead {
+  margin: 0 0 12px;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  color: var(--mantine-color-dimmed);
+}
+
+.taxz-ap-note,
+.taxz-ap-hint {
+  margin: 10px 0 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--mantine-color-dimmed);
+}
+
+.taxz-ap-hint {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--mantine-color-default);
+  border: 1px solid var(--mantine-color-default-border);
+}
+
+.taxz-ap-taxz {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.taxz-ap-taxz:disabled > :not(.taxz-ap-hint) {
+  opacity: 0.55;
+}
+
+.taxz-ap-switches {
+  display: grid;
+  gap: 16px;
+}
+
+.taxz-ap-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--mantine-color-dimmed);
+}
+
+.taxz-ap-foot p {
+  margin: 0;
+}
+
+.taxz-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.taxz-tiles {
+  display: grid;
+  gap: 12px;
+}
+
+.taxz-tiles-2 {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  max-width: 620px;
+}
+
+.taxz-tiles-3 {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+}
+
+.taxz-tile {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding: 8px 8px 12px;
+  border-radius: 15px;
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-default);
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.taxz-tile:hover {
+  background: var(--mantine-color-default-hover);
+}
+
+.taxz-tile.is-on {
+  border-color: var(--mantine-primary-color-filled);
+  box-shadow: inset 0 0 0 1px var(--mantine-primary-color-filled);
+}
+
+.taxz-tile.is-disabled {
+  cursor: default;
+}
+
+.taxz-tile:has(input:focus-visible),
+.taxz-swatch:has(input:focus-visible) {
+  outline: 2px solid var(--mantine-primary-color-filled);
+  outline-offset: 2px;
+}
+
+.taxz-tile-text {
+  display: grid;
+  padding: 0 6px;
+}
+
+.taxz-tile-text b {
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  font-weight: 800;
+}
+
+.taxz-tile-text small {
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--mantine-color-dimmed);
+}
+
+.taxz-tile-check {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--mantine-primary-color-filled);
+  box-shadow: 0 0 0 2px var(--mantine-color-body);
+}
+
+.taxz-tile-check svg,
+.taxz-swatch-dot svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Mini-Vorschau: kleiner Ausschnitt mit Hintergrund und drei Karten */
+.taxz-mini {
+  position: relative;
+  display: block;
+  height: 96px;
+  border-radius: 10px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--bg);
+  border: 1px solid var(--line);
+}
+
+.taxz-mini.is-standard {
+  background: #242424;
+  border-color: #424242;
+}
+
+[data-mantine-color-scheme='light'] .taxz-mini.is-standard {
+  background: #f1f3f5;
+  border-color: #dee2e6;
+}
+
+.taxz-mini-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.taxz-mini-bg .taxz-blob {
+  filter: blur(18px);
+}
+
+.taxz-mini-cards {
+  position: absolute;
+  inset: auto 12% 26% 12%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8%;
+  height: 40%;
+}
+
+.taxz-mini-cards i {
+  display: block;
+  border-radius: 7px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.taxz-mini-cards i::before,
+.taxz-mini-cards i::after {
+  content: '';
+  position: absolute;
+  left: 14%;
+  height: 4px;
+  border-radius: 4px;
+}
+
+.taxz-mini-cards i::before {
+  top: 22%;
+  width: 50%;
+  background: var(--muted);
+  opacity: 0.5;
+}
+
+.taxz-mini-cards i::after {
+  bottom: 22%;
+  width: 72%;
+  background: var(--acc-grad);
+  opacity: 0.55;
+}
+
+.taxz-mini-cards.is-standard i {
+  background: #2e2e2e;
+  border-color: #424242;
+  box-shadow: none;
+}
+
+.taxz-mini-cards.is-standard i::before {
+  background: #909296;
+}
+
+.taxz-mini-cards.is-standard i::after {
+  background: #1971c2;
+  opacity: 1;
+}
+
+[data-mantine-color-scheme='light'] .taxz-mini-cards.is-standard i {
+  background: #fff;
+  border-color: #dee2e6;
+}
+
+.taxz-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.taxz-swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 16px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-default);
+  font-weight: 700;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  cursor: pointer;
+}
+
+.taxz-swatch.is-on {
+  border-color: var(--mantine-primary-color-filled);
+  box-shadow: inset 0 0 0 1px var(--mantine-primary-color-filled);
+}
+
+.taxz-swatch-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--acc-grad);
+}
+
+fieldset:disabled .taxz-tile,
+fieldset:disabled .taxz-swatch {
+  cursor: default;
+}
+
+/* =====================================================================================================================
+   Stufe 2: Seiten (Designvorgabe 7., 8.)
+   ===================================================================================================================== */
+
+/* ---------- Bausteine (8.) ---------- */
+
+:root[data-taxz] .taxz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: calc(8px * var(--dk)) 14px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card2);
+  color: var(--fg);
+  font: 700 max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+:root[data-taxz] .taxz-btn:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+:root[data-taxz] .taxz-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+:root[data-taxz] .taxz-btn-tonal {
+  background: var(--acc-soft);
+  color: var(--acc-text);
+  border-color: transparent;
+}
+
+:root[data-taxz] .taxz-btn-tonal:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+:root[data-taxz] .taxz-btn-danger {
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 40%, var(--line));
+}
+
+:root[data-taxz] .taxz-btn-start {
+  color: var(--ok);
+}
+
+:root[data-taxz] .taxz-btn-icon {
+  width: 38px;
+  padding: 0;
+  flex: none;
+}
+
+:root[data-taxz] .taxz-btn-select {
+  color: var(--faint);
+}
+
+:root[data-taxz] .taxz-btn-select.is-on {
+  background: var(--acc-grad);
+  color: var(--on-acc);
+  border-color: transparent;
+}
+
+:root[data-taxz] .taxz-pill {
+  --st: var(--off);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 8px;
+  border-radius: 99px;
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--st);
+  background: color-mix(in srgb, var(--st) 14%, transparent);
+}
+
+:root[data-taxz] .taxz-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--st, var(--off));
+  flex: none;
+}
+
+:root[data-taxz] .taxz-tone-ok {
+  --st: var(--ok);
+}
+
+:root[data-taxz] .taxz-tone-warn {
+  --st: var(--warn);
+}
+
+:root[data-taxz] .taxz-tone-bad {
+  --st: var(--bad);
+}
+
+:root[data-taxz] .taxz-tone-off {
+  --st: var(--off);
+}
+
+:root[data-taxz] .taxz-tone-info {
+  --st: var(--acc-text);
+}
+
+/* Pill auf dem farbigen Kartenkopf: dunkles Glas, Punkt in der hellen Statusfarbe */
+:root[data-taxz] .taxz-pill.taxz-pill-art {
+  color: #fff;
+  background: rgba(12, 10, 14, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+:root[data-taxz] .taxz-pill-art .taxz-dot {
+  background: var(--st-art, #b5aebb);
+}
+
+:root[data-taxz] .taxz-pill-art.taxz-tone-ok {
+  --st-art: #5ddf98;
+}
+
+:root[data-taxz] .taxz-pill-art.taxz-tone-warn {
+  --st-art: #ffc95c;
+}
+
+:root[data-taxz] .taxz-pill-art.taxz-tone-bad {
+  --st-art: #ff8a82;
+}
+
+:root[data-taxz] .taxz-pill-art.taxz-tone-info {
+  --st-art: #c4b5fd;
+}
+
+:root[data-taxz] .taxz-meter {
+  display: block;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+:root[data-taxz] .taxz-meter > b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--acc-grad);
+  transition: width 0.4s ease;
+}
+
+:root[data-taxz] .taxz-meter.is-high > b {
+  background: var(--warn);
+}
+
+:root[data-taxz] .taxz-mono {
+  font-family: var(--taxz-mono);
+}
+
+:root[data-taxz] .taxz-muted {
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-addr {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font: 500 max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1))) var(--taxz-mono);
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-addr > .taxz-mono {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-ib {
+  position: relative;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--r1);
+  color: var(--muted);
+  flex: none;
+}
+
+:root[data-taxz] .taxz-ib:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-emb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r2);
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  background: var(--taxz-emb-bg);
+  border: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-emb svg {
+  width: 62%;
+  height: 62%;
+}
+
+:root[data-taxz] .taxz-emb-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r1);
+}
+
+:root[data-taxz] .taxz-emb-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r3);
+}
+
+/* Seitenkopf mit Kicker (3.4) */
+:root[data-taxz] .taxz-phead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 16px;
+  flex-wrap: wrap;
+  margin: 4px 0 14px;
+}
+
+:root[data-taxz] .taxz-kicker {
+  margin: 0 0 4px;
+  font: 600 max(var(--taxz-fmin, 0px), calc(10.5px * var(--taxz-fs, 1))) var(--taxz-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--acc-text);
+}
+
+:root[data-taxz] .taxz-h1 {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(28px * var(--taxz-fs, 1)));
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-sub {
+  margin: 4px 0 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-seg2 {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card2);
+}
+
+:root[data-taxz] .taxz-seg2 button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: calc(var(--r2) - 4px);
+  background: none;
+  color: var(--muted);
+  font: 700 max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1))) var(--taxz-sans);
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-seg2 button:hover {
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-seg2 button.is-on {
+  background: var(--hover);
+  color: var(--fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+/* ---------- Serverliste (7.1) ---------- */
+
+/* Raster des Standard-Panels (2 Spalten) im taxz-Theme: Karten ab 300 px nebeneinander, Liste untereinander */
+:root[data-taxz] div.grid:has(> .taxz-sc) {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)) !important;
+  gap: var(--gap) !important;
+}
+
+:root[data-taxz] div.grid:has(> .taxz-srow) {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 8px !important;
+}
+
+:root[data-taxz] .taxz-sc {
+  --dk: var(--dks);
+  --pad: calc(18px * var(--dk));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  transition: border-color 0.15s;
+}
+
+:root[data-taxz] .taxz-sc:hover,
+:root[data-taxz] .taxz-sc:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+:root[data-taxz] .taxz-sc.is-selected,
+:root[data-taxz] .taxz-srow.is-selected {
+  border-color: var(--accent);
+  box-shadow:
+    var(--shadow),
+    0 0 0 3px var(--acc-soft);
+}
+
+/* Ganze Karte klickbar: der Link im Namen spannt sich ueber die Karte, Knoepfe liegen darueber */
+:root[data-taxz] .taxz-stretch {
+  color: inherit;
+  text-decoration: none;
+}
+
+:root[data-taxz] .taxz-stretch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+:root[data-taxz] .taxz-stretch:focus-visible {
+  outline: none;
+}
+
+/* Fokusring um die ganze Karte bzw. Zeile (8.: 2 px Akzent, 2 px Abstand), nicht nur um den Teil, in dem der Link liegt */
+:root[data-taxz] :is(.taxz-sc, .taxz-srow):has(.taxz-stretch:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+:root[data-taxz] .taxz-sc :is(button, .taxz-btn, .taxz-ib, a:not(.taxz-stretch), .taxz-addr),
+:root[data-taxz] .taxz-srow :is(button, .taxz-btn, .taxz-ib, .taxz-addr) {
+  position: relative;
+  z-index: 2;
+}
+
+:root[data-taxz] .taxz-sc-art {
+  position: relative;
+  height: calc(128px * var(--dks));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+:root[data-taxz] .taxz-sc.is-off .taxz-sc-art {
+  filter: saturate(0.45) brightness(0.92);
+}
+
+.taxz-art-layer,
+.taxz-art-layer > :is(div, span, svg),
+.taxz-art-layer svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.taxz-art-hatch {
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 11px);
+}
+
+.taxz-art-layer > .taxz-art-glyph {
+  inset: auto;
+  right: -6%;
+  top: -20%;
+  width: 58%;
+  height: 140%;
+  opacity: 0.26;
+  transform: rotate(-12deg);
+}
+
+.taxz-art-layer > .taxz-art-mesh {
+  opacity: 0.85;
+}
+
+.taxz-art-layer > .taxz-art-amb {
+  inset: -30%;
+  width: auto;
+  height: auto;
+  display: grid;
+  place-items: center;
+  filter: blur(22px) saturate(1.8) brightness(1.35);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+.taxz-art-shade {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.35));
+}
+
+:root[data-taxz] .taxz-sc-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  max-width: calc(100% - 140px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font: 700 max(var(--taxz-fmin, 0px), calc(11px * var(--taxz-fs, 1))) var(--taxz-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(10, 8, 14, 0.62);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+:root[data-taxz] .taxz-sc-art .taxz-pill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+}
+
+:root[data-taxz] .taxz-sc-body {
+  position: relative;
+  display: grid;
+  gap: calc(12px * var(--dk));
+  padding: 0 var(--pad) var(--pad);
+}
+
+:root[data-taxz] .taxz-sc-body > .taxz-emb {
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-taxz] .taxz-sc-title {
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-sc-title h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(18px * var(--taxz-fs, 1)));
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-sc-title h3 > a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-foreign {
+  color: var(--warn);
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  flex: none;
+}
+
+:root[data-taxz] .taxz-sc-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-sc-egg {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-sc-note {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--warn);
+}
+
+:root[data-taxz] .taxz-stats3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+:root[data-taxz] .taxz-stat {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: calc(9px * var(--dk)) 10px;
+  border-radius: var(--r2);
+  background: var(--card2);
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-stat b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+  font-weight: 800;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-taxz] .taxz-stat b small {
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-sc-acts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+:root[data-taxz] .taxz-sc-open {
+  flex: 1;
+}
+
+/* Kompakte Liste (Idee 19) */
+:root[data-taxz] .taxz-srow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 10px 28px minmax(120px, 1.4fr) minmax(84px, 0.6fr) minmax(0, 1.2fr) 92px 112px auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 10px 8px 16px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-srow:hover,
+:root[data-taxz] .taxz-srow:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+:root[data-taxz] .taxz-srow-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-weight: 800;
+}
+
+:root[data-taxz] .taxz-srow-name > a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-srow-status {
+  color: var(--st);
+  font-weight: 700;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-srow-addr {
+  min-width: 0;
+  display: flex;
+}
+
+:root[data-taxz] .taxz-srow-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-srow-num > span {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  margin-right: 4px;
+}
+
+:root[data-taxz] .taxz-srow-acts {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+:root[data-taxz] .taxz-srow-acts .taxz-btn-icon {
+  width: 34px;
+  min-height: 34px;
+}
+
+@media (max-width: 1180px) {
+  :root[data-taxz] .taxz-srow {
+    grid-template-columns: 10px 28px minmax(0, 1fr) auto auto;
+  }
+
+  :root[data-taxz] .taxz-srow :is(.taxz-srow-addr, .taxz-srow-num) {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-srow {
+    grid-template-columns: 10px 28px minmax(0, 1fr) auto;
+  }
+
+  :root[data-taxz] .taxz-srow-status {
+    display: none;
+  }
+
+  :root[data-taxz] .taxz-btn,
+  :root[data-taxz] .taxz-btn-icon {
+    min-height: 44px;
+  }
+
+  :root[data-taxz] .taxz-btn-icon {
+    width: 44px;
+  }
+
+  :root[data-taxz] .taxz-h1 {
+    font-size: max(var(--taxz-fmin, 0px), calc(24px * var(--taxz-fs, 1)));
+  }
+}
+
+/* ---------- Verlaufskurve in Kennzahlen (Idee 4) ---------- */
+
+:root[data-taxz] .taxz-stat {
+  position: relative;
+  overflow: hidden;
+}
+
+:root[data-taxz] .taxz-stat > * {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-taxz] .taxz-stat > .taxz-stat-spark {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 0;
+  width: 100%;
+  height: 58%;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ---------- Server-Kopf (7.2) ---------- */
+
+:root[data-taxz] .taxz-shead-wrap {
+  padding: 0 16px;
+  margin-top: 8px;
+}
+
+@container page (min-width: 64rem) {
+  :root[data-taxz] .taxz-shead-wrap {
+    padding: 0 24px;
+    margin-top: 14px;
+  }
+}
+
+/* Inhalt der Unterseite folgt direkt unter dem Kopf */
+:root[data-taxz] .taxz-shead-wrap ~ div.mb-4 {
+  margin-top: 0 !important;
+}
+
+:root[data-taxz] .taxz-shead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: calc(18px * var(--dk)) 20px;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--glow-c) calc(20% * var(--gk)), transparent), transparent 60%),
+    var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+}
+
+:root[data-taxz] .taxz-shead-main {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+:root[data-taxz] .taxz-shead-name {
+  margin: 0;
+  font: 800 max(var(--taxz-fmin, 0px), calc(26px * var(--taxz-fs, 1)))/1.15 var(--taxz-sans);
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-shead-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-shead-desc {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-shead-power {
+  flex: none;
+  align-self: center;
+}
+
+:root[data-taxz] .taxz-shead-power .mantine-Button-root {
+  height: 36px;
+  min-width: 0;
+  padding: 0 14px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card2);
+  color: var(--fg);
+  font: 700 max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-shead-power .mantine-Button-root:hover:not(:disabled, [data-disabled]) {
+  background: var(--hover);
+}
+
+:root[data-taxz] .taxz-shead-power .mantine-Button-root[style*='green'],
+:root[data-taxz] .taxz-shead-power .mantine-Button-root[data-variant][style*='--button-color: var(--mantine-color-green'] {
+  color: var(--ok);
+}
+
+:root[data-taxz] .taxz-shead-power .mantine-Button-root:disabled,
+:root[data-taxz] .taxz-shead-power .mantine-Button-root[data-disabled] {
+  opacity: 0.45;
+  background: var(--card2);
+  color: var(--fg);
+}
+
+/* Startvorgang (Idee 6) */
+:root[data-taxz] .taxz-startline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 6px 10px;
+  border-radius: var(--r2);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--fg);
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-startline-time {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-startline-last {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+}
+
+@container page (max-width: 47.99rem) {
+  :root[data-taxz] .taxz-shead {
+    flex-wrap: wrap;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  :root[data-taxz] .taxz-shead .taxz-emb-lg {
+    width: 44px;
+    height: 44px;
+  }
+
+  :root[data-taxz] .taxz-shead-name {
+    font-size: max(var(--taxz-fmin, 0px), calc(21px * var(--taxz-fs, 1)));
+  }
+
+  :root[data-taxz] .taxz-shead-power {
+    flex-basis: 100%;
+  }
+
+  :root[data-taxz] .taxz-shead-power .mantine-Button-root {
+    height: 44px;
+  }
+}
+
+/* ---------- Konsole: Kennzahl-Kacheln (7.3) ---------- */
+
+:root[data-taxz] .taxz-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+:root[data-taxz] .taxz-kpi {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  min-height: 112px;
+  overflow: hidden;
+  padding: calc(14px * var(--dk)) 16px;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .taxz-kpi > :not(.taxz-kpi-spark) {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-taxz] .taxz-kpi-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-kpi-ic {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r1);
+  background: var(--acc-soft);
+  color: var(--acc-text);
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-kpi-val {
+  font: 800 max(var(--taxz-fmin, 0px), calc(20px * var(--taxz-fs, 1)))/1.2 var(--taxz-sans);
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-kpi-val small {
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-kpi-detail {
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:root[data-taxz] .taxz-kpi-spark {
+  position: absolute;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 46px;
+  pointer-events: none;
+}
+
+@container page (max-width: 63.99rem) {
+  :root[data-taxz] .taxz-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container page (max-width: 30rem) {
+  :root[data-taxz] .taxz-kpis {
+    gap: 8px;
+  }
+
+  :root[data-taxz] .taxz-kpi {
+    min-height: 92px;
+    padding: 10px 12px;
+  }
+
+  :root[data-taxz] .taxz-kpi-val {
+    font-size: max(var(--taxz-fmin, 0px), calc(16px * var(--taxz-fs, 1)));
+  }
+
+  :root[data-taxz] .taxz-kpi-detail {
+    display: none;
+  }
+}
+
+/* ---------- Konsole selbst (3.5) ---------- */
+
+:root[data-taxz] .taxz-console {
+  display: flex;
+  flex-direction: column;
+  height: clamp(340px, 64vh, 820px);
+  margin-bottom: 16px;
+}
+
+:root[data-taxz] .taxz-console > * {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------- Knoepfe primaer und Gefahr gefuellt (8.) ---------- */
+
+:root[data-taxz] .taxz-btn-primary {
+  background: var(--acc-grad);
+  color: var(--on-acc);
+  border-color: transparent;
+}
+
+:root[data-taxz] .taxz-btn-primary:hover:not(:disabled) {
+  background: var(--acc-grad);
+  filter: brightness(1.06);
+}
+
+:root[data-taxz] .taxz-btn-danger-solid {
+  background: #c33a3a;
+  color: #fff;
+  border-color: transparent;
+}
+
+:root[data-taxz] .taxz-btn-danger-solid:hover:not(:disabled) {
+  background: #a92f2f;
+}
+
+/* ---------- Abschnitts-Karten (7.5) ---------- */
+
+:root[data-taxz] .taxz-sect {
+  min-width: 0;
+  padding: calc(18px * var(--dk)) 20px;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .taxz-sect-danger {
+  border-color: color-mix(in srgb, var(--bad) 40%, transparent);
+}
+
+:root[data-taxz] .taxz-sect-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  font: 800 max(var(--taxz-fmin, 0px), calc(16px * var(--taxz-fs, 1)))/1.3 var(--taxz-sans);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-sect-title > svg {
+  color: var(--acc-text);
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-sect-danger .taxz-sect-title,
+:root[data-taxz] .taxz-sect-danger .taxz-sect-title > svg {
+  color: var(--bad);
+}
+
+:root[data-taxz] .taxz-sect-aside {
+  margin-left: auto;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-sect-sub {
+  margin: -8px 0 12px;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-sect-body {
+  display: grid;
+  gap: 14px;
+}
+
+:root[data-taxz] .taxz-hint {
+  margin: 6px 0 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-narrow {
+  max-width: 280px;
+}
+
+:root[data-taxz] .taxz-danger-h {
+  margin: 0;
+  font: 700 max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1))) var(--taxz-sans);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-danger-text {
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-danger-text p {
+  margin: 0;
+}
+
+/* Technische Angaben */
+:root[data-taxz] .taxz-kv {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+:root[data-taxz] .taxz-kv > div {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+}
+
+:root[data-taxz] .taxz-kv dt {
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-kv dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--fg);
+}
+
+/* Seitenaufbau Einstellungen: links Formular, rechts Technisches und Gefahrenbereich */
+:root[data-taxz] .taxz-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+:root[data-taxz] .taxz-settings-main,
+:root[data-taxz] .taxz-settings-side {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-settings-ext:empty {
+  display: none;
+}
+
+:root[data-taxz] .taxz-settings-ext {
+  display: grid;
+  gap: 16px;
+}
+
+@container page (max-width: 63.99rem) {
+  :root[data-taxz] .taxz-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Gemeinsame Speichern-Leiste */
+:root[data-taxz] .taxz-savebar {
+  grid-column: 1 / -1;
+  position: sticky;
+  bottom: 12px;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 10px 12px 10px 18px;
+  border-radius: var(--r3);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+}
+
+:root[data-taxz] .taxz-savebar-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1))) var(--taxz-sans);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-savebar-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+:root[data-taxz] .taxz-savebar-acts {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-savebar {
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+
+  :root[data-taxz] .taxz-savebar-acts {
+    flex: 1;
+  }
+
+  :root[data-taxz] .taxz-savebar-acts .taxz-btn {
+    flex: 1;
+    min-height: 44px;
+  }
+}
+
+/* ---------- Admin-Uebersicht (7.6) ---------- */
+
+:root[data-taxz] .taxz-admin {
+  display: grid;
+  gap: 16px;
+}
+
+:root[data-taxz] .taxz-akpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+:root[data-taxz] .taxz-akpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: calc(14px * var(--dk)) 16px;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  color: var(--fg);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+:root[data-taxz] a.taxz-akpi:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+:root[data-taxz] .taxz-akpi-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r2);
+  background: var(--card2);
+  color: var(--acc-text);
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-akpi-txt {
+  display: grid;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-akpi-txt b {
+  font: 800 max(var(--taxz-fmin, 0px), calc(21px * var(--taxz-fs, 1)))/1.15 var(--taxz-sans);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-akpi-txt span {
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
+}
+
+:root[data-taxz] .taxz-rows {
+  display: grid;
+  margin: 0;
+}
+
+:root[data-taxz] .taxz-rows > div {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+:root[data-taxz] .taxz-rows > div:last-child {
+  border-bottom: 0;
+}
+
+:root[data-taxz] .taxz-rows dt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-rows dt svg {
+  width: 14px;
+}
+
+:root[data-taxz] .taxz-rows dd {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-rows dd small {
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  font-weight: 500;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-mini4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+:root[data-taxz] .taxz-mini4 > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 9px 11px;
+  border-radius: var(--r2);
+  background: var(--card2);
+}
+
+:root[data-taxz] .taxz-mini4 span {
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-mini4 b {
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-taxz] .taxz-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-variant-numeric: tabular-nums;
+}
+
+:root[data-taxz] .taxz-table th,
+:root[data-taxz] .taxz-table td {
+  padding: 10px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+
+:root[data-taxz] .taxz-table th:first-child {
+  text-align: left;
+}
+
+:root[data-taxz] .taxz-table thead th {
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-table tbody th {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+:root[data-taxz] .taxz-table td small {
+  display: block;
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-ok {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+:root[data-taxz] .taxz-bad {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+:root[data-taxz] .taxz-empty-line {
+  margin: 0;
+  color: var(--muted);
+}
+
+@container page (max-width: 79.99rem) {
+  :root[data-taxz] .taxz-admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container page (max-width: 47.99rem) {
+  :root[data-taxz] .taxz-akpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  :root[data-taxz] .taxz-akpi {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  :root[data-taxz] .taxz-akpi-ic {
+    width: 32px;
+    height: 32px;
+  }
+
+  :root[data-taxz] .taxz-akpi-txt b {
+    font-size: max(var(--taxz-fmin, 0px), calc(18px * var(--taxz-fs, 1)));
+  }
+
+  :root[data-taxz] .taxz-rows > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  :root[data-taxz] .taxz-mini4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  :root[data-taxz] .taxz-table th,
+  :root[data-taxz] .taxz-table td {
+    padding: 9px 3px;
+    font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  }
+}
+
+/* ---------- Server-Kopf: Knopf nicht abschneiden ---------- */
+
+:root[data-taxz] .taxz-shead-power .mantine-Button-root {
+  min-width: max-content;
+}
+
+/* ---------- Schwebende Auswahlleiste (Dateien 7.4 und andere Listen) ---------- */
+
+:root[data-taxz] div.pointer-events-none.fixed.inset-x-0.bottom-0 > .mantine-Card-root {
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] div.pointer-events-none.fixed.inset-x-0.bottom-0:has(> .mantine-Card-root) {
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ---------- Dateien (7.4): Groesse und Datum in Mono ---------- */
+
+:root[data-taxz] tr.group[data-index] > td:nth-child(3),
+:root[data-taxz] tr.group[data-index] > td:nth-child(4) {
+  font-family: var(--taxz-mono);
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ablageflaeche beim Hochladen per Ziehen (Idee 20): gestrichelter Akzentrahmen, Glas */
+:root[data-taxz] .fixed.inset-0.z-100 > .border-dashed {
+  border-radius: var(--r3);
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .fixed.inset-0.z-100 > .border-dashed:not([class*='red']) {
+  border-color: var(--accent);
+}
+
+:root[data-taxz] .fixed.inset-0.z-100 > .border-dashed:not([class*='red']) svg {
+  color: var(--acc-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .fixed.inset-0.z-100 .animate-bounce {
+    animation: none;
+  }
+}
+
+/* ---------- Zustaende (8.) ---------- */
+
+:root[data-taxz] .taxz-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 36px 20px;
+  text-align: center;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .taxz-state.is-flush {
+  border: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 20px 8px;
+}
+
+:root[data-taxz] .taxz-state.is-error {
+  border-color: color-mix(in srgb, var(--bad) 40%, transparent);
+}
+
+:root[data-taxz] .taxz-state-ic {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 4px;
+  border-radius: var(--r3);
+  background: var(--acc-soft);
+  color: var(--acc-text);
+  font-size: max(var(--taxz-fmin, 0px), calc(20px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-state.is-error .taxz-state-ic {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+}
+
+:root[data-taxz] .taxz-state-title {
+  margin: 0;
+  font: 800 max(var(--taxz-fmin, 0px), calc(18px * var(--taxz-fs, 1)))/1.3 var(--taxz-sans);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-state-text {
+  max-width: 46ch;
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-state-text p {
+  margin: 0 0 4px;
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-state-acts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Verbindung weg */
+:root[data-taxz] .taxz-connbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 10px 16px 0;
+  padding: 10px 14px;
+  border-radius: var(--r2);
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
+  background: color-mix(in srgb, var(--warn) 14%, var(--card-solid));
+  color: var(--fg);
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-connbar > svg {
+  color: var(--warn);
+}
+
+:root[data-taxz] .taxz-connbar.is-bad {
+  border-color: color-mix(in srgb, var(--bad) 40%, transparent);
+  background: color-mix(in srgb, var(--bad) 14%, var(--card-solid));
+}
+
+:root[data-taxz] .taxz-connbar.is-bad > svg {
+  color: var(--bad);
+}
+
+:root[data-taxz] .taxz-connbar-text {
+  flex: 1;
+  min-width: 12ch;
+}
+
+@container page (min-width: 64rem) {
+  :root[data-taxz] .taxz-connbar {
+    margin: 12px 24px 0;
+  }
+}
+
+/* Skelette */
+:root[data-taxz] .taxz-skel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+:root[data-taxz] .taxz-skel-grid.is-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+:root[data-taxz] .taxz-skel-grid.is-list .taxz-skel-art,
+:root[data-taxz] .taxz-skel-grid.is-list .taxz-skel-stats,
+:root[data-taxz] .taxz-skel-grid.is-list .taxz-skel-btn,
+:root[data-taxz] .taxz-skel-grid.is-list .taxz-skel-emb {
+  display: none;
+}
+
+:root[data-taxz] .taxz-skel-card {
+  overflow: hidden;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+:root[data-taxz] .taxz-skel {
+  border-radius: var(--r1);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--fg) 7%, transparent) 0%,
+    color-mix(in srgb, var(--fg) 14%, transparent) 50%,
+    color-mix(in srgb, var(--fg) 7%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: taxz-shimmer 1.4s linear infinite;
+}
+
+:root[data-taxz] .taxz-skel-art {
+  height: calc(128px * var(--dks));
+  border-radius: 0;
+}
+
+:root[data-taxz] .taxz-skel-body {
+  display: grid;
+  gap: 10px;
+  padding: 0 16px 16px;
+}
+
+:root[data-taxz] .taxz-skel-emb {
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  border-radius: var(--r2);
+}
+
+:root[data-taxz] .taxz-skel-line {
+  height: 12px;
+}
+
+:root[data-taxz] .taxz-skel-line.w60 {
+  width: 60%;
+  height: 16px;
+}
+
+:root[data-taxz] .taxz-skel-line.w40 {
+  width: 40%;
+}
+
+:root[data-taxz] .taxz-skel-grid.is-list .taxz-skel-body {
+  padding-top: 14px;
+}
+
+:root[data-taxz] .taxz-skel-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+:root[data-taxz] .taxz-skel-stats > div {
+  height: 52px;
+}
+
+:root[data-taxz] .taxz-skel-btn {
+  height: 36px;
+  border-radius: var(--r2);
+}
+
+@keyframes taxz-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .taxz-skel {
+    animation: none;
+    background: color-mix(in srgb, var(--fg) 9%, transparent);
+  }
+}
+
+/* Meldungen (Toasts): Glas-Karte mit farbigem Streifen links; am Handy ueber der Tab-Leiste */
+:root[data-taxz] .fixed.z-999 .mantine-Notification-root {
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+  color: var(--fg);
+}
+
+:root[data-taxz] .fixed.z-999 .mantine-Notification-root::before {
+  top: 8px;
+  bottom: 8px;
+  left: 6px;
+  width: 4px;
+  border-radius: 4px;
+}
+
+:root[data-taxz] .fixed.z-999 .mantine-Notification-description {
+  color: var(--fg);
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .fixed.z-999.bottom-4 {
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ---------- Darstellung: Vorschau der Serverbilder (auch im Standard-Theme sichtbar) ---------- */
+
+.taxz-ap .taxz-art-mini {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 70px;
+  border-radius: 10px;
+  isolation: isolate;
+}
+
+.taxz-ap .taxz-art-mini .taxz-art-amb svg {
+  width: 40%;
+  height: 40%;
+}
+
+/* ---------- Stufe 3: Konsole mit Filter und Schnellbefehlen (Idee 8) ---------- */
+
+:root[data-taxz] .taxz-chead-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-right: 4px;
+  font-family: var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-seg2.is-sm {
+  padding: 2px;
+}
+
+:root[data-taxz] .taxz-seg2.is-sm button {
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-seg-count {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: var(--track);
+  font: 700 max(var(--taxz-fmin, 0px), calc(11px * var(--taxz-fs, 1)))/18px var(--taxz-mono);
+  text-align: center;
+}
+
+:root[data-taxz] .taxz-csearch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card2);
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-csearch:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+:root[data-taxz] .taxz-csearch input {
+  width: 13ch;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg);
+  font: 600 max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1))) var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-csearch input::placeholder {
+  color: var(--faint);
+}
+
+/* Gefilterte Liste liegt ueber der Ausgabe, immer dunkel wie die Konsole (3.5) */
+:root[data-taxz] .taxz-cfilter {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  background: #0b090f;
+  color: var(--con-fg);
+  font-family: var(--taxz-mono);
+}
+
+:root[data-taxz] .taxz-cfilter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--con-dim);
+  font: 600 max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-cfilter-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--con-fg);
+  font: 700 max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-cfilter-clear:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+:root[data-taxz] .taxz-cfilter-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 6px 8px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-cfilter-list:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+:root[data-taxz] .taxz-cline.is-warn {
+  color: #ffc95c;
+}
+
+:root[data-taxz] .taxz-cline.is-error {
+  color: #ff8a82;
+}
+
+:root[data-taxz] .taxz-cline mark {
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--con-cmd) 35%, transparent);
+  color: inherit;
+}
+
+:root[data-taxz] .taxz-cfilter-none {
+  margin: 12px 0;
+  color: var(--con-dim);
+  font-family: var(--taxz-sans);
+}
+
+/* Schnellbefehle: eigene Zeile ueber dem Eingabefeld (Zeile darf umbrechen) */
+:root[data-taxz] div.flex-row:has(> .taxz-qcmds) {
+  flex-wrap: wrap;
+}
+
+:root[data-taxz] .taxz-qcmds {
+  order: -1;
+  flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-family: var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-qcmd {
+  min-height: 30px;
+  padding: 0 11px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: var(--card2);
+  color: var(--fg);
+  font: 600 max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1))) var(--taxz-mono);
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-qcmd:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--acc-soft);
+  color: var(--acc-text);
+}
+
+:root[data-taxz] .taxz-qcmd:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+:root[data-taxz] .taxz-qcmds-hint {
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-qcmds-hint a {
+  color: var(--acc-text);
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-qcmd,
+  :root[data-taxz] .taxz-cfilter-clear {
+    min-height: 40px;
+  }
+}
+
+/* ---------- Lichtkante (Idee 10): Rand leuchtet an der Mausposition ---------- */
+
+:root[data-taxz] :is(.taxz-sect, .taxz-akpi, .taxz-srow) {
+  position: relative;
+}
+
+:root[data-taxz] :is(.taxz-sc, .taxz-srow, .taxz-kpi, .taxz-sect, .taxz-akpi)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    220px circle at var(--taxz-mx, -500px) var(--taxz-my, -500px),
+    rgb(var(--glow-c) / 0.9),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+:root[data-taxz] .taxz-lit::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  :root[data-taxz] :is(.taxz-sc, .taxz-srow, .taxz-kpi, .taxz-sect, .taxz-akpi)::before {
+    display: none;
+  }
+}
+
+/* Kopfzeile der Konsole: Werkzeuge duerfen umbrechen; schmal steht der Filter in einer eigenen Zeile */
+:root[data-taxz] div.flex-row:has(> .taxz-chead-tools) {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+:root[data-taxz] .taxz-chead-tools .taxz-seg2 {
+  flex-wrap: nowrap;
+}
+
+@container page (max-width: 47.99rem) {
+  :root[data-taxz] .taxz-chead-tools {
+    flex: 1 1 100%;
+    margin-right: 0;
+  }
+
+  :root[data-taxz] .taxz-csearch {
+    flex: 1;
+    min-width: 0;
+  }
+
+  :root[data-taxz] .taxz-csearch input {
+    width: 100%;
+  }
+}
+
+/* ---------- "Wähle deinen Look" (Idee 2) ---------- */
+
+:root[data-taxz] .taxz-welcome .mantine-Modal-title {
+  font: 800 max(var(--taxz-fmin, 0px), calc(17px * var(--taxz-fs, 1)))/1.3 var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-welcome-body {
+  gap: 14px;
+}
+
+:root[data-taxz] .taxz-welcome-acts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+:root[data-taxz] .taxz-welcome-hint {
+  margin-right: auto;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-welcome-hint {
+    flex-basis: 100%;
+  }
+
+  :root[data-taxz] .taxz-welcome-acts .taxz-btn {
+    flex: 1;
+  }
+}
+
+:root[data-taxz] .taxz-welcome .taxz-tiles-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-welcome .taxz-tiles-3 {
+    gap: 8px;
+  }
+
+  :root[data-taxz] .taxz-welcome .taxz-tile {
+    padding: 5px 5px 8px;
+  }
+
+  :root[data-taxz] .taxz-welcome .taxz-mini {
+    height: 52px;
+  }
+
+  :root[data-taxz] .taxz-welcome .taxz-tile-text small {
+    display: none;
+  }
+
+  :root[data-taxz] .taxz-welcome .taxz-tile-check {
+    top: 8px;
+    right: 8px;
+  }
+}
+
+/* ---------- Zeitplaene in Klartext (Idee 17) ---------- */
+
+:root[data-taxz] .taxz-sched {
+  display: grid;
+  gap: 2px;
+  min-width: 18ch;
+}
+
+:root[data-taxz] .taxz-sched-name {
+  font-weight: 700;
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-sched-when {
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-sched-next {
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-cronfreq {
+  display: grid;
+  gap: 6px;
+  flex: 1 1 100%;
+}
+
+:root[data-taxz] .taxz-cronfreq-label {
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-cronfreq .taxz-seg2 {
+  justify-self: start;
+}
+
+:root[data-taxz] .taxz-cronsum {
+  display: grid;
+  gap: 2px;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-cronsum b {
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-cronsum code {
+  font: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1))) var(--taxz-mono);
+  color: var(--muted);
+}
+
+/* ---------- Backups als Zeitleiste (Idee 18) ---------- */
+
+:root[data-taxz] .taxz-btl {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 14px 18px 16px;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+}
+
+:root[data-taxz] .taxz-btl-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+:root[data-taxz] .taxz-btl-title {
+  margin: 0;
+  font: 800 max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1))) var(--taxz-sans);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-btl-range {
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-btl-track {
+  position: relative;
+  height: calc(56px + var(--lvls, 0) * 24px);
+  margin: 0 10px;
+}
+
+:root[data-taxz] .taxz-btl-line {
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  top: 18px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--track);
+}
+
+:root[data-taxz] .taxz-btl-empty {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-btl-dot {
+  /* Trefferflaeche 24 px (WCAG 2.5.8), sichtbarer Punkt 18 px */
+  position: absolute;
+  top: calc(6px + var(--lvl, 0) * 24px);
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  --dot: var(--ok);
+}
+
+:root[data-taxz] .taxz-btl-dot::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: 3px solid var(--card-solid);
+  background: var(--dot);
+  box-shadow: 0 0 0 1px var(--line);
+  transition: transform 0.12s;
+}
+
+:root[data-taxz] .taxz-btl-dot.is-warn {
+  --dot: var(--warn);
+}
+
+:root[data-taxz] .taxz-btl-dot.is-bad {
+  --dot: var(--bad);
+}
+
+:root[data-taxz] .taxz-btl-dot:hover::before {
+  transform: scale(1.2);
+}
+
+:root[data-taxz] .taxz-btl-dot.is-on::before {
+  box-shadow:
+    0 0 0 2px var(--card-solid),
+    0 0 0 4px var(--accent);
+}
+
+:root[data-taxz] .taxz-btl-dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+:root[data-taxz] .taxz-btl-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -14px;
+  font: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1))) var(--taxz-mono);
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-btl-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 12px 14px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--card2);
+}
+
+:root[data-taxz] .taxz-btl-info {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-btl-info > b {
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-btl-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .taxz-btl-dot::before {
+    transition: none;
+  }
+}
+
+:root[data-taxz] .taxz-btl-kv {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3px 14px;
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-btl-kv dt {
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-btl-kv dd {
+  margin: 0;
+  color: var(--fg);
+}
+
+/* ---------- Ankuendigungen als Banner (Idee 21) ---------- */
+
+:root[data-taxz] .taxz-banner {
+  --tone: var(--accent);
+  --tone-text: var(--acc-text);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 10px 16px 0;
+  padding: 12px 12px 12px 14px;
+  border-radius: var(--r2);
+  border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
+  background: color-mix(in srgb, var(--tone) 14%, var(--card-solid));
+  color: var(--fg);
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-banner.is-ok {
+  --tone: var(--ok);
+  --tone-text: var(--ok);
+}
+
+:root[data-taxz] .taxz-banner.is-warn {
+  --tone: var(--warn);
+  --tone-text: var(--warn);
+}
+
+:root[data-taxz] .taxz-banner.is-bad {
+  --tone: var(--bad);
+  --tone-text: var(--bad);
+}
+
+:root[data-taxz] .taxz-banner-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r1);
+  background: color-mix(in srgb, var(--tone) 18%, transparent);
+  color: var(--tone-text);
+}
+
+:root[data-taxz] .taxz-banner-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+:root[data-taxz] .taxz-banner-title {
+  font-weight: 800;
+}
+
+:root[data-taxz] .taxz-banner-text :is(p, ul, ol) {
+  margin: 0;
+}
+
+:root[data-taxz] .taxz-banner-text a {
+  color: var(--tone-text);
+  text-decoration: underline;
+}
+
+@container page (min-width: 64rem) {
+  :root[data-taxz] .taxz-banner {
+    margin: 12px 24px 0;
+  }
+}
+
+/* ---------- Hinweis "Zum Startbildschirm hinzufügen" (Idee 24), nur Handy ---------- */
+
+:root[data-taxz] .taxz-install {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+  z-index: 190;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px 10px 12px;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+  background: var(--side);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+  color: var(--fg);
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-install-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r1);
+  background: var(--acc-soft);
+  color: var(--acc-text);
+}
+
+:root[data-taxz] .taxz-install-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+:root[data-taxz] .taxz-install-body span {
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-install .taxz-btn {
+  flex: none;
+}
+
+/* ---------- Anmeldeseite (Idee 1): eine Glas-Karte mittig mit Logo, Panelname, Feldern und primaerem Knopf ---------- */
+/* Gilt fuer alle Seiten der Anmeldung (Anmelden, Registrieren, Passwort vergessen, Zwei-Faktor), sie teilen das Geruest. */
+
+:root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) {
+  width: min(100% - 32px, 440px);
+  margin-block: 32px;
+  padding: 24px 26px 20px !important;
+  border-radius: var(--r3);
+  border: 1px solid var(--line);
+  background: var(--card);
+  -webkit-backdrop-filter: var(--blur);
+  backdrop-filter: var(--blur);
+  box-shadow: var(--shadow);
+}
+
+:root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) > div.h-16 {
+  justify-content: center;
+  gap: 10px;
+  height: auto;
+  margin-bottom: 14px;
+}
+
+:root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) > div.h-16 > h1 {
+  flex-grow: 0;
+  margin: 0;
+  font: 800 max(var(--taxz-fmin, 0px), calc(20px * var(--taxz-fs, 1))) var(--taxz-sans);
+}
+
+:root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) .mantine-Title-root {
+  font: 800 max(var(--taxz-fmin, 0px), calc(22px * var(--taxz-fs, 1)))/1.25 var(--taxz-sans);
+}
+
+:root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) .mantine-Card-root {
+  padding: 0 !important;
+  overflow: visible;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] div.m-auto.flex-col.items-center:has(> div.h-16 > img) {
+    width: calc(100% - 24px);
+    padding: 20px 16px 16px !important;
+  }
+}
+
+/* Startvorgang auf der Serverkarte (Idee 6) */
+:root[data-taxz] .taxz-sc-starting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+:root[data-taxz] .taxz-sc-starting::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+}
+
+/* ---------- Stufe 4: Hilfe beim Absturz (Idee 13) ---------- */
+
+:root[data-taxz] .taxz-crash {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 16px 18px;
+  border-radius: var(--r3);
+  border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
+  background: color-mix(in srgb, var(--bad) 8%, var(--card-solid));
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-crash-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+:root[data-taxz] .taxz-crash-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r2);
+  background: color-mix(in srgb, var(--bad) 16%, transparent);
+  color: var(--bad);
+  font-size: max(var(--taxz-fmin, 0px), calc(18px * var(--taxz-fs, 1)));
+}
+
+:root[data-taxz] .taxz-crash-title {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+:root[data-taxz] .taxz-crash-title h2 {
+  margin: 0;
+  font: 800 max(var(--taxz-fmin, 0px), calc(17px * var(--taxz-fs, 1)))/1.3 var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-crash-title span {
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-crash-cause {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  font-weight: 600;
+}
+
+:root[data-taxz] .taxz-crash-log {
+  max-height: 260px;
+  overflow: auto;
+  padding: 10px 12px;
+  border-radius: var(--r2);
+  background: #0b090f;
+  color: var(--con-fg);
+  font: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)))/1.5 var(--taxz-mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-crash-log .is-error {
+  margin: 0 -12px;
+  padding: 0 12px;
+  background: rgba(255, 138, 130, 0.14);
+  color: #ff8a82;
+}
+
+:root[data-taxz] .taxz-crash-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+:root[data-taxz] .taxz-sc-crash {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* ---------- Stufe 4: Benachrichtigungen (9.8, Idee 15) ---------- */
+
+:root[data-taxz] .taxz-sb-bell {
+  position: absolute;
+  top: 18px;
+  right: 12px;
+  z-index: 2;
+}
+
+:root[data-taxz] .taxz-bell {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  background: var(--card2);
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-bell:hover,
+:root[data-taxz] .taxz-bell.is-on {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-bell-m {
+  position: relative;
+}
+
+:root[data-taxz] .taxz-bell-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--side);
+}
+
+:root[data-taxz] .taxz-bell-m .taxz-bell-dot {
+  top: 9px;
+  right: 9px;
+}
+
+:root[data-taxz] .taxz-bell-pop {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r3);
+  background: var(--card-solid);
+  color: var(--fg);
+  box-shadow: var(--shadow), 0 24px 60px -20px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-taxz] .taxz-bell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-bell-head h2 {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(15px * var(--taxz-fs, 1)));
+  font-weight: 800;
+}
+
+:root[data-taxz] .taxz-bell-read,
+:root[data-taxz] .taxz-bell-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--acc-text);
+  font: inherit;
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-bell-read:hover:not([aria-disabled='true']),
+:root[data-taxz] .taxz-bell-retry:hover {
+  background: var(--acc-soft);
+}
+
+:root[data-taxz] .taxz-bell-read[aria-disabled='true'] {
+  color: var(--muted);
+  cursor: default;
+}
+
+:root[data-taxz] .taxz-bell-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: min(460px, calc(100vh - 160px));
+  overflow-y: auto;
+}
+
+:root[data-taxz] .taxz-bell-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 10px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--r2);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+:root[data-taxz] a.taxz-bell-item:hover {
+  background: var(--hover);
+}
+
+:root[data-taxz] .taxz-bell-ic {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
+}
+
+:root[data-taxz] .taxz-bell-item.is-ok { --tone: var(--ok); }
+:root[data-taxz] .taxz-bell-item.is-warn { --tone: var(--warn); }
+:root[data-taxz] .taxz-bell-item.is-bad { --tone: var(--bad); }
+:root[data-taxz] .taxz-bell-item.is-info { --tone: var(--acc-text); }
+
+:root[data-taxz] .taxz-bell-txt {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+:root[data-taxz] .taxz-bell-txt b {
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-bell-item.is-unread .taxz-bell-txt b {
+  font-weight: 800;
+}
+
+:root[data-taxz] .taxz-bell-txt small {
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-bell-new {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+:root[data-taxz] .taxz-bell-empty {
+  padding: 22px 16px;
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  text-align: center;
+}
+
+:root[data-taxz] .taxz-bell-note {
+  margin: 0;
+  padding: 10px 16px 12px;
+  border-top: 1px solid var(--line);
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+  color: var(--muted);
+}
+
+/* ---------- Stufe 4: Startvariablen als Formular (9.12, Idee 16) ---------- */
+
+:root[data-taxz] .taxz-startup {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+:root[data-taxz] .taxz-startup-side {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+@container page (max-width: 63.99rem) {
+  :root[data-taxz] .taxz-startup {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+:root[data-taxz] .taxz-vform {
+  display: grid;
+}
+
+:root[data-taxz] .taxz-vrow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 300px);
+  align-items: start;
+  gap: 8px 20px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-vrow:first-child {
+  border-top: 0;
+  padding-top: 2px;
+}
+
+:root[data-taxz] .taxz-vrow.is-switch .taxz-vctl {
+  justify-self: end;
+}
+
+:root[data-taxz] .taxz-vrow.is-changed .taxz-vname::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 2px;
+}
+
+:root[data-taxz] .taxz-vlabel {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+:root[data-taxz] .taxz-vname {
+  font-size: max(var(--taxz-fmin, 0px), calc(14px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-vreq {
+  color: var(--bad);
+}
+
+:root[data-taxz] .taxz-vbadge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--card2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  vertical-align: 1px;
+}
+
+:root[data-taxz] .taxz-vdesc {
+  font-size: max(var(--taxz-fmin, 0px), calc(13px * var(--taxz-fs, 1)));
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+:root[data-taxz] .taxz-vdesc p {
+  margin: 0;
+}
+
+:root[data-taxz] .taxz-venv {
+  justify-self: start;
+  padding: 0;
+  background: none;
+  font: 500 max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1))) var(--taxz-mono, ui-monospace, monospace);
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-vctl {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+:root[data-taxz] .taxz-vctl .taxz-seg2 {
+  justify-self: start;
+}
+
+:root[data-taxz] .taxz-vctl .taxz-seg2 button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+:root[data-taxz] .taxz-vctl .taxz-seg2 button:disabled.is-on {
+  opacity: 1;
+}
+
+:root[data-taxz] .taxz-vrange {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 84px;
+  align-items: center;
+  gap: 14px;
+}
+
+:root[data-taxz] .taxz-vrange .mantine-Slider-bar {
+  background: var(--accent);
+}
+
+:root[data-taxz] .taxz-vrange .mantine-Slider-thumb {
+  border-color: var(--accent);
+}
+
+:root[data-taxz] .taxz-verr {
+  margin: 0;
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--bad);
+}
+
+:root[data-taxz] .taxz-vreset {
+  width: 28px;
+  height: 28px;
+}
+
+:root[data-taxz] .taxz-startcmd textarea {
+  font-family: var(--taxz-mono, ui-monospace, monospace);
+  font-size: max(var(--taxz-fmin, 0px), calc(12.5px * var(--taxz-fs, 1)));
+}
+
+@container page (max-width: 47.99rem) {
+  :root[data-taxz] .taxz-vrow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :root[data-taxz] .taxz-vrow.is-switch {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* ---------- Stufe 4: Eigenes Bild pro Server (9.18, Idee 22) ---------- */
+
+:root[data-taxz] .taxz-emb.is-img {
+  background: var(--card2);
+}
+
+:root[data-taxz] .taxz-emb.is-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.taxz-art-layer > .taxz-art-glyph.is-img {
+  top: -12%;
+  right: -4%;
+  width: auto;
+  height: 124%;
+  aspect-ratio: 1;
+  opacity: 0.32;
+}
+
+.taxz-art-layer > .taxz-art-glyph.is-img img,
+.taxz-art-layer > .taxz-art-amb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.taxz-art-layer > .taxz-art-glyph.is-img img {
+  border-radius: 22%;
+}
+
+.taxz-art-layer > .taxz-art-amb:has(> img) {
+  inset: -20%;
+  display: block;
+}
+
+.taxz-art-layer > .taxz-art-illu {
+  position: absolute;
+  inset: 0;
+}
+
+.taxz-art-layer > img.taxz-art-tile {
+  position: absolute;
+  z-index: 1;
+  inset: auto;
+  right: 14px;
+  bottom: 12px;
+  width: calc(56px * var(--dks, 1));
+  height: calc(56px * var(--dks, 1));
+  border-radius: 14px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-taxz] .taxz-simg {
+  display: grid;
+  gap: 14px;
+}
+
+:root[data-taxz] .taxz-simg-prev {
+  position: relative;
+  padding-bottom: 22px;
+}
+
+:root[data-taxz] .taxz-simg-art {
+  position: relative;
+  height: 112px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: var(--r2);
+  border: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-simg-prev > .taxz-emb {
+  position: absolute;
+  left: 14px;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 0 0 3px var(--card-solid);
+}
+
+:root[data-taxz] .taxz-simg-acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Abnahme (12.): Panel-Farben in Statustoenen, damit Text darauf WCAG AA erfuellt ---------- */
+
+/* "light"-Variante (Badges, Hinweise, Alerts): Statusfarbe 14 % als Grund, Wort in der Statusfarbe */
+:root[data-taxz] {
+  --mantine-color-green-light: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-green-light-hover: color-mix(in srgb, var(--ok) 22%, transparent);
+  --mantine-color-green-light-color: var(--ok);
+  --mantine-color-green-text: var(--ok);
+  --mantine-color-green-outline: var(--ok);
+  --mantine-color-green-outline-hover: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-teal-light: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-teal-light-hover: color-mix(in srgb, var(--ok) 22%, transparent);
+  --mantine-color-teal-light-color: var(--ok);
+  --mantine-color-teal-text: var(--ok);
+  --mantine-color-teal-outline: var(--ok);
+  --mantine-color-teal-outline-hover: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-lime-light: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-lime-light-hover: color-mix(in srgb, var(--ok) 22%, transparent);
+  --mantine-color-lime-light-color: var(--ok);
+  --mantine-color-lime-text: var(--ok);
+  --mantine-color-lime-outline: var(--ok);
+  --mantine-color-lime-outline-hover: color-mix(in srgb, var(--ok) 14%, transparent);
+  --mantine-color-red-light: color-mix(in srgb, var(--bad) 14%, transparent);
+  --mantine-color-red-light-hover: color-mix(in srgb, var(--bad) 22%, transparent);
+  --mantine-color-red-light-color: var(--bad);
+  --mantine-color-red-text: var(--bad);
+  --mantine-color-red-outline: var(--bad);
+  --mantine-color-red-outline-hover: color-mix(in srgb, var(--bad) 14%, transparent);
+  --mantine-color-pink-light: color-mix(in srgb, var(--bad) 14%, transparent);
+  --mantine-color-pink-light-hover: color-mix(in srgb, var(--bad) 22%, transparent);
+  --mantine-color-pink-light-color: var(--bad);
+  --mantine-color-pink-text: var(--bad);
+  --mantine-color-pink-outline: var(--bad);
+  --mantine-color-pink-outline-hover: color-mix(in srgb, var(--bad) 14%, transparent);
+  --mantine-color-yellow-light: color-mix(in srgb, var(--warn) 14%, transparent);
+  --mantine-color-yellow-light-hover: color-mix(in srgb, var(--warn) 22%, transparent);
+  --mantine-color-yellow-light-color: var(--warn);
+  --mantine-color-yellow-text: var(--warn);
+  --mantine-color-yellow-outline: var(--warn);
+  --mantine-color-yellow-outline-hover: color-mix(in srgb, var(--warn) 14%, transparent);
+  --mantine-color-orange-light: color-mix(in srgb, var(--warn) 14%, transparent);
+  --mantine-color-orange-light-hover: color-mix(in srgb, var(--warn) 22%, transparent);
+  --mantine-color-orange-light-color: var(--warn);
+  --mantine-color-orange-text: var(--warn);
+  --mantine-color-orange-outline: var(--warn);
+  --mantine-color-orange-outline-hover: color-mix(in srgb, var(--warn) 14%, transparent);
+}
+
+/* Volle Flaechen in Gruen, Gelb, Orange (Badges und Knoepfe): wie die Status-Pill (Designvorgabe 5.) statt weisser Schrift auf greller Farbe.
+   Badges tragen die Variante "filled" nicht als Attribut, deshalb ueber die gesetzte Flaechenfarbe. Rote Knoepfe regelt schon "Gefahr" oben. */
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-green-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-green-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-green-filled)'],
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-teal-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-teal-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-teal-filled)'],
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-lime-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-lime-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-lime-filled)'] {
+  background: color-mix(in srgb, var(--ok) 14%, transparent);
+  color: var(--ok);
+  border: 1px solid color-mix(in srgb, var(--ok) 40%, transparent);
+}
+
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]) {
+  background: color-mix(in srgb, var(--ok) 22%, transparent);
+}
+
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-red-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-red-filled)'],
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-pink-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-pink-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-pink-filled)'] {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+  border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
+}
+
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-red-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]) {
+  background: color-mix(in srgb, var(--bad) 22%, transparent);
+}
+
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-yellow-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-yellow-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-yellow-filled)'],
+:root[data-taxz] .mantine-Badge-root[style*='-bg: var(--mantine-color-orange-filled)'],
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-orange-filled)'],
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-orange-filled)'] {
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  color: var(--warn);
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
+}
+
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]) {
+  background: color-mix(in srgb, var(--warn) 22%, transparent);
+}
+
+/* Graue volle Badges: Wort in --fg auf Glas */
+:root[data-taxz] .mantine-Badge-root[style*='--badge-bg: var(--mantine-color-gray-filled)'] {
+  background: var(--card2);
+  color: var(--fg);
+  border: 1px solid var(--line);
+}
+
+/* Akzentflaechen mit Text (volle Badges in der Panel-Farbe, aktive Seitenzahl): Schrift --on-acc wie auf dem Hauptknopf (3.6) */
+:root[data-taxz] .mantine-Badge-root:is([style*='--badge-bg: var(--mantine-color-blue-filled)'], [style*='--badge-bg: var(--mantine-primary-color-filled)']),
+:root[data-taxz] .mantine-Pagination-control[data-active] {
+  background: var(--accent);
+  color: var(--on-acc);
+}
+
+/* Handy: Abschnittskoepfe mit Knopfgruppe (z. B. "Ausstehende Erweiterungen") brechen um, statt ueber den Rand zu ragen */
+@media (max-width: 640px) {
+  :root[data-taxz] .flex.items-center.justify-between:has(> .mantine-Group-root) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* Lange zusammengesetzte Woerter in Ueberschriften ("Anwendungseinstellungen") brechen am Handy um, statt ueber den Rand zu ragen */
+:root[data-taxz] .mantine-Title-root {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Breite Tabellen (Admin-Uebersicht) scrollen in sich, nicht die ganze Seite */
+:root[data-taxz] .taxz-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--r1);
+}
+
+/* Groessere Schrift: Kartenraster mit drei festen Spalten (Konto) werden erst bei genug Platz dreispaltig */
+@media (min-width: 768px) {
+  :root[data-taxz][data-taxz-large] .grid.md\:grid-cols-3 {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+  }
+}
+
+/* "Bewegung reduzieren" des Systems: auch das pulsierende Verbindungslicht der Konsole steht still */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .animate-pulse {
+    animation: none;
+  }
+}
+
+/* ---------- Brotkrumen (6.1): schmale Zeile oben im Inhalt, 44 px, ohne Linie, ueber Bannern und Seite ---------- */
+:root[data-taxz] div:has(> .taxz-crumbs) {
+  display: flex;
+  flex-direction: column;
+}
+
+:root[data-taxz] .taxz-crumbs {
+  order: -1;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 16px 0;
+  color: var(--muted);
+  font: 600 max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1))) var(--taxz-sans);
+}
+
+:root[data-taxz] .taxz-crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:root[data-taxz] .taxz-crumbs li {
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+:root[data-taxz] .taxz-crumbs a:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+:root[data-taxz] .taxz-crumbs [aria-current='page'] {
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-crumb-sep {
+  display: inline-flex;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+@media (min-width: 1024px) {
+  :root[data-taxz] .taxz-crumbs {
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-crumbs {
+    display: none;
+  }
+}
+
+/* ===== Nachtrag nach der Abnahme ===== */
+
+/* Rolle unter dem Namen (6.1); der Text kommt als --taxz-role vom Fuss der Seitenleiste */
+:root[data-taxz] .taxz-foot #sidebar-account-card > :first-child > span {
+  line-height: 1.2;
+}
+
+:root[data-taxz] .taxz-foot #sidebar-account-card > :first-child > span::after {
+  content: var(--taxz-role, none);
+  display: block;
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+}
+
+/* Speichern-Leiste in Konto und Admin-Einstellungen (7.5): die Huelle des Panel-Knopfs aufloesen,
+   damit die Leiste am Formular (nicht an der Huelle) unten klebt */
+:root[data-taxz] form .mantine-Group-root:has(> .taxz-savebar) {
+  display: contents;
+}
+
+:root[data-taxz] form .taxz-savebar {
+  margin-top: 4px;
+}
+
+/* ---------- Review-Nachtrag: Seitenleiste nach 6.1 ---------- */
+
+/* Server-Karte oben: Symbol, Name als Umschalter, Status und Laufzeit */
+:root[data-taxz] .taxz-swcard {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 2px;
+  padding: 8px 10px;
+  border-radius: var(--r2);
+  background: var(--card2);
+  border: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-swcard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-swcard-main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+:root[data-taxz] .taxz-swcard-pick {
+  display: block;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-swcard-pick .mantine-InputWrapper-root,
+:root[data-taxz] .taxz-swcard-pick > div {
+  margin: 0 !important;
+}
+
+:root[data-taxz] .taxz-swcard-pick .mantine-Input-input {
+  height: auto;
+  min-height: 0;
+  padding: 0 22px 0 6px;
+  margin-left: -6px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-swcard-pick .mantine-Input-input::placeholder {
+  color: var(--fg);
+  opacity: 1;
+}
+
+:root[data-taxz] .taxz-swcard-pick .mantine-Input-section {
+  width: 20px;
+  color: var(--muted);
+}
+
+:root[data-taxz] .taxz-swcard-name {
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-swcard-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:root[data-taxz] .taxz-swcard-power > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+:root[data-taxz] .taxz-swcard-power .mantine-Button-root {
+  height: 30px;
+  padding-inline: 8px;
+  font-size: max(var(--taxz-fmin, 0px), calc(12px * var(--taxz-fs, 1)));
+}
+
+/* "Zu Server wechseln" ausserhalb eines Servers, oben unter der Suche */
+:root[data-taxz] .taxz-jump {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+:root[data-taxz] .taxz-jump-label {
+  font-size: max(var(--taxz-fmin, 0px), calc(11.5px * var(--taxz-fs, 1)));
+  font-weight: 700;
+  color: var(--muted);
+  padding: 0 2px;
+}
+
+:root[data-taxz] .taxz-jump .mantine-Select-root,
+:root[data-taxz] .taxz-jump > div {
+  margin: 0 !important;
+}
+
+/* Aufklappbarer Punkt "Schluessel und Sitzungen" */
+:root[data-taxz] .taxz-fold-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--r2);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: max(var(--taxz-fmin, 0px), calc(13.5px * var(--taxz-fs, 1)));
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+:root[data-taxz] .taxz-fold-btn > svg:first-child {
+  width: 16px;
+  margin-right: 10px;
+}
+
+:root[data-taxz] .taxz-fold-btn > span {
+  flex: 1;
+  min-width: 0;
+}
+
+:root[data-taxz] .taxz-fold-btn:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-fold.has-active > .taxz-fold-btn {
+  color: var(--fg);
+}
+
+:root[data-taxz] .taxz-fold.has-active > .taxz-fold-btn > svg:first-child {
+  color: var(--acc-text);
+}
+
+:root[data-taxz] .taxz-fold-chev {
+  width: 10px;
+  transition: transform 0.15s ease;
+}
+
+:root[data-taxz] .taxz-fold.is-open .taxz-fold-chev {
+  transform: rotate(90deg);
+}
+
+:root[data-taxz] .taxz-fold-body {
+  display: grid;
+  gap: 2px;
+  margin: 2px 0 2px 17px;
+  padding-left: 8px;
+  border-left: 1px solid var(--line);
+}
+
+:root[data-taxz] .taxz-fold-body[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .taxz-fold-chev {
+    transition: none;
+  }
+}
+
+/* Aktiver Punkt (6.1): die Grundregel oben ist durch #sidebar-content spezifischer, deshalb hier mit derselben Kette */
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet) #sidebar-content a > .mantine-Button-root:hover,
+:root[data-taxz] .taxz-ph-sheet-body a > .mantine-Button-root:hover {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet) #sidebar-content a > .mantine-Button-root.active,
+:root[data-taxz] .taxz-ph-sheet-body a > .mantine-Button-root.active {
+  background: var(--acc-soft);
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1px rgb(var(--glow-c) / 0.25);
+}
+
+:root[data-taxz] :is(#sidebar-desktop, .taxz-ph-sheet) #sidebar-content a > .mantine-Button-root.active svg,
+:root[data-taxz] .taxz-ph-sheet-body a > .mantine-Button-root.active svg {
+  color: var(--acc-text);
+}
+
+/* Glocke: Hinweis ohne Link (Panel-Update) darf umbrechen, damit der ganze Satz lesbar bleibt */
+:root[data-taxz] div.taxz-bell-item .taxz-bell-txt small {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* ---------- Nachtrag nach dem Einspielen ---------- */
+
+/* Serverkarten (7.1): Mindestbreite waechst mit der Schrift, damit "auto-fill" auf breiten Bildschirmen keine
+   zu schmalen Spalten anlegt (vorher bis 303 px, dann brach die Knopfleiste in eine zweite Zeile um). */
+:root[data-taxz] div.grid:has(> .taxz-sc) {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(330px * var(--taxz-fs, 1))), 1fr)) !important;
+}
+
+/* Knopfleiste immer in einer Zeile: die Symbolknoepfe behalten ihre Groesse, "Oeffnen" nimmt den Rest und wird
+   bei sehr schmalen Karten zum reinen Symbol (Text bleibt fuer Screenreader). */
+:root[data-taxz] .taxz-sc {
+  container: taxz-sc / inline-size;
+}
+
+:root[data-taxz] .taxz-sc-acts {
+  flex-wrap: nowrap;
+}
+
+:root[data-taxz] .taxz-sc-acts > * {
+  flex: none;
+}
+
+:root[data-taxz] .taxz-sc-acts > .taxz-sc-open {
+  flex: 1 1 auto;
+  min-width: 44px;
+  overflow: hidden;
+}
+
+:root[data-taxz] .taxz-sc-open-txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@container taxz-sc (max-width: 300px) {
+  :root[data-taxz] .taxz-sc-acts {
+    gap: 6px;
+  }
+
+  :root[data-taxz] .taxz-sc-acts > .taxz-sc-open {
+    padding-inline: 10px;
+  }
+
+  :root[data-taxz] .taxz-sc-open-txt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Kennzahlen: passt "Wert / Grenze" nicht in eine Zeile, rutscht die Grenze unter den Wert, statt abgeschnitten zu
+   werden ("1.000 K / …"). Die Balken bleiben auf einer Hoehe. */
+:root[data-taxz] .taxz-sc .taxz-stat {
+  grid-template-rows: auto 1fr auto;
+}
+
+:root[data-taxz] .taxz-sc .taxz-stat b {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  align-self: start;
+  column-gap: 0.3em;
+  white-space: nowrap;
+}
+
+:root[data-taxz] .taxz-sc .taxz-stat b small {
+  white-space: nowrap;
+}
+
+/* Auswahl als Haekchen in der Kartenecke (7.1: Leiste nur Oeffnen, Start/Stopp, Menue). Sichtbar bei Hover/Fokus der Karte,
+   sobald irgendein Server ausgewaehlt ist, und immer auf Geraeten ohne Hover (Touch). Bleibt per Tab erreichbar. */
+:root[data-taxz] .taxz-sel {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  padding: 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--faint);
+  background: var(--card);
+  color: transparent;
+  font-size: 12px;
+  cursor: pointer;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+:root[data-taxz] .taxz-sel:hover { border-color: var(--accent); color: var(--faint); }
+:root[data-taxz] .taxz-sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:root[data-taxz] .taxz-sel.is-on { background: var(--acc-grad); border-color: transparent; color: var(--on-acc); }
+:root[data-taxz] :is(.taxz-sc, .taxz-srow):is(:hover, :focus-within) .taxz-sel,
+:root[data-taxz] .taxz-sel.is-on,
+:root[data-taxz]:has(:is(.taxz-sc, .taxz-srow).is-selected) .taxz-sel { opacity: 1; }
+@media (hover: none) {
+  :root[data-taxz] .taxz-sel { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .taxz-sel { transition: none; }
+}
+/* Karte: rechts neben dem Symbol, wo der Kopf frei ist (Spezifitaet ueber der Regel "Knoepfe ueber dem Kartenlink"); Trefferflaeche 44 px */
+:root[data-taxz] .taxz-sc .taxz-sc-body > .taxz-sel {
+  position: absolute;
+  top: 10px;
+  right: var(--pad);
+  z-index: 2;
+}
+:root[data-taxz] .taxz-sel::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+:root[data-taxz] .taxz-srow-acts { align-items: center; }
+
+/* Schnellaktionen: Kuerzel des Panels kompakt zeigen (6.1 "Kuerzel als kbd"), in der Textschrift statt Mono, damit
+   "Schnellaktionen..." und "Ctrl+Space" in die 252 px breite Leiste passen. Ein laengeres eigenes Kuerzel kuerzt den Text mit "…".
+   Mit grosser Schrift passt es nicht daneben, dort bleibt es ausgeblendet; alle Kuerzel stehen unter Konto > Tastaturkuerzel. */
+:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) {
+  padding-inline: 10px;
+}
+:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) .mantine-Button-section[data-position='left'] {
+  margin-inline-end: 8px;
+}
+:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+  display: flex;
+  margin-left: 4px;
+}
+:root[data-taxz] #sidebar-desktop .mantine-Button-section[data-position='right'] .mantine-Kbd-root {
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0;
+  line-height: 1.5;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) .mantine-Button-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:root[data-taxz][data-taxz-large] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+  display: none;
+}
+
+/* ---------- Nachtrag Produktionsreife-Review 18.11.2026 ---------- */
+
+/* B1: Am Handy umbrechen statt kuerzen (Vorgabe 12): Titel und Unterzeile der Kopfleiste, Beschriftungen der Tab-Leiste */
+@media (max-width: 640px) {
+  :root[data-taxz] .taxz-ph-title :is(b, small) {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+  }
+  :root[data-taxz] .taxz-ph-title b { line-height: 1.2; }
+  :root[data-taxz] .taxz-ph-title small { line-height: 1.3; }
+}
+:root[data-taxz] .taxz-tab span {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  text-align: center;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+/* Technische Angaben (Einstellungen): lange Kennungen brechen um statt abgeschnitten zu werden; Kopierknopf im dd */
+:root[data-taxz] .taxz-kv > div { grid-template-columns: 96px minmax(0, 1fr); }
+:root[data-taxz] .taxz-kv dd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+:root[data-taxz] .taxz-kv dd > .taxz-mono { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+/* B2: Am Handy Ziele mindestens 44 px (Vorgabe 1.4 und 8). Knoepfe und Felder ueber die Groessen-Variablen von Mantine,
+   damit Symbole in den Feldern mittig bleiben; kleine Symbolknoepfe bekommen eine unsichtbare Trefferflaeche. */
+@media (max-width: 640px) {
+  :root[data-taxz] .mantine-Input-wrapper {
+    --input-height-xs: 44px;
+    --input-height-sm: 44px;
+    --input-height-md: 44px;
+  }
+  :root[data-taxz] .mantine-Button-root {
+    --button-height-xs: 44px;
+    --button-height-sm: 44px;
+    --button-height-md: 44px;
+  }
+  :root[data-taxz] :is(.mantine-Tabs-tab, .mantine-SegmentedControl-label) { min-height: 44px; }
+  :root[data-taxz] .mantine-SegmentedControl-label { display: flex; align-items: center; justify-content: center; }
+  :root[data-taxz] .taxz-seg2 button,
+  :root[data-taxz] .taxz-seg2.is-sm button { min-height: 44px; }
+  :root[data-taxz] .taxz-csearch { height: 44px; }
+  :root[data-taxz] .taxz-ib::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
+  :root[data-taxz] .taxz-shead-power .mantine-Button-root { height: 44px; }
+  :root[data-taxz] .mantine-ActionIcon-root:not([data-size='xs']),
+  :root[data-taxz] .mantine-Pagination-control {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  :root[data-taxz] :is(.mantine-Checkbox-root, .mantine-Checkbox-body, .mantine-Checkbox-inner) {
+    --checkbox-size-xs: 24px;
+    --checkbox-size-sm: 24px;
+  }
+}
+/* Kleinste Symbolknoepfe des Panels (z. B. "Wird mit deinem Konto synchronisiert") mindestens 24 px (WCAG 2.5.8) */
+:root[data-taxz] .mantine-ActionIcon-root[data-size='xs'] {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+/* C4: Konsolenfilter am Handy: das Suchfeld bekommt eine eigene Zeile, wenn es neben den Filtern zu schmal wuerde */
+:root[data-taxz] .taxz-csearch { min-width: min(100%, 12rem); }
+
+/* B3: Glas-Leisten am Handy im Hellmodus deckender, damit Beschriftungen auch ueber bunten Karten 4,5:1 erreichen */
+@media (max-width: 640px) {
+  :root[data-taxz][data-mantine-color-scheme='light'] :is(.taxz-ph-tabs, .taxz-ph-top) {
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* C2: "Stoppen" im Server-Kopf: im Dunkelmodus etwas heller als --bad, damit es auch ueber dem hellen Schein von
+   Nordlicht + Glut 4,5:1 erreicht (vorher 4,3:1) */
+:root[data-taxz] .taxz-shead-power .mantine-Button-root[style*='--button-bg: var(--mantine-color-red'] {
+  color: var(--bad);
+}
+:root[data-taxz][data-mantine-color-scheme='dark'] .taxz-shead-power .mantine-Button-root[style*='--button-bg: var(--mantine-color-red'] {
+  color: #ffaea8;
+}
+
+/* Navigationsgruppen ohne sichtbaren Punkt (fehlende Rechte, Server nicht ladbar) ohne leere Ueberschrift */
+:root[data-taxz] .taxz-ngrp:not(:has(a, button)) { display: none; }
+
+/* ---------- Konsole: Kacheln fuehren zu "Ressourcen" (Verlauf des Panels) ---------- */
+
+/* Der Link spannt sich ueber die ganze Kachel; dafuer darf die Kopfzeile weder Bezugsrahmen noch eigene Stapelebene
+   bilden (als Grid-Kind wuerde schon z-index: 1 eine eigene Ebene anlegen, die Werte darunter laegen dann ueber dem Link). */
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go) > .taxz-kpi-top {
+  position: static;
+  z-index: auto;
+}
+
+:root[data-taxz] .taxz-kpi-go {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-left: auto;
+  border-radius: var(--r1);
+  color: var(--muted);
+  font-size: max(var(--taxz-fmin, 0px), calc(11px * var(--taxz-fs, 1)));
+  transition: color 0.15s, background-color 0.15s;
+}
+
+/* Bewegung nur am Symbol: ein transform am Link selbst machte ihn zum Bezugsrahmen, die Klickflaeche schrumpfte. */
+:root[data-taxz] .taxz-kpi-go svg {
+  transition: transform 0.15s;
+}
+
+:root[data-taxz] .taxz-kpi-go::after {
+  z-index: 3;
+}
+
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go) {
+  transition: border-color 0.15s;
+}
+
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:hover),
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:focus-visible) {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:hover) .taxz-kpi-go,
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:focus-visible) .taxz-kpi-go {
+  color: var(--acc-text);
+  background: var(--acc-soft);
+}
+
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:hover) .taxz-kpi-go svg,
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:focus-visible) .taxz-kpi-go svg {
+  transform: translateX(2px);
+}
+
+/* Fokusring um die ganze Kachel (8.: 2 px Akzent, 2 px Abstand) */
+:root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-taxz] .taxz-kpi-go,
+  :root[data-taxz] .taxz-kpi-go svg,
+  :root[data-taxz] .taxz-kpi:has(.taxz-kpi-go) {
+    transition: none;
+  }
+
+  :root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:hover) .taxz-kpi-go svg,
+  :root[data-taxz] .taxz-kpi:has(.taxz-kpi-go:focus-visible) .taxz-kpi-go svg {
+    transform: none;
+  }
+}
