@@ -1,3 +1,4 @@
 package_name = "de.taxz.theme"
 name = "taxz Theme"
-panel_version = ">=1.2.10"
+# Das Theme ersetzt einzelne Panel-Seiten; neue Minor-Versionen des Panels werden erst nach einem Test freigegeben.
+panel_version = "~1.2.10"
