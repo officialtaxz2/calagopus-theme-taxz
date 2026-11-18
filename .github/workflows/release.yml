@@ -12,6 +12,8 @@ env:
 
 jobs:
   release:
+    # Releases nur aus dem oeffentlichen Repo (Veroeffentlichung erst nach Freigabe).
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:

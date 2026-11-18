@@ -2,8 +2,9 @@ name: Check
 
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,6 +14,9 @@ env:
 
 jobs:
   check:
+    # Solange das Repo privat ist, kosten Actions-Minuten Kontingent; dann laufen die Pruefungen lokal
+    # (scripts/check-in-panel.sh, siehe README). Oeffentliche Repos bekommen die Standard-Runner kostenlos.
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
