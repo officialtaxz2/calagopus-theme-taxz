@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+env:
+  PANEL_IMAGE: ghcr.io/calagopus/panel:1.2.10-heavy-aio
+
+jobs:
+  release:
+    # Releases nur aus dem oeffentlichen Repo (Veroeffentlichung erst nach Freigabe).
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag matches version
+        run: |
+          version="$(sed -n 's/^version = "\(.*\)"/\1/p' backend/Cargo.toml | head -n 1)"
+          test "v$version" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME does not match backend/Cargo.toml version $version"; exit 1; }
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Release notes from CHANGELOG.md
+        run: |
+          awk -v v="$VERSION" '$0 ~ "^## " { if (found) exit; if (index($0, "## " v) == 1) { found = 1; next } } found' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "CHANGELOG.md has no section for $VERSION"; exit 1; }
+          cat notes.md
+      - name: Package
+        run: ./scripts/package.sh
+      - name: Check in panel image
+        run: docker run --rm -v "$PWD:/ext" --entrypoint sh "$PANEL_IMAGE" /ext/scripts/check-in-panel.sh /ext/dist/de_taxz_theme.c7s.zip
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/de_taxz_theme.c7s.zip dist/de_taxz_theme.c7s.zip.sha256 --title "$GITHUB_REF_NAME" --notes-file notes.md

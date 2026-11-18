@@ -1,0 +1,575 @@
+{
+  "items": {
+    "consoleError": {
+      "zero": "{count} Fehler",
+      "one": "{count} Fehler",
+      "two": "{count} Fehler",
+      "few": "{count} Fehler",
+      "many": "{count} Fehler",
+      "other": "{count} Fehler"
+    },
+    "consoleLine": {
+      "zero": "{count} Zeilen",
+      "one": "{count} Zeile",
+      "two": "{count} Zeilen",
+      "few": "{count} Zeilen",
+      "many": "{count} Zeilen",
+      "other": "{count} Zeilen"
+    },
+    "consoleWarning": {
+      "zero": "{count} Warnungen",
+      "one": "{count} Warnung",
+      "two": "{count} Warnungen",
+      "few": "{count} Warnungen",
+      "many": "{count} Warnungen",
+      "other": "{count} Warnungen"
+    },
+    "server": {
+      "zero": "{count} Server",
+      "one": "{count} Server",
+      "two": "{count} Server",
+      "few": "{count} Server",
+      "many": "{count} Server",
+      "other": "{count} Server"
+    },
+    "unsavedChange": {
+      "zero": "{count} ungespeicherte Änderungen",
+      "one": "{count} ungespeicherte Änderung",
+      "two": "{count} ungespeicherte Änderungen",
+      "few": "{count} ungespeicherte Änderungen",
+      "many": "{count} ungespeicherte Änderungen",
+      "other": "{count} ungespeicherte Änderungen"
+    }
+  },
+  "translations": {
+    "common": {
+      "loading": "Wird geladen …",
+      "save": "Speichern",
+      "retry": "Erneut versuchen",
+      "retrying": "Versucht erneut …",
+      "discard": "Verwerfen",
+      "saving": "Speichert …"
+    },
+    "look": {
+      "theme": {
+        "standard": {
+          "title": "Standard",
+          "subtitle": "Calagopus wie bisher"
+        },
+        "taxz": {
+          "title": "taxz",
+          "subtitle": "Das neue Design"
+        }
+      },
+      "background": {
+        "horizon": {
+          "title": "Horizont",
+          "subtitle": "Leuchtender Bogen unten"
+        },
+        "topo": {
+          "title": "Topografie",
+          "subtitle": "Höhenlinien, ruhig"
+        },
+        "aurora": {
+          "title": "Nordlicht",
+          "subtitle": "Langsame Farbwolken"
+        }
+      },
+      "accent": {
+        "violet": "Violett",
+        "sky": "Eisblau",
+        "emerald": "Smaragd",
+        "glut": "Glut"
+      },
+      "art": {
+        "colors": {
+          "title": "Spielfarben",
+          "subtitle": "Farben und Symbol des Spiels"
+        },
+        "icon": {
+          "title": "Icon-Schein",
+          "subtitle": "Weicher Schein des Symbols"
+        },
+        "illu": {
+          "title": "Illustration",
+          "subtitle": "Kleine Landschaft je Spiel"
+        }
+      },
+      "view": {
+        "cards": "Karten",
+        "list": "Liste"
+      }
+    },
+    "appearance": {
+      "title": "Darstellung",
+      "subtitle": "Gilt nur für dich und wird sofort übernommen",
+      "theme": {
+        "title": "Theme",
+        "lead": "Jeder wählt selbst, der Wechsel geht jederzeit zurück."
+      },
+      "scheme": {
+        "title": "Hell oder dunkel",
+        "auto": "Wie das Gerät",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "note": "Gilt auf diesem Gerät, wie der Schalter unten in der Seitenleiste."
+      },
+      "taxzOnly": "Die folgenden Einstellungen gelten für das Theme „taxz“.",
+      "background": {
+        "title": "Hintergrund"
+      },
+      "accent": {
+        "title": "Akzentfarbe",
+        "lead": "Für Knöpfe, Auswahl und Anzeigen. Statusfarben wie „Läuft“ bleiben immer gleich."
+      },
+      "art": {
+        "title": "Serverbilder",
+        "lead": "Kopf der Serverkarten in der Serverliste. Gilt für jedes Spiel gleich."
+      },
+      "view": {
+        "title": "Serverliste",
+        "label": "Ansicht der Serverliste",
+        "note": "Lässt sich auch direkt auf der Serverliste umschalten."
+      },
+      "readability": {
+        "title": "Lesbarkeit",
+        "largeFont": "Größere Schrift",
+        "largeFontDescription": "Alle Texte etwas größer, mindestens 14 px.",
+        "strongContrast": "Starker Kontrast",
+        "strongContrastDescription": "Deckende Karten statt Glas, kräftigere Rahmen und Texte. Ist „Mehr Kontrast“ im System an, gilt das automatisch."
+      },
+      "adminDefault": "Der Admin legt fest, was Benutzer ohne eigene Wahl sehen (derzeit: {theme}, {background}, {accent}).",
+      "reset": "Eigene Wahl löschen, Vorgabe nutzen"
+    },
+    "welcome": {
+      "title": "Willkommen, {name}! Wie soll dein Panel aussehen?",
+      "hint": "Später änderbar unter „Darstellung“",
+      "later": "Später",
+      "apply": "Übernehmen"
+    },
+    "admin": {
+      "defaults": {
+        "title": "Vorgaben für Benutzer ohne eigene Wahl",
+        "lead": "Jeder Benutzer kann unter Konto → Darstellung selbst wählen. Diese Werte gelten, solange er das nicht getan hat, und auf der Anmeldeseite.",
+        "standardOption": "Standard (Calagopus wie bisher)",
+        "saved": "Vorgaben gespeichert. Neu geladene Seiten zeigen sie, spätestens nach einer Minute."
+      }
+    },
+    "adminOverview": {
+      "noPermission": "Für die Übersicht fehlt dir das Recht „Statistiken lesen“.",
+      "kpi": {
+        "servers": "Server",
+        "users": "Benutzer",
+        "nodes": "Nodes",
+        "version": "Panel-Version",
+        "locations": "Standorte",
+        "eggs": "Eggs",
+        "databaseHosts": "Datenbank-Hosts",
+        "roles": "Rollen"
+      },
+      "system": {
+        "title": "System",
+        "cpu": "Prozessor",
+        "threads": "{count} Threads",
+        "memory": "Arbeitsspeicher",
+        "panelMemory": "Panel selbst: {size}",
+        "kernel": "Kernel",
+        "installation": "Installation",
+        "database": "Datenbank"
+      },
+      "cache": {
+        "calls": "Cache-Aufrufe",
+        "hits": "Treffer",
+        "misses": "Fehlversuche",
+        "slowest": "Langsamster"
+      },
+      "backups": {
+        "title": "Backups",
+        "allServers": "alle Server",
+        "label": "Backups nach Zeitraum",
+        "period": "Zeitraum",
+        "total": "Gesamt",
+        "successful": "Erfolgreich",
+        "failed": "Fehlgeschl.",
+        "deleted": "Gelöscht"
+      },
+      "periods": {
+        "today": "Heute",
+        "week": "Diese Woche",
+        "month": "Dieser Monat",
+        "allTime": "Gesamt"
+      },
+      "container": {
+        "none": "Ohne Container",
+        "official": "Offiziell",
+        "officialAio": "Offiziell (AIO)",
+        "officialHeavy": "Offiziell (Heavy)",
+        "officialHeavyAio": "Offiziell (Heavy AIO)"
+      }
+    },
+    "announcement": {
+      "close": "Ankündigung schließen"
+    },
+    "backups": {
+      "state": {
+        "deleting": "Wird gelöscht",
+        "running": "Läuft",
+        "failed": "Fehlgeschlagen",
+        "done": "Fertig"
+      },
+      "download": {
+        "preparing": "Download wird vorbereitet …",
+        "started": "Download gestartet.",
+        "failed": "Download fehlgeschlagen."
+      },
+      "timelineLabel": "Backups als Zeitleiste",
+      "timeline": "Zeitleiste",
+      "lastDays": "Letzte {days} Tage",
+      "empty": "Keine Backups in diesem Zeitraum.",
+      "today": "heute",
+      "cardLabel": "Backup {name}",
+      "created": "Erstellt",
+      "size": "Größe",
+      "kind": "Art",
+      "status": "Status",
+      "kindServer": "Server-Backup",
+      "kindDatabase": "Datenbank-Backup",
+      "downloadButton": "Herunterladen",
+      "restore": "Wiederherstellen"
+    },
+    "bell": {
+      "title": "Benachrichtigungen",
+      "labelUnread": "Benachrichtigungen, {count} ungelesen",
+      "signal": "Vom System beendet ({signal})",
+      "exitCode": "Exit-Code {code}",
+      "backupOk": "Backup „{name}“ fertig",
+      "backupFailed": "Backup „{name}“ fehlgeschlagen",
+      "scheduleFailed": "Zeitplan „{name}“ fehlgeschlagen",
+      "update": "Panel-Update verfügbar: {version}",
+      "installed": "Installiert: {version}",
+      "markRead": "Alle gelesen",
+      "loadFailed": "Benachrichtigungen konnten nicht geladen werden.",
+      "empty": "Keine Ereignisse in den letzten 7 Tagen.",
+      "unread": "ungelesen",
+      "unavailableOne": "Absturzverlauf von einem Server gerade nicht abrufbar.",
+      "unavailableMany": "Absturzverlauf von {count} Servern gerade nicht abrufbar."
+    },
+    "card": {
+      "startingSeconds": "Startet seit {seconds} s",
+      "startingMinutes": "Startet seit {minutes} Min {seconds} s",
+      "addToGroup": "Zu Gruppe hinzufügen",
+      "addToGroupNone": "Zu Gruppe hinzufügen (keine frei)",
+      "removeFromGroup": "Aus Gruppe entfernen",
+      "select": "Auswählen",
+      "deselect": "Auswahl aufheben",
+      "selectName": "{name} auswählen",
+      "deselectName": "{name} abwählen",
+      "moreActions": "Weitere Aktionen",
+      "moreActionsName": "Weitere Aktionen für {name}",
+      "foreign": "Server eines anderen Benutzers",
+      "copyAddress": "Adresse kopieren",
+      "noAddress": "Keine Adresse",
+      "crashed": "Abgestürzt {when} · {cause}",
+      "statsUnavailable": "Werte gerade nicht abrufbar (Node nicht erreichbar).",
+      "open": "Öffnen"
+    },
+    "console": {
+      "filter": {
+        "matching": "{count} mit „{query}“",
+        "clear": "Filter aufheben",
+        "output": "Gefilterte Konsolenausgabe",
+        "none": "Keine passenden Zeilen in der bisherigen Ausgabe.",
+        "all": "Alle",
+        "warnings": "Warnungen",
+        "errors": "Fehler",
+        "label": "Konsole filtern",
+        "placeholder": "Zeilen filtern …",
+        "searchLabel": "Konsolenzeilen nach Text filtern"
+      },
+      "quick": {
+        "label": "Schnellbefehle",
+        "hint": "Schnellbefehle: eigene Befehlskürzel unter {link} anlegen.",
+        "link": "Konto › Befehlskürzel"
+      }
+    },
+    "consolePage": {
+      "history": "Verlauf unter Ressourcen ansehen",
+      "historyLabel": "{label}: Verlauf unter Ressourcen ansehen",
+      "load": "Auslastung"
+    },
+    "crash": {
+      "cause": {
+        "oom": "Speicher voll",
+        "oomText": "Speicher voll: Das System hat den Server beendet, weil der RAM nicht reichte.",
+        "port": "Port belegt",
+        "portText": "Port belegt: Ein anderes Programm nutzt die Adresse des Servers schon.",
+        "signal": "Vom System beendet",
+        "signalText": "Vom System beendet ({signal}, Exit-Code {code}).",
+        "unknown": "Ursache unbekannt",
+        "unknownCode": "Ursache unbekannt. Der Server endete mit Exit-Code {code}.",
+        "unknownText": "Ursache unbekannt. Der Server hat sich unerwartet beendet."
+      },
+      "starting": "{name} wird gestartet.",
+      "title": "{name} ist abgestürzt",
+      "dismiss": "Absturzmeldung ausblenden",
+      "lastLines": "Letzte Konsolenzeilen vor dem Absturz",
+      "startingButton": "Startet …",
+      "restart": "Neu starten",
+      "adjustMemory": "Speicher anpassen",
+      "fullLog": "Ganzes Log"
+    },
+    "crumbs": {
+      "label": "Brotkrumen",
+      "servers": "Server",
+      "admin": "Admin",
+      "overview": "Übersicht"
+    },
+    "home": {
+      "empty": "Hier erscheinen deine Server.",
+      "count": "{servers}, davon {active} aktiv."
+    },
+    "install": {
+      "label": "Als App installieren",
+      "title": "Zum Startbildschirm hinzufügen",
+      "text": "Das Panel öffnet sich dann wie eine App, ohne Browserleiste.",
+      "ios": "Tippe unten auf „Teilen“ und dann auf „Zum Home-Bildschirm“.",
+      "add": "Hinzufügen",
+      "close": "Hinweis schließen"
+    },
+    "metric": {
+      "disk": "Speicher",
+      "network": "Netzwerk"
+    },
+    "nav": {
+      "resources": "Ressourcen",
+      "group": {
+        "overview": "Übersicht",
+        "account": "Konto",
+        "admin": "Verwaltung",
+        "more": "Weitere",
+        "control": "Steuern",
+        "setup": "Einrichten",
+        "share": "Teilen"
+      },
+      "servers": "Server",
+      "account": "Konto",
+      "allServers": "Alle Server",
+      "keys": "Schlüssel und Sitzungen",
+      "jumpToServer": "Zu Server wechseln",
+      "switchServer": "Server wechseln",
+      "label": "Navigation",
+      "tab": {
+        "console": "Konsole",
+        "files": "Dateien",
+        "settings": "Einstel­lungen",
+        "overview": "Übersicht",
+        "servers": "Server",
+        "users": "Benutzer",
+        "activity": "Aktivität",
+        "account": "Konto"
+      },
+      "backToConsole": "Zurück zur Konsole",
+      "backToServers": "Zurück zu allen Servern",
+      "openSearch": "Schnellaktionen und Suche öffnen",
+      "search": "Suchen",
+      "quickNav": "Schnellnavigation",
+      "more": "Mehr",
+      "toLight": "Hell einschalten",
+      "toDark": "Dunkel einschalten",
+      "roleAdmin": "Administrator",
+      "roleUser": "Benutzer"
+    },
+    "power": {
+      "start": "Starten",
+      "restart": "Neu starten",
+      "stop": "Stoppen",
+      "kill": "Sofort beenden",
+      "startName": "{name} starten",
+      "stopName": "{name} stoppen",
+      "killName": "{name} sofort beenden",
+      "stopConfirmTitle": "{name} stoppen?",
+      "stopConfirmText": "Der Server fährt herunter, alle Verbindungen zum Spiel werden getrennt.",
+      "killConfirmTitle": "{name} sofort beenden?",
+      "killConfirmText": "Der Server wird ohne Speichern abgebrochen. Nicht gespeicherte Spielstände gehen verloren."
+    },
+    "saveBar": {
+      "label": "Ungespeicherte Änderungen"
+    },
+    "schedule": {
+      "manualOnly": "Nur von Hand",
+      "nextRun": "Nächster Lauf {when}",
+      "paused": "Pausiert",
+      "next": {
+        "today": "heute {time}",
+        "tomorrow": "morgen {time}",
+        "date": "{date}, {time}"
+      },
+      "weekday": {
+        "sun": "Sonntag",
+        "mon": "Montag",
+        "tue": "Dienstag",
+        "wed": "Mittwoch",
+        "thu": "Donnerstag",
+        "fri": "Freitag",
+        "sat": "Samstag"
+      },
+      "cron": {
+        "everyMinute": "Jede Minute",
+        "everyMinutes": "Alle {n} Minuten",
+        "everyHour": "Jede Stunde zur vollen Stunde",
+        "everyHours": "Alle {n} Stunden",
+        "daily": "Jeden Tag um {time}",
+        "weekly": "Jeden {weekday} um {time}",
+        "everyWeeks": "Alle {n} Wochen {weekday} um {time}",
+        "monthly": "Jeden Monat am {day}. um {time}",
+        "raw": "Zeitplan {schedule}"
+      },
+      "trigger": {
+        "power": {
+          "start": "Wenn der Server gestartet wird",
+          "stop": "Wenn der Server gestoppt wird",
+          "restart": "Wenn der Server neu gestartet wird",
+          "kill": "Wenn der Server hart beendet wird"
+        },
+        "powerOther": "Wenn der Server {action} wird",
+        "state": {
+          "running": "Wenn der Server „Läuft“ meldet",
+          "offline": "Wenn der Server „Gestoppt“ meldet",
+          "starting": "Wenn der Server „Startet“ meldet",
+          "stopping": "Wenn der Server „Stoppt“ meldet"
+        },
+        "stateOther": "Wenn der Server {state} meldet",
+        "backup": {
+          "starting": "Wenn ein Backup startet",
+          "finished": "Wenn ein Backup fertig ist",
+          "failed": "Wenn ein Backup fehlschlägt"
+        },
+        "backupOther": "Wenn ein Backup {status}",
+        "databaseBackup": {
+          "starting": "Wenn ein Datenbank-Backup startet",
+          "finished": "Wenn ein Datenbank-Backup fertig ist",
+          "failed": "Wenn ein Datenbank-Backup fehlschlägt"
+        },
+        "databaseBackupOther": "Wenn ein Datenbank-Backup {status}",
+        "scheduleOk": "Wenn ein anderer Zeitplan erfolgreich durchgelaufen ist",
+        "scheduleFailed": "Wenn ein anderer Zeitplan fehlgeschlagen ist",
+        "resource": "Wenn {metric} {comparator} {value} liegt",
+        "resourceFor": "Wenn {metric} für {seconds} s {comparator} {value} liegt",
+        "console": "Wenn in der Konsole „{text}“ erscheint",
+        "crash": "Wenn der Server abstürzt",
+        "other": "Eigener Auslöser"
+      },
+      "metric": {
+        "cpu": "die CPU-Last",
+        "memory": "der RAM",
+        "disk": "der Speicher"
+      },
+      "comparator": {
+        "smaller_than": "unter",
+        "smaller_than_or_equals": "höchstens bei",
+        "equal": "genau bei",
+        "greater_than": "über",
+        "greater_than_or_equals": "mindestens bei"
+      },
+      "form": {
+        "repeat": "Wiederholung",
+        "frequency": {
+          "daily": "Täglich",
+          "weekly": "Wöchentlich",
+          "everyHours": "Stündlich",
+          "monthly": "Monatlich",
+          "everyMinutes": "Minütlich"
+        }
+      }
+    },
+    "serverHead": {
+      "label": "Server {name}",
+      "copyAddress": "Adresse kopieren"
+    },
+    "serverImage": {
+      "wrongType": "Bitte ein Bild im Format PNG, JPG oder WebP wählen.",
+      "tooLarge": "Das Bild ist größer als 8 MB.",
+      "saved": "Serverbild gespeichert.",
+      "removed": "Serverbild entfernt. Es gelten wieder die Spielfarben.",
+      "title": "Serverbild",
+      "subtitle": "Für Serverliste und Server-Symbol, wird sofort gespeichert",
+      "previewOwn": "Vorschau mit eigenem Bild",
+      "previewColors": "Vorschau mit Spielfarben",
+      "uploading": "Lädt hoch …",
+      "change": "Ändern",
+      "upload": "Bild hochladen",
+      "removing": "Entfernt …",
+      "remove": "Entfernen",
+      "hint": "PNG, JPG oder WebP, mindestens 64 × 64 Pixel. Nicht quadratische Bilder werden mittig zugeschnitten. Ohne Bild gelten die Spielfarben."
+    },
+    "settings": {
+      "tech": {
+        "node": "Node",
+        "location": "Standort",
+        "uuid": "Server-UUID",
+        "title": "Technische Angaben",
+        "subtitle": "Nur für Fehlersuche und Support",
+        "copy": "{label} kopieren"
+      },
+      "danger": "Gefahrenbereich",
+      "saved": "Einstellungen gespeichert.",
+      "title": "Einstellungen",
+      "subtitle": "{name} · Änderungen werden gemeinsam gespeichert",
+      "general": "Allgemein",
+      "timeThere": "Uhrzeit dort: {time}",
+      "behavior": "Verhalten",
+      "autostartDescription": "Nach einem Neustart des Systems",
+      "autokillDescription": "Hängenden Server nach dem Stoppen hart beenden"
+    },
+    "socket": {
+      "lost": "Verbindung zum Server unterbrochen, verbinde neu …",
+      "lostRetry": "Verbindung zum Server unterbrochen, verbinde neu … (nächster Versuch in {seconds} s)",
+      "connectNow": "Jetzt verbinden",
+      "close": "Meldung schließen"
+    },
+    "start": {
+      "running": "{name} läuft.",
+      "starting": "{name} startet"
+    },
+    "startup": {
+      "variablesSubtitle": "Einstellungen des Eggs für diesen Server",
+      "savedImmediately": "Änderungen werden sofort gespeichert"
+    },
+    "states": {
+      "error": {
+        "title": "Das hat nicht geklappt",
+        "hint": "Prüfe die Verbindung und versuche es noch einmal."
+      },
+      "loadingServers": "Server werden geladen …"
+    },
+    "status": {
+      "disconnected": "Getrennt",
+      "crashed": "Abgestürzt",
+      "suspended": "Gesperrt",
+      "transferring": "Wird umgezogen",
+      "installing": "Wird installiert",
+      "installFailed": "Installation fehlgeschlagen",
+      "restoringBackup": "Backup wird eingespielt",
+      "backupRestoreFailed": "Backup fehlgeschlagen",
+      "maintenance": "Wartung",
+      "running": "Läuft",
+      "starting": "Startet",
+      "stopping": "Stoppt",
+      "offline": "Gestoppt",
+      "unknown": "Unbekannt"
+    },
+    "time": {
+      "justNow": "gerade eben",
+      "minutesAgo": "vor {minutes} Min",
+      "hoursAgo": "vor {hours} Std",
+      "dayAgo": "vor 1 Tag",
+      "daysAgo": "vor {days} Tagen"
+    },
+    "uptime": {
+      "days": "{days} T {hours} Std",
+      "hours": "{hours} Std {minutes} Min",
+      "minutes": "{minutes} Min",
+      "seconds": "{seconds} s"
+    }
+  }
+}

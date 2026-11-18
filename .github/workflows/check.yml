@@ -1,0 +1,27 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PANEL_IMAGE: ghcr.io/calagopus/panel:1.2.10-heavy-aio
+
+jobs:
+  check:
+    # Solange das Repo privat ist, kosten Actions-Minuten Kontingent; dann laufen die Pruefungen lokal
+    # (scripts/check-in-panel.sh, siehe README). Oeffentliche Repos bekommen die Standard-Runner kostenlos.
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: ./scripts/package.sh
+      - name: Check in panel image
+        run: docker run --rm -v "$PWD:/ext" --entrypoint sh "$PANEL_IMAGE" /ext/scripts/check-in-panel.sh /ext/dist/de_taxz_theme.c7s.zip
