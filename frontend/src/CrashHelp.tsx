@@ -5,23 +5,23 @@
 // Speicher voll (OOM), Signal des Systems, Port belegt ("address already in use" des Betriebssystems), sonst "unbekannt".
 // Keine Mustererkennung fuer einzelne Spiele.
 
+import type { z } from 'zod';
 import { faFileLines, faMemory, faPlay, faSkull, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink } from 'react-router';
-import type { z } from 'zod';
+import type { serverCrashSchema, serverSchema } from '@/lib/schemas/server/server.ts';
 import { httpErrorToHuman } from '@/api/axios.ts';
-import getResourceHistory from '@/api/server/resources/getResourceHistory.ts';
 import getCrashes from '@/api/server/logs/getCrashes.ts';
 import getCrashLog from '@/api/server/logs/getCrashLog.ts';
+import getResourceHistory from '@/api/server/resources/getResourceHistory.ts';
 import sendPowerAction from '@/api/server/sendPowerAction.ts';
 import { isAdmin } from '@/lib/auth/permissions.ts';
 import { isConflictingState } from '@/lib/domain/server.ts';
 import { exitCodeSignal } from '@/lib/format/exitCode.ts';
 import { queryKeys } from '@/lib/queryKeys.ts';
 import { safeLocalStorageGet, safeLocalStorageSet } from '@/lib/safeStorage.ts';
-import type { serverCrashSchema, serverSchema } from '@/lib/schemas/server/server.ts';
 import { useServerCan } from '@/plugins/usePermissions.ts';
 import { useAuth } from '@/providers/AuthProvider.tsx';
 import { useToast } from '@/providers/ToastProvider.tsx';
@@ -30,7 +30,6 @@ import { lineLevel } from './consoleLevel.ts';
 import { locale, type PowerState, type StatusInfo, statusOf } from './serverStatus.ts';
 import { cleanLine } from './StartProgress.tsx';
 import { getExtTranslations, useExtTranslations } from './translations.ts';
-
 
 type Crash = z.infer<typeof serverCrashSchema>;
 
@@ -169,9 +168,13 @@ export function ago(date: Date) {
 }
 
 const when = (date: Date) =>
-  new Intl.DateTimeFormat(locale(), { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }).format(
-    date,
-  );
+  new Intl.DateTimeFormat(locale(), {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
 
 /** Absturz-Karte auf der Serverseite. */
 export function CrashCard({
@@ -267,7 +270,6 @@ export function CrashCard({
         <NavLink className='taxz-btn' to={`/server/${server.uuidShort}/console/crashes?crash=${crash.id}`}>
           <FontAwesomeIcon icon={faFileLines} aria-hidden='true' />
           {t('crash.fullLog', {})}
-
         </NavLink>
       </div>
     </section>

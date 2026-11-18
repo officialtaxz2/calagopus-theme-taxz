@@ -16,7 +16,8 @@ export function useServerImages() {
   const { user } = useAuth();
   return useQuery({
     queryKey: [...KEY, user?.uuid],
-    queryFn: async () => listSchema.parse((await axiosInstance.get('/api/client/extensions/de.taxz.theme/server-images')).data).images,
+    queryFn: async () =>
+      listSchema.parse((await axiosInstance.get('/api/client/extensions/de.taxz.theme/server-images')).data).images,
     enabled: !!user,
     staleTime: 5 * 60_000,
     // Das Panel stellt refetchOnMount auf 'always'; jede Karte, Kopf und Seitenleiste wuerde sonst neu laden.

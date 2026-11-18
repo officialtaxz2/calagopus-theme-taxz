@@ -10,7 +10,16 @@ import Select from '@/elements/input/Select.tsx';
 import Switch from '@/elements/input/Switch.tsx';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { accentText, artText, backgroundText, themeText, viewText } from './AppearancePage.tsx';
-import { ACCENTS, type Accent, ARTS, BACKGROUNDS, type Background, BUILTIN_DEFAULTS, SERVER_VIEWS, type ThemeChoice } from './prefs.ts';
+import {
+  ACCENTS,
+  type Accent,
+  ARTS,
+  BACKGROUNDS,
+  type Background,
+  BUILTIN_DEFAULTS,
+  SERVER_VIEWS,
+  type ThemeChoice,
+} from './prefs.ts';
 import { useExtTranslations } from './translations.ts';
 
 const API = '/api/admin/extensions/de.taxz.theme/defaults';
@@ -120,7 +129,6 @@ export default function AdminDefaultsPage() {
         />
         <Button onClick={save} loading={saving} disabled={!loaded} className='w-fit!'>
           {t('common.save', {})}
-
         </Button>
       </Stack>
     </TitleCard>

@@ -3,7 +3,13 @@
 // Server-Kopf (ServerHead). Jede Kachel fuehrt zu den ausfuehrlichen Diagrammen des Panels (Navigationspunkt "Ressourcen").
 // Mit "Standard" das Original.
 
-import { faArrowRightArrowLeft, faChevronRight, faHardDrive, faMemory, faMicrochip } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRightArrowLeft,
+  faChevronRight,
+  faHardDrive,
+  faMemory,
+  faMicrochip,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon, type FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -18,10 +24,10 @@ import { useVisualViewportBottomInset } from '@/plugins/viewport/useVisualViewpo
 import { useServerStore } from '@/stores/server.ts';
 import { pushLive, useResourceSeries } from './history.ts';
 import { useIsTaxz } from './prefs.ts';
-import Sparkline from './Sparkline.tsx';
 import { bytes, num } from './serverStatus.ts';
-import { useTween } from './useTween.ts';
+import Sparkline from './Sparkline.tsx';
 import { useExtTranslations } from './translations.ts';
+import { useTween } from './useTween.ts';
 
 function Tile({
   icon,

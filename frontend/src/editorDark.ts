@@ -27,5 +27,8 @@ export function registerEditorDark(ctx: ExtensionContext) {
       }
     }, 80);
   });
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-mantine-color-scheme', 'data-taxz'] });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-mantine-color-scheme', 'data-taxz'],
+  });
 }

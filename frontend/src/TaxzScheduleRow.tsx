@@ -20,8 +20,8 @@ import FormattedTimestamp from '@/elements/time/FormattedTimestamp.tsx';
 import { downloadTextFile } from '@/lib/download/download.ts';
 import { queryKeys } from '@/lib/queryKeys.ts';
 import { serverScheduleSchema } from '@/lib/schemas/server/schedules.ts';
-import OriginalScheduleRow from '@/pages/server/schedules/ScheduleRow.tsx';
 import ScheduleDuplicateModal from '@/pages/server/schedules/modals/ScheduleDuplicateModal.tsx';
+import OriginalScheduleRow from '@/pages/server/schedules/ScheduleRow.tsx';
 import { useServerCan } from '@/plugins/usePermissions.ts';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { useTranslations } from '@/providers/TranslationProvider.tsx';
@@ -202,7 +202,9 @@ const TaxzScheduleRow = forwardRef<HTMLTableRowElement, ScheduleRowProps>(functi
                 </span>
                 {next && (
                   <span className='taxz-sched-next'>
-                    {schedule.enabled ? tExt('schedule.nextRun', { when: formatNext(next, timezone) }) : tExt('schedule.paused', {})}
+                    {schedule.enabled
+                      ? tExt('schedule.nextRun', { when: formatNext(next, timezone) })
+                      : tExt('schedule.paused', {})}
                   </span>
                 )}
               </div>

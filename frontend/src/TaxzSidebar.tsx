@@ -44,9 +44,9 @@ import {
 import { Link, matchPath, NavLink, useLocation } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
 import { ServerCan } from '@/elements/Can.tsx';
-import Drawer from '@/elements/overlays/Drawer.tsx';
 import ServerSwitcher from '@/elements/navigation/ServerSwitcher.tsx';
 import Sidebar from '@/elements/navigation/Sidebar.tsx';
+import Drawer from '@/elements/overlays/Drawer.tsx';
 import ServerStatusIndicator from '@/elements/ServerStatusIndicator.tsx';
 import ServerPowerControls from '@/pages/server/console/stats/ServerPowerControls.tsx';
 import { useAuth } from '@/providers/AuthProvider.tsx';
@@ -55,11 +55,11 @@ import { useQuickActionsStore } from '@/stores/quickActions.ts';
 import { useRelativePageStore } from '@/stores/relativePage.ts';
 import { useServerStore } from '@/stores/server.ts';
 import { type CrumbPage, setCrumbPage } from './Breadcrumbs.tsx';
-import { gameLook } from './games.ts';
-import { useIsTaxz } from './prefs.ts';
-import NotificationBell from './NotificationBell.tsx';
-import { ServerEmblem } from './ServerArt.tsx';
 import { useCurrentServerStatus } from './CrashHelp.tsx';
+import { gameLook } from './games.ts';
+import NotificationBell from './NotificationBell.tsx';
+import { useIsTaxz } from './prefs.ts';
+import { ServerEmblem } from './ServerArt.tsx';
 import { useServerHeadVisible } from './ServerHead.tsx';
 import { useServerImage } from './serverImages.ts';
 import { isActive, uptime } from './serverStatus.ts';
@@ -67,7 +67,10 @@ import { getExtTranslations, useExtTranslations } from './translations.ts';
 import WelcomeLook from './WelcomeLook.tsx';
 
 type SidebarProps = { children: ReactNode; header?: ReactNode; footer?: ReactNode };
-type Entry = { kind: 'link'; to: string; node: ReactElement } | { kind: 'divider'; label?: string } | { kind: 'other'; node: ReactNode };
+type Entry =
+  | { kind: 'link'; to: string; node: ReactElement }
+  | { kind: 'divider'; label?: string }
+  | { kind: 'other'; node: ReactNode };
 
 type Context = { kind: 'dashboard' } | { kind: 'server'; base: string } | { kind: 'admin' };
 
@@ -169,7 +172,13 @@ function dashboardGroup(to: string): NavGroup {
 }
 
 // Konto-Gruppe (6.1): Reihenfolge, und welche Punkte unter "Schluessel und Sitzungen" zusammengefasst werden.
-const KEY_PATHS = ['/account/security-keys', '/account/api-keys', '/account/ssh-keys', '/account/oauth-links', '/account/sessions'];
+const KEY_PATHS = [
+  '/account/security-keys',
+  '/account/api-keys',
+  '/account/ssh-keys',
+  '/account/oauth-links',
+  '/account/sessions',
+];
 const ACCOUNT_ORDER = ['/account', '/account/appearance', 'keys', '/account/command-snippets', '/account/shortcuts'];
 
 function serverGroup(to: string, base: string): NavGroup {
@@ -196,7 +205,9 @@ function ownName(kind: 'dashboard' | 'server', to: string): string | undefined {
 
 function withOwnName(node: ReactElement, to: string, key: string, kind: 'dashboard' | 'server'): ReactElement {
   const name = ownName(kind, to);
-  return node.type === Sidebar.Link && name ? cloneElement(node as ReactElement<{ name?: string }>, { key, name }) : cloneElement(node, { key });
+  return node.type === Sidebar.Link && name
+    ? cloneElement(node as ReactElement<{ name?: string }>, { key, name })
+    : cloneElement(node, { key });
 }
 
 function linkName(node: ReactElement): string | null {
@@ -253,7 +264,17 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 }
 
 /** Aufklappbarer Punkt in der Navigation; offen, solange einer seiner Unterpunkte aktiv ist. */
-function Fold({ label, icon, paths, children }: { label: string; icon: IconDefinition; paths: string[]; children: ReactNode }) {
+function Fold({
+  label,
+  icon,
+  paths,
+  children,
+}: {
+  label: string;
+  icon: IconDefinition;
+  paths: string[];
+  children: ReactNode;
+}) {
   const { pathname } = useLocation();
   const path = strip(pathname);
   const active = paths.some((to) => path === to || path.startsWith(`${to}/`));
@@ -266,7 +287,13 @@ function Fold({ label, icon, paths, children }: { label: string; icon: IconDefin
 
   return (
     <div className={classNames('taxz-fold', open && 'is-open', active && 'has-active')}>
-      <button type='button' className='taxz-fold-btn' aria-expanded={open} aria-controls={id} onClick={() => setOpen((o) => !o)}>
+      <button
+        type='button'
+        className='taxz-fold-btn'
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((o) => !o)}
+      >
         <FontAwesomeIcon icon={icon} aria-hidden='true' />
         <span>{label}</span>
         <FontAwesomeIcon icon={faChevronRight} className='taxz-fold-chev' aria-hidden='true' />
@@ -291,7 +318,9 @@ function ServerCard({ switcher }: { switcher: ReactElement | null }) {
   if (!server?.uuid) return null;
 
   const line =
-    isActive(state) && !disconnected && !crash && stats?.uptime ? `${status.label} · ${uptime(stats.uptime)}` : status.label;
+    isActive(state) && !disconnected && !crash && stats?.uptime
+      ? `${status.label} · ${uptime(stats.uptime)}`
+      : status.label;
 
   return (
     <div className='taxz-swcard'>
@@ -332,12 +361,20 @@ function accountItems(list: Placed[]): ReactNode[] {
     return index === -1 ? ACCOUNT_ORDER.length : index;
   };
   const rest = list.filter((item) => keys.length < 2 || !KEY_PATHS.includes(strip(item.to)));
-  const entries: { rank: number; node: ReactNode }[] = rest.map((item) => ({ rank: rank(strip(item.to)), node: item.node }));
+  const entries: { rank: number; node: ReactNode }[] = rest.map((item) => ({
+    rank: rank(strip(item.to)),
+    node: item.node,
+  }));
   if (keys.length >= 2) {
     entries.push({
       rank: rank('keys'),
       node: (
-        <Fold key='keys' label={getExtTranslations().t('nav.keys', {})} icon={faKey} paths={keys.map((item) => strip(item.to))}>
+        <Fold
+          key='keys'
+          label={getExtTranslations().t('nav.keys', {})}
+          icon={faKey}
+          paths={keys.map((item) => strip(item.to))}
+        >
           {keys.map((item) => item.node)}
         </Fold>
       ),
@@ -361,7 +398,8 @@ function regroup(props: SidebarProps, context: Context, pathname: string): Sideb
   let switcher: ReactElement | null = null;
   const footer: ReactNode[] = [];
   for (const [index, entry] of flatten(props.footer).entries()) {
-    if (entry.kind === 'other' && isValidElement(entry.node) && entry.node.type === ServerSwitcher) switcher = entry.node;
+    if (entry.kind === 'other' && isValidElement(entry.node) && entry.node.type === ServerSwitcher)
+      switcher = entry.node;
     else if (entry.kind !== 'divider') footer.push(cloneElement(entry.node as ReactElement, { key: `f-${index}` }));
   }
 
@@ -467,20 +505,28 @@ function MobileBars({ props }: { props: SidebarProps }) {
   const tabs = tabsFor(context);
   // Liegt die Seite nicht hinter einem der drei Tabs (z. B. Ressourcen, Backups), ist "Mehr" markiert, damit man sieht, wo man ist.
   const onServerList = context.kind === 'dashboard' && SERVER_LIST_PATHS.includes(strip(pathname));
-  const inMore =
-    !onServerList &&
-    !tabs.some((tab) => matchPath({ path: tab.to, end: tab.end ?? false }, pathname));
+  const inMore = !onServerList && !tabs.some((tab) => matchPath({ path: tab.to, end: tab.end ?? false }, pathname));
 
   return (
     <>
       <header className='taxz-ph-top'>
         {context.kind === 'server' && strip(pathname) === `${context.base}${RESOURCES_PATH}` ? (
-          <Link to={context.base} className='taxz-ph-btn' aria-label={t('nav.backToConsole', {})} title={t('nav.tab.console', {})}>
+          <Link
+            to={context.base}
+            className='taxz-ph-btn'
+            aria-label={t('nav.backToConsole', {})}
+            title={t('nav.tab.console', {})}
+          >
             <FontAwesomeIcon icon={faArrowLeft} />
           </Link>
         ) : (
           context.kind !== 'dashboard' && (
-            <Link to='/' className='taxz-ph-btn' aria-label={t('nav.backToServers', {})} title={t('nav.allServers', {})}>
+            <Link
+              to='/'
+              className='taxz-ph-btn'
+              aria-label={t('nav.backToServers', {})}
+              title={t('nav.allServers', {})}
+            >
               <FontAwesomeIcon icon={faArrowLeft} />
             </Link>
           )
@@ -514,7 +560,9 @@ function MobileBars({ props }: { props: SidebarProps }) {
             to={tab.to}
             end={tab.end}
             // Die Serverliste hat drei Ansichten (/, /grouped, /all); der Tab "Server" gilt fuer alle.
-            className={({ isActive }) => classNames('taxz-tab', (isActive || (onServerList && tab.to === '/')) && 'is-on')}
+            className={({ isActive }) =>
+              classNames('taxz-tab', (isActive || (onServerList && tab.to === '/')) && 'is-on')
+            }
           >
             <FontAwesomeIcon icon={tab.icon} />
             <span>{tab.label}</span>
@@ -549,7 +597,13 @@ function MobileBars({ props }: { props: SidebarProps }) {
   );
 }
 
-function TaxzSidebarSwitch({ element, props: panelProps }: { element: ReactElement<SidebarProps>; props: SidebarProps }) {
+function TaxzSidebarSwitch({
+  element,
+  props: panelProps,
+}: {
+  element: ReactElement<SidebarProps>;
+  props: SidebarProps;
+}) {
   const isTaxz = useIsTaxz();
   const context = useSidebarContext();
   const props = isTaxz ? addResources(panelProps, context) : panelProps;
@@ -644,6 +698,8 @@ function TaxzFooterSwitch({ element }: { element: ReactElement }) {
 }
 
 export function registerSidebarHooks() {
-  Sidebar.addRenderInterceptor((element, props) => <TaxzSidebarSwitch element={element} props={props as SidebarProps} />);
+  Sidebar.addRenderInterceptor((element, props) => (
+    <TaxzSidebarSwitch element={element} props={props as SidebarProps} />
+  ));
   Sidebar.Footer.addRenderInterceptor((element) => <TaxzFooterSwitch element={element} />);
 }

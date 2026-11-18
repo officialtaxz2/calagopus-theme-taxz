@@ -10,8 +10,8 @@ import { Link, useLocation } from 'react-router';
 import Container from '@/elements/layout/Container.tsx';
 import { useCurrentWindow } from '@/providers/CurrentWindowProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
-import { useIsTaxz } from './prefs.ts';
 import type { NavGroup } from './TaxzSidebar.tsx';
+import { useIsTaxz } from './prefs.ts';
 import { useExtTranslations } from './translations.ts';
 
 export type CrumbPage = { label: string; to: string; group: NavGroup } | null;

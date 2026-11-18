@@ -2,30 +2,30 @@
 // Unterzeile mit Status-Pill (plus Laufzeit), Adresse, Egg; rechts die Ein/Aus-Knoepfe des Panels.
 // Haengt als Render-Interceptor an ServerContentContainer; mit "Standard", im Vollbild und im Konsolen-Popout bleibt alles wie im Original.
 
+import type { HookableComponent } from 'shared';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { type ComponentProps, type ReactElement, useEffect, useMemo, useSyncExternalStore } from 'react';
-import type { HookableComponent } from 'shared';
+import { useLocation } from 'react-router';
 import { useShallow } from 'zustand/react/shallow';
-import CopyOnClick from '@/elements/CopyOnClick.tsx';
 import { ServerCan } from '@/elements/Can.tsx';
 import ServerContentContainer from '@/elements/containers/ServerContentContainer.tsx';
+import CopyOnClick from '@/elements/CopyOnClick.tsx';
 import RedactedText from '@/elements/typography/RedactedText.tsx';
 import { formatAllocation } from '@/lib/domain/server.ts';
 import ServerPowerControls from '@/pages/server/console/stats/ServerPowerControls.tsx';
-import { useCurrentWindow } from '@/providers/CurrentWindowProvider.tsx';
 import { useServerCan } from '@/plugins/usePermissions.ts';
-import { useLocation } from 'react-router';
-import { CrashCard, useCurrentServerStatus } from './CrashHelp.tsx';
+import { useCurrentWindow } from '@/providers/CurrentWindowProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
+import { CrashCard, useCurrentServerStatus } from './CrashHelp.tsx';
 import { gameLook } from './games.ts';
 import { useIsTaxz } from './prefs.ts';
 import { ServerEmblem } from './ServerArt.tsx';
 import { useServerImage } from './serverImages.ts';
 import { uptime } from './serverStatus.ts';
-import { StatusPill } from './TaxzServerItem.tsx';
 import StartProgress from './StartProgress.tsx';
 import TabStatus from './TabStatus.tsx';
+import { StatusPill } from './TaxzServerItem.tsx';
 import { useExtTranslations } from './translations.ts';
 
 type ContainerProps = ComponentProps<typeof ServerContentContainer>;
@@ -60,7 +60,8 @@ export function ServerHead() {
   const onConsole = /^\/server\/[^/]+\/?$/.test(pathname);
   const running = state === 'running' || state === 'starting' || state === 'stopping';
   const address = server.allocation ? formatAllocation(server.allocation, server.egg.separatePort) : null;
-  const pill = running && !disconnected && !crash && stats?.uptime ? `${status.label} · ${uptime(stats.uptime)}` : status.label;
+  const pill =
+    running && !disconnected && !crash && stats?.uptime ? `${status.label} · ${uptime(stats.uptime)}` : status.label;
 
   useEffect(() => {
     changeHeadCount(1);
@@ -69,35 +70,35 @@ export function ServerHead() {
 
   return (
     <>
-    <section className='taxz-shead' aria-label={t('serverHead.label', { name: server.name })}>
-      <ServerEmblem look={look} size='lg' image={image} />
-      <div className='taxz-shead-main'>
-        <h1 className='taxz-shead-name'>{server.name}</h1>
-        <div className='taxz-shead-sub'>
-          <StatusPill tone={status.tone} label={pill} />
-          {address && (
-            <span className='taxz-addr'>
-              <span className='taxz-mono'>
-                <RedactedText value={address} />
+      <section className='taxz-shead' aria-label={t('serverHead.label', { name: server.name })}>
+        <ServerEmblem look={look} size='lg' image={image} />
+        <div className='taxz-shead-main'>
+          <h1 className='taxz-shead-name'>{server.name}</h1>
+          <div className='taxz-shead-sub'>
+            <StatusPill tone={status.tone} label={pill} />
+            {address && (
+              <span className='taxz-addr'>
+                <span className='taxz-mono'>
+                  <RedactedText value={address} />
+                </span>
+                <CopyOnClick content={address} className='taxz-ib'>
+                  <span className='taxz-sr'>{t('serverHead.copyAddress', {})}</span>
+                  <FontAwesomeIcon icon={faCopy} aria-hidden='true' />
+                </CopyOnClick>
               </span>
-              <CopyOnClick content={address} className='taxz-ib'>
-                <span className='taxz-sr'>{t('serverHead.copyAddress', {})}</span>
-                <FontAwesomeIcon icon={faCopy} aria-hidden='true' />
-              </CopyOnClick>
-            </span>
-          )}
-          <span className='taxz-shead-egg'>{server.egg.name}</span>
+            )}
+            <span className='taxz-shead-egg'>{server.egg.name}</span>
+          </div>
+          {server.description && <p className='taxz-shead-desc'>{server.description}</p>}
+          <StartProgress />
         </div>
-        {server.description && <p className='taxz-shead-desc'>{server.description}</p>}
-        <StartProgress />
-      </div>
-      <ServerCan action={['control.start', 'control.stop', 'control.restart']} matchAny>
-        <div className='taxz-shead-power'>
-          <ServerPowerControls />
-        </div>
-      </ServerCan>
-    </section>
-    {crash && onConsole && <CrashCard server={server} crash={crash} canStart={canStart} />}
+        <ServerCan action={['control.start', 'control.stop', 'control.restart']} matchAny>
+          <div className='taxz-shead-power'>
+            <ServerPowerControls />
+          </div>
+        </ServerCan>
+      </section>
+      {crash && onConsole && <CrashCard server={server} crash={crash} canStart={canStart} />}
     </>
   );
 }
@@ -129,5 +130,7 @@ function ServerFrame({ element, props }: { element: ReactElement; props: Contain
 
 export function registerServerHead() {
   // Der Default-Export ist im Panel auf den einfachen Komponententyp gecastet, die Hook-Methoden gibt es trotzdem.
-  (ServerContentContainer as unknown as HookableComponent<ContainerProps>).addRenderInterceptor((element, props) => <ServerFrame element={element} props={props} />);
+  (ServerContentContainer as unknown as HookableComponent<ContainerProps>).addRenderInterceptor((element, props) => (
+    <ServerFrame element={element} props={props} />
+  ));
 }

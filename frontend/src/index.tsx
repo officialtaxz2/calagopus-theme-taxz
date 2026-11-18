@@ -25,7 +25,6 @@ import { registerSidebarHooks } from './TaxzSidebar.tsx';
 import { registerToastTiming } from './toastTiming.tsx';
 import { getExtTranslations } from './translations.ts';
 
-
 function apply(prefs: ThemePrefs) {
   applyPrefs(prefs);
   renderBackdrop(prefs.theme === 'taxz' ? prefs.background : null);

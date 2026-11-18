@@ -21,6 +21,7 @@ import AccountContentContainer from '@/elements/containers/AccountContentContain
 import TitleCard from '@/elements/data-display/TitleCard.tsx';
 import Switch from '@/elements/input/Switch.tsx';
 import SegmentedControl from '@/elements/layout/SegmentedControl.tsx';
+import { removeUserSetting } from '@/lib/userSettings.ts';
 import { backdropMarkup } from './backdrop.ts';
 import { gameLook } from './games.ts';
 import {
@@ -37,7 +38,6 @@ import {
   type ThemeChoice,
   useThemePrefs,
 } from './prefs.ts';
-import { removeUserSetting } from '@/lib/userSettings.ts';
 import { ServerArtLayer } from './ServerArt.tsx';
 import { getExtTranslations, useExtTranslations } from './translations.ts';
 
@@ -79,7 +79,15 @@ function MiniCards({ standard = false }: { standard?: boolean }) {
   );
 }
 
-export function MiniPreview({ background, accent, standard = false }: { background: Background; accent: Accent; standard?: boolean }) {
+export function MiniPreview({
+  background,
+  accent,
+  standard = false,
+}: {
+  background: Background;
+  accent: Accent;
+  standard?: boolean;
+}) {
   return (
     <span
       className={classNames('taxz-preview taxz-mini', standard && 'is-standard')}
@@ -87,7 +95,11 @@ export function MiniPreview({ background, accent, standard = false }: { backgrou
       aria-hidden='true'
     >
       {!standard && (
-        <span className='taxz-mini-bg' data-bg={background} dangerouslySetInnerHTML={{ __html: backdropMarkup(background) }} />
+        <span
+          className='taxz-mini-bg'
+          data-bg={background}
+          dangerouslySetInnerHTML={{ __html: backdropMarkup(background) }}
+        />
       )}
       <MiniCards standard={standard} />
     </span>
@@ -189,7 +201,11 @@ export default function AppearancePage() {
           {taxzOff && <p className='taxz-ap-hint'>{t('appearance.taxzOnly', {})}</p>}
 
           <TitleCard title={t('appearance.background.title', {})} icon={<FontAwesomeIcon icon={faImage} />}>
-            <div className='taxz-tiles taxz-tiles-3' role='radiogroup' aria-label={t('appearance.background.title', {})}>
+            <div
+              className='taxz-tiles taxz-tiles-3'
+              role='radiogroup'
+              aria-label={t('appearance.background.title', {})}
+            >
               {BACKGROUNDS.map((background) => (
                 <Tile
                   key={background}
@@ -303,7 +319,6 @@ export default function AppearancePage() {
             <Button variant='subtle' onClick={() => removeUserSetting(PREFS_KEY)}>
               {t('appearance.reset', {})}
             </Button>
-
           )}
         </div>
       </div>

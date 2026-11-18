@@ -105,7 +105,12 @@ export function pushLive(uuid: string, stats: LiveStats | null | undefined) {
   const offline = stats.state === 'offline';
   current.samples = trim([
     ...current.samples,
-    { t: now, cpu: offline ? null : stats.cpuAbsolute, mem: offline ? null : stats.memoryBytes, net: offline ? null : net },
+    {
+      t: now,
+      cpu: offline ? null : stats.cpuAbsolute,
+      mem: offline ? null : stats.memoryBytes,
+      net: offline ? null : net,
+    },
   ]);
   emit();
 }

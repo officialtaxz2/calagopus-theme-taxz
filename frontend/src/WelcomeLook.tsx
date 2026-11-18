@@ -15,7 +15,6 @@ import InstallHint from './InstallHint.tsx';
 import { type Accent, applyPrefs, BACKGROUNDS, type Background, getEffectivePrefs, useThemePrefs } from './prefs.ts';
 import { useExtTranslations } from './translations.ts';
 
-
 export const WELCOME_KEY = 'de.taxz.theme::welcome_done';
 const doneSchema = z.boolean();
 
@@ -84,7 +83,11 @@ export default function WelcomeLook() {
         </div>
         <div className='taxz-swatches' role='radiogroup' aria-label={t('appearance.accent.title', {})}>
           {ACCENT_ORDER.map((value) => (
-            <label key={value} className={classNames('taxz-swatch', accent === value && 'is-on')} data-taxz-accent={value}>
+            <label
+              key={value}
+              className={classNames('taxz-swatch', accent === value && 'is-on')}
+              data-taxz-accent={value}
+            >
               <input
                 type='radio'
                 name={`${groupId}-accent`}
@@ -112,7 +115,6 @@ export default function WelcomeLook() {
           <button type='button' className='taxz-btn taxz-btn-primary' onClick={apply}>
             {t('welcome.apply', {})}
           </button>
-
         </div>
       </div>
     </Modal>

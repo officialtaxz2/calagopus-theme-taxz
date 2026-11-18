@@ -14,8 +14,8 @@ import updateAutokill from '@/api/server/settings/updateAutokill.ts';
 import updateAutostart from '@/api/server/settings/updateAutostart.ts';
 import updateTimezone from '@/api/server/settings/updateTimezone.ts';
 import updateTrash from '@/api/server/settings/updateTrash.ts';
-import CopyOnClick from '@/elements/CopyOnClick.tsx';
 import ServerContentContainer from '@/elements/containers/ServerContentContainer.tsx';
+import CopyOnClick from '@/elements/CopyOnClick.tsx';
 import ExtensionSlot from '@/elements/ExtensionSlot.tsx';
 import NumberInput from '@/elements/input/NumberInput.tsx';
 import Select from '@/elements/input/Select.tsx';
@@ -279,7 +279,11 @@ function TaxzServerSettings() {
               {canRename && (
                 <>
                   <TextInput withAsterisk label={t('common.form.serverName', {})} {...rename.getInputProps('name')} />
-                  <TextArea label={t('common.form.description', {})} rows={3} {...rename.getInputProps('description')} />
+                  <TextArea
+                    label={t('common.form.description', {})}
+                    rows={3}
+                    {...rename.getInputProps('description')}
+                  />
                 </>
               )}
               {canTimezone && (

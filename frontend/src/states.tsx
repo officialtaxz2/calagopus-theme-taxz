@@ -2,9 +2,9 @@
 // Fehler als Karte mit Rand --bad 40 % und "Erneut versuchen". Haengt als Render-Interceptor an den Panel-Elementen
 // EmptyState, ErrorState und Spinner.Centered; mit "Standard" rendert jeweils das Original.
 
+import type { ComponentProps, ReactElement } from 'react';
 import { faRotateRight, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ComponentProps, ReactElement } from 'react';
 import { useLocation } from 'react-router';
 import EmptyState from '@/elements/feedback/EmptyState.tsx';
 import ErrorState from '@/elements/feedback/ErrorState.tsx';

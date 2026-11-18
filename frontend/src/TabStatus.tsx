@@ -9,8 +9,8 @@ import useWebsocketEvent, { SocketEvent } from '@/plugins/websocket/useWebsocket
 import { useServerStore } from '@/stores/server.ts';
 import { lineLevel } from './consoleLevel.ts';
 import { useCurrentServerStatus } from './CrashHelp.tsx';
-import { cleanLine } from './StartProgress.tsx';
 import { type Tone } from './serverStatus.ts';
+import { cleanLine } from './StartProgress.tsx';
 
 // Kraeftige Farben, damit der Punkt auf hellen und dunklen Tab-Leisten erkennbar ist.
 const DOT: Record<Tone, string> = {

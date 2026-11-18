@@ -26,6 +26,12 @@ export function discardChanges(form: AnyForm) {
 
 export default function FormSaveBar({ form, loading, canSave }: { form: AnyForm; loading: boolean; canSave: boolean }) {
   return (
-    <SaveBar count={countChanges(form)} saving={loading} canSave={canSave} onDiscard={() => discardChanges(form)} submit />
+    <SaveBar
+      count={countChanges(form)}
+      saving={loading}
+      canSave={canSave}
+      onDiscard={() => discardChanges(form)}
+      submit
+    />
   );
 }

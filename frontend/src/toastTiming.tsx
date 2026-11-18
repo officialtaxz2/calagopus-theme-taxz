@@ -6,8 +6,8 @@
 // abbrechen. Zum frueheren Schliessen braucht es dismissToast aus dem ToastProvider; das liefert eine kleine Komponente,
 // die global (innerhalb des Providers) eingehaengt wird.
 
-import { useEffect } from 'react';
 import type { ExtensionContext } from 'shared';
+import { useEffect } from 'react';
 import { useToast } from '@/providers/ToastProvider.tsx';
 import { isTaxzActive } from './prefs.ts';
 

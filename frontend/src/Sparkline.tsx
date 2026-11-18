@@ -64,7 +64,13 @@ export default function Sparkline({
 
   if (!paths) return null;
   return (
-    <svg className={className ?? 'taxz-spark'} viewBox='0 0 100 32' preserveAspectRatio='none' aria-hidden='true' focusable='false'>
+    <svg
+      className={className ?? 'taxz-spark'}
+      viewBox='0 0 100 32'
+      preserveAspectRatio='none'
+      aria-hidden='true'
+      focusable='false'
+    >
       <defs>
         <linearGradient id={`sg${id}`} x1='0' y1='0' x2='0' y2='1'>
           <stop offset='0' stopColor='var(--accent)' stopOpacity='0.15' />
@@ -72,7 +78,14 @@ export default function Sparkline({
         </linearGradient>
       </defs>
       <path d={paths.area} fill={`url(#sg${id})`} />
-      <path d={paths.line} fill='none' stroke='var(--accent)' strokeWidth='1.6' vectorEffect='non-scaling-stroke' strokeLinejoin='round' />
+      <path
+        d={paths.line}
+        fill='none'
+        stroke='var(--accent)'
+        strokeWidth='1.6'
+        vectorEffect='non-scaling-stroke'
+        strokeLinejoin='round'
+      />
     </svg>
   );
 }

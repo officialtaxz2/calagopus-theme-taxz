@@ -3,7 +3,6 @@
 import { useSyncExternalStore } from 'react';
 import { getExtTranslations } from './translations.ts';
 
-
 export type PowerState = 'offline' | 'starting' | 'stopping' | 'running';
 export type Tone = 'ok' | 'warn' | 'off' | 'bad' | 'info';
 
@@ -114,4 +113,3 @@ export function uptime(ms: number): string {
   if (m > 0) return t('uptime.minutes', { minutes: m });
   return t('uptime.seconds', { seconds: s });
 }
-

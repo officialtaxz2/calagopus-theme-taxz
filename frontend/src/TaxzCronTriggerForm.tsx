@@ -4,6 +4,7 @@
 // nur die Auswahl der Wiederholung und die Zusammenfassung sind anders. Mit "Standard" das Original.
 
 import { useMemo, useState } from 'react';
+import type { TriggerFormProps } from '@/pages/server/schedules/triggers/TriggerForm.tsx';
 import { CrontabEditor } from '@/elements/input/CronInput.tsx';
 import DatePicker from '@/elements/input/DatePicker.tsx';
 import NumberInput from '@/elements/input/NumberInput.tsx';
@@ -22,10 +23,9 @@ import {
   simpleScheduleToCron,
 } from '@/lib/cron.ts';
 import { isValidCronExpression } from '@/lib/schemas/server/schedules.ts';
+import OriginalCronTriggerExtraForm from '@/pages/server/schedules/triggers/CronTriggerExtraForm.tsx';
 import { useTranslations } from '@/providers/TranslationProvider.tsx';
 import { useServerStore } from '@/stores/server.ts';
-import OriginalCronTriggerExtraForm from '@/pages/server/schedules/triggers/CronTriggerExtraForm.tsx';
-import type { TriggerFormProps } from '@/pages/server/schedules/triggers/TriggerForm.tsx';
 import { useIsTaxz } from './prefs.ts';
 import { describeCronPlain } from './scheduleText.ts';
 import { useExtTranslations } from './translations.ts';

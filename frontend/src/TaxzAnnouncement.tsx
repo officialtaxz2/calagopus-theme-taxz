@@ -3,9 +3,9 @@
 // pro Benutzer und Ankuendigung gemerkt (Benutzereinstellung, gilt auf allen Geraeten); eine zeitlich begrenzte
 // Schliessbarkeit des Panels (dismissibleEnd) gilt weiter. Mit "Standard" der Hinweis des Panels.
 
+import type { ComponentProps } from 'react';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ComponentProps } from 'react';
 import { z } from 'zod';
 import OriginalAnnouncementAlert from '@/elements/DismissibleAnnouncementAlert.tsx';
 import { announcementTypeIconMapping } from '@/lib/enums.ts';
@@ -47,7 +47,9 @@ function TaxzBanner({ announcement }: Props) {
       </span>
       <div className='taxz-banner-body'>
         <b className='taxz-banner-title'>{announcement.titleTranslations[language] ?? announcement.title}</b>
-        <div className='taxz-banner-text'>{(announcement.contentTranslations[language] ?? announcement.content).md()}</div>
+        <div className='taxz-banner-text'>
+          {(announcement.contentTranslations[language] ?? announcement.content).md()}
+        </div>
       </div>
       {canClose && (
         <button

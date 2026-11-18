@@ -57,7 +57,12 @@ function TaxzBanner() {
         </button>
       )}
       {socketError.type === SocketErrorType.DAEMON_ERROR && (
-        <button type='button' className='taxz-ib' onClick={() => setSocketError(null)} aria-label={t('socket.close', {})}>
+        <button
+          type='button'
+          className='taxz-ib'
+          onClick={() => setSocketError(null)}
+          aria-label={t('socket.close', {})}
+        >
           <FontAwesomeIcon icon={faXmark} />
         </button>
       )}

@@ -81,14 +81,13 @@ export default function ServerImageSection() {
             aria-hidden='true'
             onChange={(event) => onFile(event.currentTarget.files?.[0])}
           />
-          <button
-            type='button'
-            className='taxz-btn'
-            onClick={() => input.current?.click()}
-            disabled={busy !== null}
-          >
+          <button type='button' className='taxz-btn' onClick={() => input.current?.click()} disabled={busy !== null}>
             <FontAwesomeIcon icon={faUpload} aria-hidden='true' />
-            {busy === 'upload' ? t('serverImage.uploading', {}) : image ? t('serverImage.change', {}) : t('serverImage.upload', {})}
+            {busy === 'upload'
+              ? t('serverImage.uploading', {})
+              : image
+                ? t('serverImage.change', {})
+                : t('serverImage.upload', {})}
           </button>
           {image && (
             <button type='button' className='taxz-btn taxz-btn-danger' onClick={onRemove} disabled={busy !== null}>

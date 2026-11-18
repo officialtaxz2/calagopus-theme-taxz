@@ -106,9 +106,11 @@ const translations = defineTranslations({
         largeFont: 'Larger text',
         largeFontDescription: 'All text a little larger, at least 14 px.',
         strongContrast: 'Strong contrast',
-        strongContrastDescription: 'Opaque cards instead of glass, stronger borders and text. If “Increase contrast” is on in your system, this applies automatically.',
+        strongContrastDescription:
+          'Opaque cards instead of glass, stronger borders and text. If “Increase contrast” is on in your system, this applies automatically.',
       },
-      adminDefault: 'The admin decides what users without their own choice see (currently: {theme}, {background}, {accent}).',
+      adminDefault:
+        'The admin decides what users without their own choice see (currently: {theme}, {background}, {accent}).',
       reset: 'Clear my choice, use the default',
     },
     welcome: {

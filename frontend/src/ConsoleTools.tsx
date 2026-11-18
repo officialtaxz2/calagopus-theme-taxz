@@ -5,12 +5,12 @@
 //   Ein Klick fuellt nur die Eingabezeile, geschickt wird wie immer mit Enter. Keine fest eingebauten Befehle.
 // Beides nur im taxz-Theme; mit "Standard" rendern beide Bausteine nichts.
 
+import type { ExtensionContext } from 'shared';
 import { faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router';
-import type { ExtensionContext } from 'shared';
 import { ServerCan } from '@/elements/Can.tsx';
 import { redactConsoleLine } from '@/lib/network/redact.ts';
 import { useUserSetting } from '@/lib/userSettings.ts';
@@ -24,8 +24,8 @@ import useWebsocketEvent, { SocketEvent } from '@/plugins/websocket/useWebsocket
 import { useServerStore } from '@/stores/server.ts';
 import { type LineLevel, lineLevel } from './consoleLevel.ts';
 import { useIsTaxz } from './prefs.ts';
-import { useExtTranslations } from './translations.ts';
 import { cleanLine } from './StartProgress.tsx';
+import { useExtTranslations } from './translations.ts';
 
 const MAX_LINES = 3000;
 
@@ -117,9 +117,7 @@ function FilteredView({
   const shown = useMemo(
     () =>
       lines.filter(
-        (line) =>
-          (level === 'all' || line.level === level) &&
-          (!needle || line.text.toLowerCase().includes(needle)),
+        (line) => (level === 'all' || line.level === level) && (!needle || line.text.toLowerCase().includes(needle)),
       ),
     [lines, version, level, needle],
   );
@@ -129,7 +127,10 @@ function FilteredView({
     if (el && atBottom.current) el.scrollTop = el.scrollHeight;
   }, [shown]);
 
-  const count = tItem(level === 'warn' ? 'consoleWarning' : level === 'error' ? 'consoleError' : 'consoleLine', shown.length);
+  const count = tItem(
+    level === 'warn' ? 'consoleWarning' : level === 'error' ? 'consoleError' : 'consoleLine',
+    shown.length,
+  );
   return (
     <div className='taxz-cfilter'>
       <div className='taxz-cfilter-bar'>
@@ -281,7 +282,6 @@ export function QuickCommands() {
               link: <NavLink to='/account/command-snippets'>{t('console.quick.link', {})}</NavLink>,
             })}
           </span>
-
         ) : (
           snippets.map((snippet) => (
             <button

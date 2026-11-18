@@ -3,6 +3,7 @@
 // Steuerelement je Regel (variableControl.ts) und der gemeinsamen Speichern-Leiste. Gespeichert wird ueber dieselben
 // Schnittstellen und Pruefungen wie im Standard-Panel. Mit "Standard" das Original.
 
+import type { z } from 'zod';
 import { faDocker } from '@fortawesome/free-brands-svg-icons';
 import { faPlay, faReply, faSliders } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,8 +11,8 @@ import { Slider } from '@mantine/core';
 import classNames from 'classnames';
 import debounce from 'debounce';
 import { useEffect, useId, useMemo, useState } from 'react';
-import type { z } from 'zod';
 import { useShallow } from 'zustand/react/shallow';
+import type { serverVariableSchema } from '@/lib/schemas/server/startup.ts';
 import { httpErrorToHuman } from '@/api/axios.ts';
 import getVariables from '@/api/server/startup/getVariables.ts';
 import updateCommand from '@/api/server/startup/updateCommand.ts';
@@ -29,7 +30,6 @@ import TextArea from '@/elements/input/TextArea.tsx';
 import TextInput from '@/elements/input/TextInput.tsx';
 import ConfirmationModal from '@/elements/modals/ConfirmationModal.tsx';
 import { ignorePasswordManagerProps } from '@/lib/passwordManager.ts';
-import type { serverVariableSchema } from '@/lib/schemas/server/startup.ts';
 import OriginalServerStartup from '@/pages/server/startup/ServerStartup.tsx';
 import { useKeyboardShortcut } from '@/plugins/quick-actions/useKeyboardShortcuts.ts';
 import { useBlocker } from '@/plugins/useBlocker.ts';
@@ -383,7 +383,8 @@ function TaxzServerStartup() {
 
   const commandLocked = !server.eggConfiguration?.startupAllowCustomCommand;
   const imageLocked =
-    !settings.server.allowOverwritingCustomDockerImage && !Object.values(server.egg.dockerImages).includes(server.image);
+    !settings.server.allowOverwritingCustomDockerImage &&
+    !Object.values(server.egg.dockerImages).includes(server.image);
 
   return (
     <ServerContentContainer
@@ -401,7 +402,11 @@ function TaxzServerStartup() {
       </ConfirmationModal>
 
       <div className='taxz-startup'>
-        <Section icon={faSliders} title={t('pages.server.startup.variables', {})} subtitle={tExt('startup.variablesSubtitle', {})}>
+        <Section
+          icon={faSliders}
+          title={t('pages.server.startup.variables', {})}
+          subtitle={tExt('startup.variablesSubtitle', {})}
+        >
           {variablesLoading ? (
             <Spinner.Centered />
           ) : variablesError ? (
@@ -430,12 +435,17 @@ function TaxzServerStartup() {
         </Section>
 
         <div className='taxz-startup-side'>
-          <Section icon={faPlay} title={t('common.form.startupCommand', {})} subtitle={tExt('startup.savedImmediately', {})}>
+          <Section
+            icon={faPlay}
+            title={t('common.form.startupCommand', {})}
+            subtitle={tExt('startup.savedImmediately', {})}
+          >
             {Object.keys(server.egg.startupCommands).length > 0 && (
               <Select
                 label={t('pages.server.startup.predefinedStartupCommands', {})}
                 data={[
-                  ...((commandLocked && Object.values(server.egg.startupCommands).every((value) => value !== command)) ||
+                  ...((commandLocked &&
+                    Object.values(server.egg.startupCommands).every((value) => value !== command)) ||
                   !commandLocked
                     ? [{ label: t('common.custom', {}), value: CUSTOM_COMMAND }]
                     : []),
@@ -473,7 +483,11 @@ function TaxzServerStartup() {
             />
           </Section>
 
-          <Section icon={faDocker as typeof faPlay} title={t('common.form.dockerImage', {})} subtitle={tExt('startup.savedImmediately', {})}>
+          <Section
+            icon={faDocker as typeof faPlay}
+            title={t('common.form.dockerImage', {})}
+            subtitle={tExt('startup.savedImmediately', {})}
+          >
             <Select
               aria-label={t('common.form.dockerImage', {})}
               value={dockerImage}

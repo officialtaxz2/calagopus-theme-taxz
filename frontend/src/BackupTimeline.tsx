@@ -3,17 +3,17 @@
 // des Panels, weil es den aktuellen Stand ersetzt). Daten sind die Backups, die die Liste darunter gerade zeigt.
 // Ob ein Backup automatisch (Zeitplan) oder von Hand entstand, speichert das Panel nicht; gezeigt wird deshalb der Name.
 
+import type { ExtensionContext } from 'shared';
+import type { z } from 'zod';
 import { faFileArrowDown, faRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
-import type { ExtensionContext } from 'shared';
-import type { z } from 'zod';
+import type { serverBackupSchema } from '@/lib/schemas/server/backups.ts';
 import { httpErrorToHuman } from '@/api/axios.ts';
 import downloadBackup from '@/api/server/backups/downloadBackup.ts';
 import { downloadUrl } from '@/lib/network/url.ts';
-import type { serverBackupSchema } from '@/lib/schemas/server/backups.ts';
 import BackupRestoreModal from '@/pages/server/backups/modals/BackupRestoreModal.tsx';
 import DatabaseInstanceBackupRestoreModal from '@/pages/server/databases/instances/modals/DatabaseInstanceBackupRestoreModal.tsx';
 import { useServerCan } from '@/plugins/usePermissions.ts';
@@ -169,7 +169,11 @@ function Timeline() {
           {current.kind === 'server' ? (
             <BackupRestoreModal backup={current} opened={restoring} onClose={() => setRestoring(false)} />
           ) : (
-            <DatabaseInstanceBackupRestoreModal backup={current} opened={restoring} onClose={() => setRestoring(false)} />
+            <DatabaseInstanceBackupRestoreModal
+              backup={current}
+              opened={restoring}
+              onClose={() => setRestoring(false)}
+            />
           )}
         </div>
       )}

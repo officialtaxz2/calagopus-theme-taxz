@@ -12,8 +12,9 @@
   font-weight: 200 800;
   font-display: swap;
   src: url('./fonts/manrope-latin-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -22,8 +23,9 @@
   font-weight: 200 800;
   font-display: swap;
   src: url('./fonts/manrope-latin-ext-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
-    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
@@ -32,8 +34,9 @@
   font-weight: 100 800;
   font-display: swap;
   src: url('./fonts/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
@@ -42,8 +45,9 @@
   font-weight: 100 800;
   font-display: swap;
   src: url('./fonts/jetbrains-mono-latin-ext-wght-normal.woff2') format('woff2-variations');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF,
-    U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+    U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /* ---------- 3.1 Flaechen und Text ---------- */
@@ -133,7 +137,7 @@
   --accent2: #c4b5fd;
   --on-acc: #0b0518;
   --acc-text: #b9a5ff;
-  --acc-soft: rgba(139,92,246,.16);
+  --acc-soft: rgba(139, 92, 246, 0.16);
   --glow-c: 139 92 246;
   --glow2: 56 189 248;
   --bg: #0f0d18;
@@ -156,7 +160,7 @@
   --accent2: #c4b5fd;
   --on-acc: #0b0518;
   --acc-text: #6d28d9;
-  --acc-soft: rgba(124,58,237,.10);
+  --acc-soft: rgba(124, 58, 237, 0.1);
   --glow-c: 139 92 246;
   --glow2: 56 189 248;
   --bg: #f6f3fb;
@@ -179,7 +183,7 @@
   --accent2: #7dd3fc;
   --on-acc: #03131c;
   --acc-text: #6cc9f7;
-  --acc-soft: rgba(14,165,233,.15);
+  --acc-soft: rgba(14, 165, 233, 0.15);
   --glow-c: 14 165 233;
   --glow2: 139 92 246;
   --bg: #0c1118;
@@ -202,7 +206,7 @@
   --accent2: #7dd3fc;
   --on-acc: #03131c;
   --acc-text: #0369a1;
-  --acc-soft: rgba(3,105,161,.10);
+  --acc-soft: rgba(3, 105, 161, 0.1);
   --glow-c: 14 165 233;
   --glow2: 139 92 246;
   --bg: #f1f5f9;
@@ -225,7 +229,7 @@
   --accent2: #6ee7b7;
   --on-acc: #04130d;
   --acc-text: #5ee0a8;
-  --acc-soft: rgba(16,185,129,.15);
+  --acc-soft: rgba(16, 185, 129, 0.15);
   --glow-c: 16 185 129;
   --glow2: 59 130 246;
   --bg: #0c1312;
@@ -248,7 +252,7 @@
   --accent2: #6ee7b7;
   --on-acc: #04130d;
   --acc-text: #047857;
-  --acc-soft: rgba(4,120,87,.10);
+  --acc-soft: rgba(4, 120, 87, 0.1);
   --glow-c: 16 185 129;
   --glow2: 59 130 246;
   --bg: #f1f6f4;
@@ -271,7 +275,7 @@
   --accent2: #ffb347;
   --on-acc: #1a0d03;
   --acc-text: #ffad6b;
-  --acc-soft: rgba(255,140,60,.16);
+  --acc-soft: rgba(255, 140, 60, 0.16);
   --glow-c: 255 122 26;
   --glow2: 150 62 140;
   --bg: #120e18;
@@ -294,7 +298,7 @@
   --accent2: #ff9a3c;
   --on-acc: #1a0d03;
   --acc-text: #a8430a;
-  --acc-soft: rgba(227,93,0,.10);
+  --acc-soft: rgba(227, 93, 0, 0.1);
   --glow-c: 255 122 26;
   --glow2: 236 130 170;
   --bg: #fbeee4;
@@ -519,7 +523,8 @@
   border-radius: var(--r2);
 }
 
-:root[data-taxz] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+:root[data-taxz]
+  :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
   background-color: var(--card);
   border-color: var(--line);
   border-radius: var(--r2);
@@ -528,11 +533,13 @@
   backdrop-filter: var(--blur);
 }
 
-:root[data-taxz][data-mantine-color-scheme='dark'] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+:root[data-taxz][data-mantine-color-scheme='dark']
+  :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
   background-color: rgba(26, 21, 34, 0.92);
 }
 
-:root[data-taxz][data-mantine-color-scheme='light'] :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
+:root[data-taxz][data-mantine-color-scheme='light']
+  :is(.mantine-Menu-dropdown, .mantine-Popover-dropdown, .mantine-Combobox-dropdown, .mantine-HoverCard-dropdown) {
   background-color: rgba(255, 255, 255, 0.94);
 }
 
@@ -552,7 +559,8 @@
 
 /* Ohne backdrop-filter: deckende Karten */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  :root[data-taxz] :is(.mantine-Card-root, .mantine-Paper-root, .mantine-Modal-content, .mantine-Drawer-content, #sidebar-desktop) {
+  :root[data-taxz]
+    :is(.mantine-Card-root, .mantine-Paper-root, .mantine-Modal-content, .mantine-Drawer-content, #sidebar-desktop) {
     background-color: var(--card-solid);
   }
 }
@@ -610,16 +618,23 @@
 }
 
 /* Hauptknopf: Akzentverlauf mit Schein */
-:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled'][style*='--mantine-color-blue-filled'],
-:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']) {
+:root[data-taxz]
+  :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled'][style*='--mantine-color-blue-filled'],
+:root[data-taxz]
+  :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']) {
   background: var(--acc-grad);
   color: var(--on-acc);
   border-color: transparent;
   box-shadow: 0 6px 20px -8px rgb(var(--glow-c) / calc(0.55 * var(--gk)));
 }
 
-:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled'][style*='--mantine-color-blue-filled']:hover,
-:root[data-taxz] :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']):hover {
+:root[data-taxz]
+  :is(
+    .mantine-Button-root,
+    .mantine-ActionIcon-root
+  )[data-variant='filled'][style*='--mantine-color-blue-filled']:hover,
+:root[data-taxz]
+  :is(.mantine-Button-root, .mantine-ActionIcon-root)[data-variant='filled']:not([style*='--mantine-color-']):hover {
   filter: brightness(1.06);
 }
 
@@ -650,7 +665,8 @@
 }
 
 /* Gesperrter Hauptknopf: Calagopus setzt dann Text "dimmed" und einen Rand inline, auf dem Verlauf waere das unlesbar */
-:root[data-taxz] .mantine-Button-root[data-variant='filled']:is(:disabled, [data-disabled])[style*='--mantine-color-blue-filled'] {
+:root[data-taxz]
+  .mantine-Button-root[data-variant='filled']:is(:disabled, [data-disabled])[style*='--mantine-color-blue-filled'] {
   color: var(--on-acc) !important;
   border-color: transparent !important;
   box-shadow: none;
@@ -664,7 +680,8 @@
 }
 
 /* Eingabefelder */
-:root[data-taxz] :is(.mantine-Input-input, .mantine-InputBase-input, .mantine-TextInput-input, .mantine-PasswordInput-input) {
+:root[data-taxz]
+  :is(.mantine-Input-input, .mantine-InputBase-input, .mantine-TextInput-input, .mantine-PasswordInput-input) {
   --input-bg: var(--card2);
   --input-bd: var(--line);
   border-radius: var(--r2);
@@ -881,7 +898,10 @@
 }
 
 /* Schnellaktionen: die Tastenkombination passt neben dem Text nicht in die 252 px breite Leiste */
-:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+:root[data-taxz]
+  #sidebar-desktop
+  .mantine-Button-root[data-variant='default']
+  .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
   display: none;
 }
 
@@ -2286,7 +2306,11 @@ fieldset:disabled .taxz-swatch {
   border-radius: var(--r3);
   border: 1px solid var(--line);
   background:
-    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--glow-c) calc(20% * var(--gk)), transparent), transparent 60%),
+    radial-gradient(
+      120% 140% at 0% 0%,
+      color-mix(in srgb, var(--glow-c) calc(20% * var(--gk)), transparent),
+      transparent 60%
+    ),
     var(--card);
   -webkit-backdrop-filter: var(--blur);
   backdrop-filter: var(--blur);
@@ -2344,7 +2368,9 @@ fieldset:disabled .taxz-swatch {
 }
 
 :root[data-taxz] .taxz-shead-power .mantine-Button-root[style*='green'],
-:root[data-taxz] .taxz-shead-power .mantine-Button-root[data-variant][style*='--button-color: var(--mantine-color-green'] {
+:root[data-taxz]
+  .taxz-shead-power
+  .mantine-Button-root[data-variant][style*='--button-color: var(--mantine-color-green'] {
   color: var(--ok);
 }
 
@@ -4166,7 +4192,9 @@ fieldset:disabled .taxz-swatch {
   border-radius: var(--r3);
   background: var(--card-solid);
   color: var(--fg);
-  box-shadow: var(--shadow), 0 24px 60px -20px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    var(--shadow),
+    0 24px 60px -20px rgba(0, 0, 0, 0.45);
 }
 
 :root[data-taxz] .taxz-bell-head {
@@ -4244,10 +4272,18 @@ fieldset:disabled .taxz-swatch {
   background: color-mix(in srgb, var(--tone) 14%, transparent);
 }
 
-:root[data-taxz] .taxz-bell-item.is-ok { --tone: var(--ok); }
-:root[data-taxz] .taxz-bell-item.is-warn { --tone: var(--warn); }
-:root[data-taxz] .taxz-bell-item.is-bad { --tone: var(--bad); }
-:root[data-taxz] .taxz-bell-item.is-info { --tone: var(--acc-text); }
+:root[data-taxz] .taxz-bell-item.is-ok {
+  --tone: var(--ok);
+}
+:root[data-taxz] .taxz-bell-item.is-warn {
+  --tone: var(--warn);
+}
+:root[data-taxz] .taxz-bell-item.is-bad {
+  --tone: var(--bad);
+}
+:root[data-taxz] .taxz-bell-item.is-info {
+  --tone: var(--acc-text);
+}
 
 :root[data-taxz] .taxz-bell-txt {
   min-width: 0;
@@ -4615,12 +4651,18 @@ fieldset:disabled .taxz-swatch {
   border: 1px solid color-mix(in srgb, var(--ok) 40%, transparent);
 }
 
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]) {
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-green-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-teal-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-lime-filled)']:hover:not(:disabled, [data-disabled]) {
   background: color-mix(in srgb, var(--ok) 22%, transparent);
 }
 
@@ -4634,9 +4676,12 @@ fieldset:disabled .taxz-swatch {
   border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
 }
 
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-red-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]) {
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-red-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-pink-filled)']:hover:not(:disabled, [data-disabled]) {
   background: color-mix(in srgb, var(--bad) 22%, transparent);
 }
 
@@ -4651,10 +4696,14 @@ fieldset:disabled .taxz-swatch {
   border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
 }
 
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-Button-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]),
-:root[data-taxz] .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]) {
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-yellow-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-Button-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]),
+:root[data-taxz]
+  .mantine-ActionIcon-root[style*='-bg: var(--mantine-color-orange-filled)']:hover:not(:disabled, [data-disabled]) {
   background: color-mix(in srgb, var(--warn) 22%, transparent);
 }
 
@@ -4666,7 +4715,11 @@ fieldset:disabled .taxz-swatch {
 }
 
 /* Akzentflaechen mit Text (volle Badges in der Panel-Farbe, aktive Seitenzahl): Schrift --on-acc wie auf dem Hauptknopf (3.6) */
-:root[data-taxz] .mantine-Badge-root:is([style*='--badge-bg: var(--mantine-color-blue-filled)'], [style*='--badge-bg: var(--mantine-primary-color-filled)']),
+:root[data-taxz]
+  .mantine-Badge-root:is(
+    [style*='--badge-bg: var(--mantine-color-blue-filled)'],
+    [style*='--badge-bg: var(--mantine-primary-color-filled)']
+  ),
 :root[data-taxz] .mantine-Pagination-control[data-active] {
   background: var(--accent);
   color: var(--on-acc);
@@ -5094,19 +5147,39 @@ fieldset:disabled .taxz-swatch {
   cursor: pointer;
   position: relative;
   opacity: 0;
-  transition: opacity 0.15s, background-color 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    opacity 0.15s,
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
-:root[data-taxz] .taxz-sel:hover { border-color: var(--accent); color: var(--faint); }
-:root[data-taxz] .taxz-sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-:root[data-taxz] .taxz-sel.is-on { background: var(--acc-grad); border-color: transparent; color: var(--on-acc); }
+:root[data-taxz] .taxz-sel:hover {
+  border-color: var(--accent);
+  color: var(--faint);
+}
+:root[data-taxz] .taxz-sel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+:root[data-taxz] .taxz-sel.is-on {
+  background: var(--acc-grad);
+  border-color: transparent;
+  color: var(--on-acc);
+}
 :root[data-taxz] :is(.taxz-sc, .taxz-srow):is(:hover, :focus-within) .taxz-sel,
 :root[data-taxz] .taxz-sel.is-on,
-:root[data-taxz]:has(:is(.taxz-sc, .taxz-srow).is-selected) .taxz-sel { opacity: 1; }
+:root[data-taxz]:has(:is(.taxz-sc, .taxz-srow).is-selected) .taxz-sel {
+  opacity: 1;
+}
 @media (hover: none) {
-  :root[data-taxz] .taxz-sel { opacity: 1; }
+  :root[data-taxz] .taxz-sel {
+    opacity: 1;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  :root[data-taxz] .taxz-sel { transition: none; }
+  :root[data-taxz] .taxz-sel {
+    transition: none;
+  }
 }
 /* Karte: rechts neben dem Symbol, wo der Kopf frei ist (Spezifitaet ueber der Regel "Knoepfe ueber dem Kartenlink"); Trefferflaeche 44 px */
 :root[data-taxz] .taxz-sc .taxz-sc-body > .taxz-sel {
@@ -5120,7 +5193,9 @@ fieldset:disabled .taxz-swatch {
   position: absolute;
   inset: -8px;
 }
-:root[data-taxz] .taxz-srow-acts { align-items: center; }
+:root[data-taxz] .taxz-srow-acts {
+  align-items: center;
+}
 
 /* Schnellaktionen: Kuerzel des Panels kompakt zeigen (6.1 "Kuerzel als kbd"), in der Textschrift statt Mono, damit
    "Schnellaktionen..." und "Ctrl+Space" in die 252 px breite Leiste passen. Ein laengeres eigenes Kuerzel kuerzt den Text mit "…".
@@ -5128,10 +5203,16 @@ fieldset:disabled .taxz-swatch {
 :root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) {
   padding-inline: 10px;
 }
-:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) .mantine-Button-section[data-position='left'] {
+:root[data-taxz]
+  #sidebar-desktop
+  .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root)
+  .mantine-Button-section[data-position='left'] {
   margin-inline-end: 8px;
 }
-:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+:root[data-taxz]
+  #sidebar-desktop
+  .mantine-Button-root[data-variant='default']
+  .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
   display: flex;
   margin-left: 4px;
 }
@@ -5143,12 +5224,18 @@ fieldset:disabled .taxz-swatch {
   padding: 0 4px;
   white-space: nowrap;
 }
-:root[data-taxz] #sidebar-desktop .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root) .mantine-Button-label {
+:root[data-taxz]
+  #sidebar-desktop
+  .mantine-Button-root[data-variant='default']:has(.mantine-Kbd-root)
+  .mantine-Button-label {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-:root[data-taxz][data-taxz-large] #sidebar-desktop .mantine-Button-root[data-variant='default'] .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
+:root[data-taxz][data-taxz-large]
+  #sidebar-desktop
+  .mantine-Button-root[data-variant='default']
+  .mantine-Button-section[data-position='right']:has(.mantine-Kbd-root) {
   display: none;
 }
 
@@ -5162,8 +5249,12 @@ fieldset:disabled .taxz-swatch {
     text-overflow: clip;
     overflow-wrap: anywhere;
   }
-  :root[data-taxz] .taxz-ph-title b { line-height: 1.2; }
-  :root[data-taxz] .taxz-ph-title small { line-height: 1.3; }
+  :root[data-taxz] .taxz-ph-title b {
+    line-height: 1.2;
+  }
+  :root[data-taxz] .taxz-ph-title small {
+    line-height: 1.3;
+  }
 }
 :root[data-taxz] .taxz-tab span {
   white-space: normal;
@@ -5175,7 +5266,9 @@ fieldset:disabled .taxz-swatch {
 }
 
 /* Technische Angaben (Einstellungen): lange Kennungen brechen um statt abgeschnitten zu werden; Kopierknopf im dd */
-:root[data-taxz] .taxz-kv > div { grid-template-columns: 96px minmax(0, 1fr); }
+:root[data-taxz] .taxz-kv > div {
+  grid-template-columns: 96px minmax(0, 1fr);
+}
 :root[data-taxz] .taxz-kv dd {
   display: flex;
   align-items: center;
@@ -5184,7 +5277,11 @@ fieldset:disabled .taxz-swatch {
   overflow: visible;
   text-overflow: clip;
 }
-:root[data-taxz] .taxz-kv dd > .taxz-mono { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+:root[data-taxz] .taxz-kv dd > .taxz-mono {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 /* B2: Am Handy Ziele mindestens 44 px (Vorgabe 1.4 und 8). Knoepfe und Felder ueber die Groessen-Variablen von Mantine,
    damit Symbole in den Feldern mittig bleiben; kleine Symbolknoepfe bekommen eine unsichtbare Trefferflaeche. */
@@ -5199,17 +5296,29 @@ fieldset:disabled .taxz-swatch {
     --button-height-sm: 44px;
     --button-height-md: 44px;
   }
-  :root[data-taxz] :is(.mantine-Tabs-tab, .mantine-SegmentedControl-label) { min-height: 44px; }
-  :root[data-taxz] .mantine-SegmentedControl-label { display: flex; align-items: center; justify-content: center; }
+  :root[data-taxz] :is(.mantine-Tabs-tab, .mantine-SegmentedControl-label) {
+    min-height: 44px;
+  }
+  :root[data-taxz] .mantine-SegmentedControl-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   :root[data-taxz] .taxz-seg2 button,
-  :root[data-taxz] .taxz-seg2.is-sm button { min-height: 44px; }
-  :root[data-taxz] .taxz-csearch { height: 44px; }
+  :root[data-taxz] .taxz-seg2.is-sm button {
+    min-height: 44px;
+  }
+  :root[data-taxz] .taxz-csearch {
+    height: 44px;
+  }
   :root[data-taxz] .taxz-ib::after {
     content: '';
     position: absolute;
     inset: -8px;
   }
-  :root[data-taxz] .taxz-shead-power .mantine-Button-root { height: 44px; }
+  :root[data-taxz] .taxz-shead-power .mantine-Button-root {
+    height: 44px;
+  }
   :root[data-taxz] .mantine-ActionIcon-root:not([data-size='xs']),
   :root[data-taxz] .mantine-Pagination-control {
     min-width: 44px;
@@ -5227,7 +5336,9 @@ fieldset:disabled .taxz-swatch {
 }
 
 /* C4: Konsolenfilter am Handy: das Suchfeld bekommt eine eigene Zeile, wenn es neben den Filtern zu schmal wuerde */
-:root[data-taxz] .taxz-csearch { min-width: min(100%, 12rem); }
+:root[data-taxz] .taxz-csearch {
+  min-width: min(100%, 12rem);
+}
 
 /* B3: Glas-Leisten am Handy im Hellmodus deckender, damit Beschriftungen auch ueber bunten Karten 4,5:1 erreichen */
 @media (max-width: 640px) {
@@ -5241,12 +5352,16 @@ fieldset:disabled .taxz-swatch {
 :root[data-taxz] .taxz-shead-power .mantine-Button-root[style*='--button-bg: var(--mantine-color-red'] {
   color: var(--bad);
 }
-:root[data-taxz][data-mantine-color-scheme='dark'] .taxz-shead-power .mantine-Button-root[style*='--button-bg: var(--mantine-color-red'] {
+:root[data-taxz][data-mantine-color-scheme='dark']
+  .taxz-shead-power
+  .mantine-Button-root[style*='--button-bg: var(--mantine-color-red'] {
   color: #ffaea8;
 }
 
 /* Navigationsgruppen ohne sichtbaren Punkt (fehlende Rechte, Server nicht ladbar) ohne leere Ueberschrift */
-:root[data-taxz] .taxz-ngrp:not(:has(a, button)) { display: none; }
+:root[data-taxz] .taxz-ngrp:not(:has(a, button)) {
+  display: none;
+}
 
 /* ---------- Konsole: Kacheln fuehren zu "Ressourcen" (Verlauf des Panels) ---------- */
 
@@ -5266,7 +5381,9 @@ fieldset:disabled .taxz-swatch {
   border-radius: var(--r1);
   color: var(--muted);
   font-size: max(var(--taxz-fmin, 0px), calc(11px * var(--taxz-fs, 1)));
-  transition: color 0.15s, background-color 0.15s;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
 }
 
 /* Bewegung nur am Symbol: ein transform am Link selbst machte ihn zum Bezugsrahmen, die Klickflaeche schrumpfte. */

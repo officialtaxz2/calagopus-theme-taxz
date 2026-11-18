@@ -48,7 +48,11 @@ function topoSvg(): string {
       const points: [number, number][] = [];
       for (let i = 0; i < 64; i++) {
         const a = (i / 64) * Math.PI * 2;
-        const m = 1 + 0.16 * Math.sin(3 * a + ph + k * 0.18) + 0.07 * Math.sin(5 * a - ph * 2 + k * 0.3) + 0.04 * Math.sin(9 * a + k);
+        const m =
+          1 +
+          0.16 * Math.sin(3 * a + ph + k * 0.18) +
+          0.07 * Math.sin(5 * a - ph * 2 + k * 0.3) +
+          0.04 * Math.sin(9 * a + k);
         points.push([cx + Math.cos(a) * r * m * 1.25, cy + Math.sin(a) * r * m]);
       }
       // Deckkraft nimmt nach aussen ab; Anfang und Ende je Modus aus CSS (--taxz-topo-hi/-lo).

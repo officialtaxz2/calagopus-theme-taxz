@@ -3,8 +3,8 @@
 // Panels (cronstrue). Andere Ausloeser des Panels (Ein/Aus, Status, Backup, Absturz, ...) werden ebenfalls als Satz beschrieben.
 
 import type { z } from 'zod';
-import { CRON_WEEKDAYS, describeCron, getCronOccurrence, parseSimpleSchedule } from '@/lib/cron.ts';
 import type { serverScheduleTriggerSchema } from '@/lib/schemas/server/schedules.ts';
+import { CRON_WEEKDAYS, describeCron, getCronOccurrence, parseSimpleSchedule } from '@/lib/cron.ts';
 import { getExtTranslations } from './translations.ts';
 
 type Trigger = z.infer<typeof serverScheduleTriggerSchema>;
@@ -23,9 +23,16 @@ const POWER_ACTIONS = ['start', 'stop', 'restart', 'kill'] as const;
 const POWER_STATES = ['running', 'offline', 'starting', 'stopping'] as const;
 const BACKUP_STATUSES = ['starting', 'finished', 'failed'] as const;
 const METRICS = ['cpu', 'memory', 'disk'] as const;
-const COMPARATORS = ['smaller_than', 'smaller_than_or_equals', 'equal', 'greater_than', 'greater_than_or_equals'] as const;
+const COMPARATORS = [
+  'smaller_than',
+  'smaller_than_or_equals',
+  'equal',
+  'greater_than',
+  'greater_than_or_equals',
+] as const;
 
-const has = <T extends string>(list: readonly T[], value: string): value is T => (list as readonly string[]).includes(value);
+const has = <T extends string>(list: readonly T[], value: string): value is T =>
+  (list as readonly string[]).includes(value);
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const time = (hour: number, minute: number) => `${pad(hour)}:${pad(minute)}`;
@@ -37,9 +44,13 @@ export function describeCronPlain(schedule: string, weekInterval: number, langua
   if (simple) {
     switch (simple.frequency) {
       case 'everyMinutes':
-        return simple.interval === 1 ? t('schedule.cron.everyMinute', {}) : t('schedule.cron.everyMinutes', { n: simple.interval });
+        return simple.interval === 1
+          ? t('schedule.cron.everyMinute', {})
+          : t('schedule.cron.everyMinutes', { n: simple.interval });
       case 'everyHours':
-        return simple.interval === 1 ? t('schedule.cron.everyHour', {}) : t('schedule.cron.everyHours', { n: simple.interval });
+        return simple.interval === 1
+          ? t('schedule.cron.everyHour', {})
+          : t('schedule.cron.everyHours', { n: simple.interval });
       case 'daily':
         return t('schedule.cron.daily', { time: time(simple.hour, simple.minute) });
       case 'weekly': {
@@ -106,7 +117,14 @@ export function nextRun(triggers: Trigger[], timezone: string, from = new Date()
   for (const trigger of triggers) {
     if (trigger.type !== 'cron') continue;
     try {
-      const date = getCronOccurrence(trigger.schedule, timezone, from, 'next', trigger.weekInterval, trigger.weekAnchor);
+      const date = getCronOccurrence(
+        trigger.schedule,
+        timezone,
+        from,
+        'next',
+        trigger.weekInterval,
+        trigger.weekAnchor,
+      );
       if (!next || date < next) next = date;
     } catch {
       // Ungueltiger Ausdruck: ohne naechsten Lauf

@@ -2,6 +2,7 @@
 // (Server, Benutzer, Nodes, Version ...) und darunter Karten nach den Navigationsgruppen. Dieselben Daten und Rechte wie im
 // Standard-Panel (stats.read), Hinweise auf Updates und fehlgeschlagene Erweiterungs-Bauten bleiben. Mit "Standard" das Original.
 
+import type { ReactNode } from 'react';
 import {
   faArchive,
   faBoxArchive,
@@ -19,7 +20,6 @@ import {
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactNode } from 'react';
 import { NavLink } from 'react-router';
 import getBackupStats from '@/api/admin/stats/getBackupStats.ts';
 import getGeneralStats from '@/api/admin/stats/getGeneralStats.ts';
@@ -35,7 +35,6 @@ import { useAdminCan } from '@/plugins/usePermissions.ts';
 import { useIsTaxz } from './prefs.ts';
 import { bytes, num } from './serverStatus.ts';
 import { getExtTranslations, useExtTranslations } from './translations.ts';
-
 
 const PERIODS = ['today', 'week', 'month', 'allTime'] as const;
 
@@ -60,7 +59,17 @@ function Kpi({ icon, value, label, to }: { icon: IconDefinition; value: string; 
   );
 }
 
-function Panel({ icon, title, aside, children }: { icon: IconDefinition; title: string; aside?: ReactNode; children: ReactNode }) {
+function Panel({
+  icon,
+  title,
+  aside,
+  children,
+}: {
+  icon: IconDefinition;
+  title: string;
+  aside?: ReactNode;
+  children: ReactNode;
+}) {
   return (
     <section className='taxz-sect'>
       <h2 className='taxz-sect-title'>
@@ -75,9 +84,21 @@ function Panel({ icon, title, aside, children }: { icon: IconDefinition; title: 
 
 function TaxzAdminOverview() {
   const canReadStats = useAdminCan('stats.read');
-  const overview = useResource({ queryKey: queryKeys.admin.system.overview(), queryFn: getOverview, enabled: canReadStats });
-  const general = useResource({ queryKey: queryKeys.admin.stats.general(), queryFn: getGeneralStats, enabled: canReadStats });
-  const backups = useResource({ queryKey: queryKeys.admin.stats.backups(), queryFn: getBackupStats, enabled: canReadStats });
+  const overview = useResource({
+    queryKey: queryKeys.admin.system.overview(),
+    queryFn: getOverview,
+    enabled: canReadStats,
+  });
+  const general = useResource({
+    queryKey: queryKeys.admin.stats.general(),
+    queryFn: getGeneralStats,
+    enabled: canReadStats,
+  });
+  const backups = useResource({
+    queryKey: queryKeys.admin.stats.backups(),
+    queryFn: getBackupStats,
+    enabled: canReadStats,
+  });
   const { t } = useExtTranslations();
 
   return (
@@ -96,23 +117,58 @@ function TaxzAdminOverview() {
           <ResourceView resource={general}>
             {(stats) => (
               <div className='taxz-akpis'>
-                <Kpi icon={faComputer} value={String(stats.servers)} label={t('adminOverview.kpi.servers', {})} to='/admin/servers' />
-                <Kpi icon={faUsers} value={String(stats.users)} label={t('adminOverview.kpi.users', {})} to='/admin/users' />
-                <Kpi icon={faServer} value={String(stats.nodes)} label={t('adminOverview.kpi.nodes', {})} to='/admin/nodes' />
+                <Kpi
+                  icon={faComputer}
+                  value={String(stats.servers)}
+                  label={t('adminOverview.kpi.servers', {})}
+                  to='/admin/servers'
+                />
+                <Kpi
+                  icon={faUsers}
+                  value={String(stats.users)}
+                  label={t('adminOverview.kpi.users', {})}
+                  to='/admin/users'
+                />
+                <Kpi
+                  icon={faServer}
+                  value={String(stats.nodes)}
+                  label={t('adminOverview.kpi.nodes', {})}
+                  to='/admin/nodes'
+                />
                 <ResourceView resource={overview}>
                   {(system) => (
-                    <Kpi icon={faCodeBranch} value={system.version} label={t('adminOverview.kpi.version', {})} to='/admin/updates' />
+                    <Kpi
+                      icon={faCodeBranch}
+                      value={system.version}
+                      label={t('adminOverview.kpi.version', {})}
+                      to='/admin/updates'
+                    />
                   )}
                 </ResourceView>
-                <Kpi icon={faEarth} value={String(stats.locations)} label={t('adminOverview.kpi.locations', {})} to='/admin/locations' />
-                <Kpi icon={faEgg} value={String(stats.nestEggs)} label={t('adminOverview.kpi.eggs', {})} to='/admin/nests' />
+                <Kpi
+                  icon={faEarth}
+                  value={String(stats.locations)}
+                  label={t('adminOverview.kpi.locations', {})}
+                  to='/admin/locations'
+                />
+                <Kpi
+                  icon={faEgg}
+                  value={String(stats.nestEggs)}
+                  label={t('adminOverview.kpi.eggs', {})}
+                  to='/admin/nests'
+                />
                 <Kpi
                   icon={faDatabase}
                   value={String(stats.databaseHosts)}
                   label={t('adminOverview.kpi.databaseHosts', {})}
                   to='/admin/database-hosts'
                 />
-                <Kpi icon={faScroll} value={String(stats.roles)} label={t('adminOverview.kpi.roles', {})} to='/admin/roles' />
+                <Kpi
+                  icon={faScroll}
+                  value={String(stats.roles)}
+                  label={t('adminOverview.kpi.roles', {})}
+                  to='/admin/roles'
+                />
               </div>
             )}
           </ResourceView>
@@ -120,10 +176,16 @@ function TaxzAdminOverview() {
           <div className='taxz-admin-grid'>
             <ResourceView resource={overview}>
               {(system) => {
-                const memPct = system.memory.totalBytes ? (system.memory.usedBytes / system.memory.totalBytes) * 100 : 0;
+                const memPct = system.memory.totalBytes
+                  ? (system.memory.usedBytes / system.memory.totalBytes) * 100
+                  : 0;
                 const hitPct = system.cache.totalCalls ? (system.cache.totalHits / system.cache.totalCalls) * 100 : 0;
                 return (
-                  <Panel icon={faMicrochip} title={t('adminOverview.system.title', {})} aside={`Calagopus ${system.version}`}>
+                  <Panel
+                    icon={faMicrochip}
+                    title={t('adminOverview.system.title', {})}
+                    aside={`Calagopus ${system.version}`}
+                  >
                     <dl className='taxz-rows'>
                       <div>
                         <dt>
@@ -142,12 +204,15 @@ function TaxzAdminOverview() {
                           <span className='taxz-meter' aria-hidden='true'>
                             <b style={{ width: `${Math.min(100, memPct)}%` }} />
                           </span>
-                          <small>{t('adminOverview.system.panelMemory', { size: bytes(system.memory.usedBytesProcess) })}</small>
+                          <small>
+                            {t('adminOverview.system.panelMemory', { size: bytes(system.memory.usedBytesProcess) })}
+                          </small>
                         </dd>
                       </div>
                       <div>
                         <dt>
-                          <FontAwesomeIcon icon={faTerminal} aria-hidden='true' /> {t('adminOverview.system.kernel', {})}
+                          <FontAwesomeIcon icon={faTerminal} aria-hidden='true' />{' '}
+                          {t('adminOverview.system.kernel', {})}
                         </dt>
                         <dd className='taxz-mono'>
                           {system.kernelVersion} ({system.architecture})
@@ -155,13 +220,15 @@ function TaxzAdminOverview() {
                       </div>
                       <div>
                         <dt>
-                          <FontAwesomeIcon icon={faBoxArchive} aria-hidden='true' /> {t('adminOverview.system.installation', {})}
+                          <FontAwesomeIcon icon={faBoxArchive} aria-hidden='true' />{' '}
+                          {t('adminOverview.system.installation', {})}
                         </dt>
                         <dd>{containerLabel(system.containerType)}</dd>
                       </div>
                       <div>
                         <dt>
-                          <FontAwesomeIcon icon={faDatabase} aria-hidden='true' /> {t('adminOverview.system.database', {})}
+                          <FontAwesomeIcon icon={faDatabase} aria-hidden='true' />{' '}
+                          {t('adminOverview.system.database', {})}
                         </dt>
                         <dd>
                           PostgreSQL {system.database.version} · {bytes(system.database.sizeBytes)}
@@ -193,8 +260,17 @@ function TaxzAdminOverview() {
 
             <ResourceView resource={backups}>
               {(stats) => (
-                <Panel icon={faArchive} title={t('adminOverview.backups.title', {})} aside={t('adminOverview.backups.allServers', {})}>
-                  <div className='taxz-table-wrap' tabIndex={0} role='region' aria-label={t('adminOverview.backups.label', {})}>
+                <Panel
+                  icon={faArchive}
+                  title={t('adminOverview.backups.title', {})}
+                  aside={t('adminOverview.backups.allServers', {})}
+                >
+                  <div
+                    className='taxz-table-wrap'
+                    tabIndex={0}
+                    role='region'
+                    aria-label={t('adminOverview.backups.label', {})}
+                  >
                     <table className='taxz-table'>
                       <thead>
                         <tr>
@@ -259,7 +335,6 @@ function containerLabel(type: string) {
       return t('status.unknown', {});
   }
 }
-
 
 export default function AdminOverview() {
   const isTaxz = useIsTaxz();

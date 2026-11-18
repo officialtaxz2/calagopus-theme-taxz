@@ -23,8 +23,8 @@ import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { z } from 'zod';
-import { axiosInstance } from '@/api/axios.ts';
 import getUpdates from '@/api/admin/system/updates/getUpdates.ts';
+import { axiosInstance } from '@/api/axios.ts';
 import { isAdmin } from '@/lib/auth/permissions.ts';
 import { exitCodeSignal } from '@/lib/format/exitCode.ts';
 import { useUserSetting } from '@/lib/userSettings.ts';
@@ -32,7 +32,6 @@ import { isOutdated } from '@/lib/version.ts';
 import { useAuth } from '@/providers/contexts/authContext.ts';
 import { ago } from './CrashHelp.tsx';
 import { getExtTranslations, useExtTranslations } from './translations.ts';
-
 
 const eventSchema = z.object({
   id: z.string(),
@@ -293,7 +292,6 @@ function Bell({ placement }: { placement: 'sidebar' | 'mobile' }) {
         {unavailable > 0 && (
           <p className='taxz-bell-note'>
             {unavailable === 1 ? t('bell.unavailableOne', {}) : t('bell.unavailableMany', { count: unavailable })}
-
           </p>
         )}
       </Popover.Dropdown>

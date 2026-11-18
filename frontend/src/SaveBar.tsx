@@ -41,7 +41,6 @@ export default function SaveBar({
         >
           <FontAwesomeIcon icon={faCheck} aria-hidden='true' />
           {saving ? t('common.saving', {}) : t('common.save', {})}
-
         </button>
       </div>
     </div>

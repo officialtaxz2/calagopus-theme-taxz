@@ -66,17 +66,15 @@ const adminDefaultsSchema = z
     strong_contrast: z.boolean().catch(BUILTIN_DEFAULTS.strongContrast),
     server_view: z.enum(SERVER_VIEWS).catch(BUILTIN_DEFAULTS.serverView),
   })
-  .transform(
-    (d): ThemePrefs => ({
-      theme: d.theme,
-      background: d.background,
-      accent: d.accent,
-      art: d.art,
-      largeFont: d.large_font,
-      strongContrast: d.strong_contrast,
-      serverView: d.server_view,
-    }),
-  );
+  .transform((d): ThemePrefs => ({
+    theme: d.theme,
+    background: d.background,
+    accent: d.accent,
+    art: d.art,
+    largeFont: d.large_font,
+    strongContrast: d.strong_contrast,
+    serverView: d.server_view,
+  }));
 
 let adminDefaults: ThemePrefs = BUILTIN_DEFAULTS;
 
@@ -84,8 +82,7 @@ export function setAdminDefaultsFromIndex(raw: unknown) {
   if (raw === undefined) return;
   const parsed = adminDefaultsSchema.safeParse(raw);
   if (parsed.success) adminDefaults = parsed.data;
-  else console.error('taxz theme: invalid admin defaults, using built-in defaults'
-, parsed.error);
+  else console.error('taxz theme: invalid admin defaults, using built-in defaults', parsed.error);
 }
 
 export function getAdminDefaults(): ThemePrefs {

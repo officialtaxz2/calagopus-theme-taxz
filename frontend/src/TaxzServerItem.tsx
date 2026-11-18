@@ -30,8 +30,8 @@ import Tooltip from '@/elements/overlays/Tooltip.tsx';
 import RedactedText from '@/elements/typography/RedactedText.tsx';
 import { formatAllocation } from '@/lib/domain/server.ts';
 import { serverPowerAction } from '@/lib/schemas/server/server.ts';
-import OriginalServerItem from '@/pages/dashboard/home/ServerItem.tsx';
 import ServerAddGroupModal from '@/pages/dashboard/home/modals/ServerAddGroupModal.tsx';
+import OriginalServerItem from '@/pages/dashboard/home/ServerItem.tsx';
 import { useBulkPowerActions } from '@/plugins/server/useBulkPowerActions.ts';
 import { useServerStats, useServerStatsUnavailable } from '@/plugins/server/useServerStats.ts';
 import { useAuth } from '@/providers/AuthProvider.tsx';
@@ -42,11 +42,10 @@ import { pushLive, useResourceSeries } from './history.ts';
 import { useIsTaxz, useThemePrefs } from './prefs.ts';
 import { ServerArtLayer, ServerEmblem } from './ServerArt.tsx';
 import { useServerImage } from './serverImages.ts';
-import Sparkline from './Sparkline.tsx';
 import { bytesShort, isActive, num, reportVisibleServer, statusOf, type Tone } from './serverStatus.ts';
+import Sparkline from './Sparkline.tsx';
 import { useExtTranslations } from './translations.ts';
 import { useTween } from './useTween.ts';
-
 
 type Props = ComponentProps<typeof OriginalServerItem>;
 
@@ -116,8 +115,15 @@ function TaxzServerItem(props: Props) {
   const { t, language } = useExtTranslations();
 
   const state = stats?.state ?? null;
-  const canReadConsole = server.permissions.includes('*') || server.permissions.includes('control.read-console') || (user?.role?.serverPermissions ?? []).includes('control.read-console');
-  const crash = useOpenCrash(server.uuid, state, canReadConsole && !server.status && !server.isSuspended && !server.isTransferring);
+  const canReadConsole =
+    server.permissions.includes('*') ||
+    server.permissions.includes('control.read-console') ||
+    (user?.role?.serverPermissions ?? []).includes('control.read-console');
+  const crash = useOpenCrash(
+    server.uuid,
+    state,
+    canReadConsole && !server.status && !server.isSuspended && !server.isTransferring,
+  );
   const status = crash ? { tone: 'bad' as const, label: t('status.crashed', {}) } : statusOf(server, state);
   const look = useMemo(() => gameLook(server.egg), [server.egg]);
   const image = useServerImage(server.uuid);
@@ -207,7 +213,17 @@ function TaxzServerItem(props: Props) {
         onClick: () => onGroupRemove?.(),
       },
     ],
-    [canPower, powerBlocked, bulkActionLoading, state, doPowerAction, showGroupAddButton, onGroupRemove, availableGroups.length, language],
+    [
+      canPower,
+      powerBlocked,
+      bulkActionLoading,
+      state,
+      doPowerAction,
+      showGroupAddButton,
+      onGroupRemove,
+      availableGroups.length,
+      language,
+    ],
   );
 
   const cpuLimit = server.limits.cpu || 0;
@@ -310,7 +326,9 @@ function TaxzServerItem(props: Props) {
         type='button'
         className={classNames('taxz-sel', isSelected && 'is-on')}
         aria-pressed={isSelected}
-        aria-label={isSelected ? t('card.deselectName', { name: server.name }) : t('card.selectName', { name: server.name })}
+        aria-label={
+          isSelected ? t('card.deselectName', { name: server.name }) : t('card.selectName', { name: server.name })
+        }
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -481,7 +499,14 @@ function TaxzServerItem(props: Props) {
                           {metric.max && <small> / {metric.max}</small>}
                         </b>
                         <Meter value={metric.pct} />
-                        {metric.spark && <Sparkline values={metric.spark} times={sparkTimes} max={metric.sparkMax} className='taxz-stat-spark' />}
+                        {metric.spark && (
+                          <Sparkline
+                            values={metric.spark}
+                            times={sparkTimes}
+                            max={metric.sparkMax}
+                            className='taxz-stat-spark'
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -490,7 +515,6 @@ function TaxzServerItem(props: Props) {
                   <NavLink to={href} className='taxz-btn taxz-btn-tonal taxz-sc-open' onClick={linkClick} tabIndex={-1}>
                     <FontAwesomeIcon icon={faTerminal} />
                     <span className='taxz-sc-open-txt'>{t('card.open', {})}</span>
-
                   </NavLink>
                   {powerButton}
                   {menuButton(openMenu, items)}
